@@ -1,0 +1,31 @@
+package com.gxw.store.project.background.controller;
+
+
+import com.gxw.store.project.common.controller.BaseController;
+import com.gxw.store.project.common.utils.ResponseResult;
+import com.gxw.store.project.product.entity.StockInfo;
+import com.gxw.store.project.product.service.StockService;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import javax.validation.Valid;
+import java.util.HashMap;
+
+@RestController
+@RequestMapping("/stock")
+public class StockController extends BaseController {
+
+    @Resource
+    private StockService stockService;
+
+
+    @PostMapping
+    public ResponseResult create(@Valid @RequestBody StockInfo info) {
+        Long id = stockService.create(info);
+        HashMap<String, Long> res = new HashMap<>();
+        res.put("id", id);
+        return ResponseResult.success(res);
+    }
+
+
+}

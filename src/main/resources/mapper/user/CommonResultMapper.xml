@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxw.store.project.user.mapper.common">
+
+    <resultMap type="BusinessDepartment" id="DepartmentResult">
+        <id property="id" column="department_id"/>
+        <result property="businessId" column="department_business_id"/>
+        <result property="name" column="department_name"/>
+    </resultMap>
+
+    <resultMap type="BusinessRole" id="RoleResult">
+        <id property="id" column="role_id"/>
+        <result property="businessId" column="role_business_id"/>
+        <result property="name" column="role_name"/>
+    </resultMap>
+
+</mapper> 

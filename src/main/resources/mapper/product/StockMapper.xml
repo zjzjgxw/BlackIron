@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxw.store.project.product.mapper.StockMapper">
+
+
+    <insert id="createStockInfo" parameterType="StockInfo" useGeneratedKeys="true" keyProperty="id">
+        insert `gxw_stock_info`  (product_id,currency_code,price,last_num)
+        value (#{productId},#{currencyCode},#{price},#{lastNum})
+    </insert>
+
+    <insert id="createStockSpecification" parameterType="StockSpecification" useGeneratedKeys="true" keyProperty="id">
+        insert  gxw_stock_specification (stock_info_id,first_name,first_value,second_name,second_value)
+        value (#{stockInfoId},#{firstName},#{firstValue},#{secondName},#{secondValue})
+    </insert>
+
+    <insert id="createStockSpecificationDetail" parameterType="StockSpecificationDetail" useGeneratedKeys="true" keyProperty="id">
+        insert  gxw_stock_specification_detail (stock_specification_id,price,last_num,sku)
+        value (#{stockSpecificationId},#{price},#{lastNum},#{sku})
+    </insert>
+
+</mapper>

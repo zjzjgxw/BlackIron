@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxw.store.project.product.mapper.CategoryMapper">
+    <resultMap type="Category" id="CategoryResult">
+        <id property="id" column="id"/>
+        <result property="businessId" column="business_id"/>
+        <result property="name" column="name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deleteFlag" column="delete_flag"/>
+    </resultMap>
+
+    <resultMap id="AttributeOptionResult" type="AttributeOption">
+        <id property="id" column="id"/>
+        <result property="attributeId" column="attribute_id"/>
+        <result property="content" column="content"/>
+    </resultMap>
+
+
+    <resultMap id="SpecificationOptionResult" type="SpecificationOption">
+        <id property="id" column="option_id"/>
+        <result property="specificationId" column="specification_id"/>
+        <result property="content" column="content"/>
+    </resultMap>
+
+    <resultMap id="CategorySpecificationResult" type="CategorySpecification">
+        <id property="id" column="id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="name" column="name"/>
+        <collection property="options" javaType="java.util.List" resultMap="SpecificationOptionResult"/>
+    </resultMap>
+
+
+    <insert id="create" parameterType="Category" useGeneratedKeys="true" keyProperty="id">
+        insert `gxw_product_category`  (business_id,name,parent_id)
+        value (#{businessId},#{name},#{parentId})
+    </insert>
+
+    <insert id="createAttribute" parameterType="CategoryAttribute" useGeneratedKeys="true" keyProperty="id">
+        insert `gxw_product_category_attribute`  (category_id,name,type)
+        value (#{categoryId},#{name},#{type})
+    </insert>
+
+    <insert id="createAttributeOption" parameterType="AttributeOption" useGeneratedKeys="true" keyProperty="id">
+        insert `gxw_product_category_attribute_options`  (attribute_id, content)
+        value (#{attributeId},#{content})
+    </insert>
+
+
+    <insert id="createSpecification" parameterType="CategorySpecification" useGeneratedKeys="true" keyProperty="id">
+        insert `gxw_product_category_specification`  (category_id,name)
+        value (#{categoryId},#{name})
+    </insert>
+
+    <insert id="createSpecificationOption" parameterType="SpecificationOption" useGeneratedKeys="true" keyProperty="id">
+        insert `gxw_product_category_specification_options`  (specification_id, content)
+        value (#{specificationId},#{content})
+    </insert>
+
+
+    <select id="selectAttributeOptions" resultMap="AttributeOptionResult" parameterType="Long">
+        select id,attribute_id,content from gxw_product_category_attribute_options where attribute_id = #{attributeId}
+    </select>
+
+    <delete id="deleteAttributeOption" parameterType="Long">
+        delete from gxw_product_category_attribute_options where id = #{id}
+    </delete>
+
+    <update id="updateAttributeOption" parameterType="AttributeOption">
+        update gxw_product_category_attribute_options
+        <set>
+            <if test="attributeId != null and attributeId !=''">attribute_id = #{attributeId}</if>
+            <if test="content != null and content !=''">content = #{content}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateSpecificationOption" parameterType="SpecificationOption">
+        update gxw_product_category_specification_options
+        <set>
+            <if test="specificationId != null and specificationId !=''">specification_id = #{specificationId}</if>
+            <if test="content != null and content !=''">content = #{content}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSpecificationOption" parameterType="Long">
+        delete from gxw_product_category_specification_options where id = #{id}
+    </delete>
+
+    <select id="selectCategorySpecifications" parameterType="Long" resultMap="CategorySpecificationResult">
+        SELECT
+        a.id,
+        a.category_id,
+        a.`name`,
+        b.id AS option_id,
+        b.specification_id,
+        b.content
+        FROM
+        gxw_product_category_specification a
+        LEFT JOIN gxw_product_category_specification_options b ON a.id = b.specification_id
+        WHERE
+        a.category_id =#{id}
+        order by a.id
+    </select>
+
+</mapper> 

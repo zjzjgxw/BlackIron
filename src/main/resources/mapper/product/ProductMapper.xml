@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxw.store.project.product.mapper.ProductMapper">
+    <resultMap type="ProductDetail" id="ProductDetailResult">
+        <id property="id" column="id"/>
+        <result property="businessId" column="business_id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="name" column="name"/>
+        <result property="mode" column="mode"/>
+        <result property="stockType" column="stock_type"/>
+        <result property="statusType" column="status_type"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="createTime" column="created_at"/>
+        <collection property="attributes" javaType="java.util.List" resultMap="AttributeResult"/>
+        <collection property="detailImages" javaType="java.util.List" resultMap="DetailImagesResult"/>
+        <collection property="mainImages" javaType="java.util.List" resultMap="MainImagesResult"/>
+    </resultMap>
+
+    <resultMap id="AttributeResult" type="ProductDetailAttribute">
+        <id property="id" column="attribute_id"/>
+        <result property="detailId" column="id"/>
+        <result property="name" column="attribute_name"/>
+        <result property="content" column="attribute_content"/>
+    </resultMap>
+
+    <resultMap id="DetailImagesResult" type="ProductDetailImg">
+        <id property="id" column="desc_id"/>
+        <result property="detailId" column="id"/>
+        <result property="imgUrl" column="desc_img_url"/>
+        <result property="indexNo" column="desc_index_no"/>
+    </resultMap>
+
+    <resultMap id="MainImagesResult" type="ProductDetailMainImg">
+        <id property="id" column="main_id"/>
+        <result property="detailId" column="id"/>
+        <result property="imgUrl" column="main_img_url"/>
+        <result property="indexNo" column="main_index_no"/>
+    </resultMap>
+
+
+    <insert id="createDetail" parameterType="ProductDetail" useGeneratedKeys="true" keyProperty="id">
+        insert `gxw_product_detail`  (business_id,category_id,name,mode,stock_type,status_type)
+        value (#{businessId},#{categoryId},#{name},#{mode},#{stockType},#{statusType})
+    </insert>
+
+    <insert id="createAttributes">
+        insert gxw_product_detail_attribute (detail_id,name,content) values
+        <foreach collection="attributes" item="item" separator=",">
+            (#{detailId},#{item.name},#{item.content})
+        </foreach>
+    </insert>
+
+    <insert id="createMainImages">
+        insert gxw_product_detail_main_img (detail_id,img_url,index_no) values
+        <foreach collection="images" item="item" separator=",">
+            (#{detailId},#{item.imgUrl},#{item.indexNo})
+        </foreach>
+    </insert>
+
+    <insert id="createDetailImages">
+        insert gxw_product_detail_desc_img (detail_id,img_url,index_no) values
+        <foreach collection="images" item="item" separator=",">
+            (#{detailId},#{item.imgUrl},#{item.indexNo})
+        </foreach>
+    </insert>
+
+    <select id="getDetailById" resultMap="ProductDetailResult">
+        SELECT
+            a.id,
+            a.business_id,
+            a.category_id,
+            a.`name`,
+            a.`mode`,
+            a.stock_type,
+            a.status_type,
+            a.delete_flag,
+            a.created_at,
+            b.id as attribute_id,
+            b.detail_id,
+            b.`name` as attribute_name,
+            b.content as attribute_content,
+            c.id as main_id,
+            c.img_url as main_img_url,
+            c.index_no as main_index_no,
+            d.id as desc_id,
+            d.img_url as desc_img_url,
+            d.index_no as desc_index_no
+        FROM
+            gxw_product_detail a
+            LEFT JOIN gxw_product_detail_attribute b ON a.id = b.detail_id
+            left join gxw_product_detail_main_img c on c.detail_id = a.id
+            left join gxw_product_detail_desc_img d on d.detail_id = a.id
+            where a.id = #{id} and a.delete_flag = 0
+    </select>
+
+</mapper> 

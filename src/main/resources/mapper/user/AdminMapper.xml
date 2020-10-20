@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxw.store.project.user.mapper.AdminMapper">
+    <resultMap type="Admin" id="AdminResult">
+        <id property="id" column="id"/>
+        <result property="account" column="account"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+        <result property="adminFlag" column="is_admin"/>
+        <result property="email" column="email"/>
+        <result property="logoImg" column="logo_img"/>
+        <result property="status" column="status"/>
+        <result property="deleteFlag" column="delete_flag"/>
+    </resultMap>
+
+    <resultMap type="Admin" id="AdminSimpleResult">
+        <id property="id" column="admin_id"/>
+        <result property="name" column="admin_name"/>
+    </resultMap>
+
+    <resultMap type="AdminRole" id="AdminRoleResult">
+        <id property="id" column="id" />
+        <result property="name" column="name"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <collection property="admins" javaType="java.util.List" resultMap="AdminSimpleResult"/>
+    </resultMap>
+
+
+    <sql id="selectAdmin">
+    SELECT
+	a.id,
+	a.account,
+	a.`password`,
+	a.`name`,
+	a.is_admin,
+	a.email,
+	a.logo_img,
+	a.`status`,
+	a.delete_flag
+    FROM
+	gxw_admin a
+    </sql>
+
+
+    <insert id="create" parameterType="Admin" useGeneratedKeys="true" keyProperty="id">
+        insert `gxw_admin`  (account,password, name, is_admin,email,logo_img,status)
+        value (#{account},#{password},#{name},#{adminFlag},#{email},#{logoImg},#{status})
+    </insert>
+
+    <select id="getAdminByAccount" parameterType="String" resultMap="AdminResult">
+        <include refid="selectAdmin" />
+        where a.delete_flag = 0
+         and a.account= #{account}
+    </select>
+
+    <select id="getAdmins" parameterType="AdminSearchParams" resultMap="AdminResult">
+        <include refid="selectAdmin" />
+        where a.delete_flag = 0
+        <if test="id != null"> and a.id= #{id}</if>
+        <if test="account != null and account != ''"> and a.account= #{account}</if>
+        <if test="email != null and email != ''"> and a.email= #{email}</if>
+        <if test="status != null">
+        and a.status in
+            <foreach collection="status" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getAdminById" parameterType="Long" resultMap="AdminResult">
+        <include refid="selectAdmin" />
+        where a.id = #{id} and a.delete_flag = 0
+    </select>
+
+    <update id="updateAdmin" parameterType="Admin">
+        update gxw_admin
+        <set>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="adminFlag != null ">is_admin = #{adminFlag},</if>
+            <if test="email != null and email != ''">email = #{email},</if>
+            <if test="logoImg != null and logoImg != ''">logo_img = #{logoImg},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="deleteFlag != null ">delete_flag = #{deleteFlag},</if>
+            update_time = current_time()
+        </set>
+        where id = #{id}
+    </update>
+
+    <insert id="createRole" parameterType="AdminRole" useGeneratedKeys="true" keyProperty="id">
+        insert `gxw_admin_role` (name) value (#{name})
+    </insert>
+
+    <sql id="selectRole">
+        SELECT
+	a.id,
+	a.`name`,
+	a.delete_flag,
+	c.id AS admin_id,
+	c.`name` AS admin_name
+    FROM
+	gxw_admin_role a
+	LEFT JOIN gxw_admin_role_relation b ON a.id = b.admin_role_id
+	LEFT JOIN gxw_admin c ON b.admin_id = c.id
+    </sql>
+
+    <select id="getRole" parameterType="Long" resultMap="AdminRoleResult">
+        <include refid="selectRole" />
+        where a.id = #{id} and a.delete_flag = 0
+    </select>
+
+    <select id="getRoles" resultMap="AdminRoleResult">
+        <include refid="selectRole" />
+        where  a.delete_flag = 0
+    </select>
+
+    <update id="updateRole" parameterType="AdminRole">
+        update gxw_admin_role
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="deleteFlag != null ">delete_flag = #{deleteFlag},</if>
+            update_time = current_time()
+        </set>
+        where id = #{id}
+    </update>
+
+    <insert id="addAdminRoles">
+        insert into gxw_admin_role_relation(admin_id,admin_role_id) values
+        <foreach item="item" index="index" collection="set" separator=",">
+            (#{item.adminId},#{item.roleId})
+        </foreach>
+    </insert>
+
+    <delete id="deleteAdminRoles">
+        delete from gxw_admin_role_relation where
+        <foreach collection="set" item="item" separator=" or " index="index">
+            (admin_id = #{item.adminId} and admin_role_id = #{item.roleId})
+        </foreach>
+    </delete>
+
+    <insert id="addRolePermission">
+        insert gxw_admin_role_permission_relation (role_id,permission_id) values
+        <foreach collection="permissionIds" item="permissionId"  separator=",">
+            (#{roleId},#{permissionId})
+        </foreach>
+    </insert>
+
+    <delete id="deleteRolePermissions">
+        delete from gxw_admin_role_permission_relation where role_id =#{roleId}
+    </delete>
+</mapper> 

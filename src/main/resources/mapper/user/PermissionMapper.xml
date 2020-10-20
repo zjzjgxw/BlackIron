@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxw.store.project.user.mapper.PermissionMapper">
+    <resultMap type="Permission" id="PermissionResult">
+        <id property="id" column="id"/>
+        <result property="type" column="type"/>
+        <result property="name" column="name"/>
+        <result property="path" column="path"/>
+        <result property="method" column="method"/>
+        <result property="info" column="info"/>
+        <result property="groupId" column="group_id"/>
+        <result property="groupName" column="group_name"/>
+    </resultMap>
+
+    <resultMap type="PermissionSampleVO" id="PermissionSampleResult">
+        <id property="id" column="permission_id"/>
+        <result property="name" column="permission_name"/>
+    </resultMap>
+
+    <resultMap type="PermissionGroup" id="PermissionGroupResult">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <collection property="permissions" javaType="java.util.List" resultMap="PermissionSampleResult"/>
+    </resultMap>
+
+    <insert id="create" parameterType="Permission" useGeneratedKeys="true" keyProperty="id">
+        insert `gxw_permission`  (type,name,path,method,info,group_id) value (#{type},#{name},#{path},#{method},#{info},#{groupId})
+    </insert>
+
+    <sql id="selectPermissionSql">
+        select a.id,a.type,a.name,a.path,a.method,a.info,a.group_id,b.name as group_name from `gxw_permission` a
+        left join gxw_permission_group b on a.group_id = b.id
+    </sql>
+
+
+    <select id="selectPermissionById" parameterType="Long" resultMap="PermissionResult">
+        <include refid="selectPermissionSql"/>
+        where a.id = #{id}
+    </select>
+
+    <select id="getPermissions" parameterType="PermissionSearchParams" resultMap="PermissionResult">
+        <include refid="selectPermissionSql"/>
+        where a.type = #{type}
+        <if test="id != null">and a.id= #{id}</if>
+        <if test="name != null and name != ''">
+            and a.name like "%"#{name}"%"
+        </if>
+        <if test="groupId != null and groupId != ''">and a.group_id = #{groupId}</if>
+        order by a.create_time desc
+    </select>
+
+    <select id="selectPermissionByStaffId" parameterType="Long" resultMap="PermissionResult">
+        SELECT a.id,a.type,a.name,a.path,a.method,a.info,a.group_id from
+        gxw_permission a
+        left join gxw_business_role_permission_relation b on a.id = b.permission_id
+        left join gxw_business_staff_role_relation c on c.business_role_id = b.role_id
+        where c.business_staff_id = #{staffId}
+    </select>
+
+    <select id="selectPermissionByAdminId" parameterType="Long" resultMap="PermissionResult">
+        SELECT a.id,a.type,a.name,a.path,a.method,a.info,a.group_id from
+        gxw_permission a
+        left join gxw_admin_role_permission_relation b on a.id = b.permission_id
+        left join gxw_admin_role_relation c on c.admin_role_id = b.role_id
+        where c.admin_id = #{adminId}
+    </select>
+
+    <update id="updatePermission" parameterType="Permission">
+        update gxw_permission
+        <set>
+            <if test="type != null and type !=0">type = #{type},</if>
+            <if test="name != null and name !=''">name = #{name},</if>
+            <if test="path != null and path !=''">path = #{path},</if>
+            <if test="method != null and method !=''">method = #{method},</if>
+            <if test="info != null and info !=''">info = #{info},</if>
+            <if test="groupId != null and groupId !=0">group_id = #{groupId}</if>
+        </set>
+        where id =#{id}
+    </update>
+
+    <select id="selectPermissionByGroupId" parameterType="Long" resultMap="PermissionResult">
+        <include refid="selectPermissionSql"/>
+        where a.group_id = #{groupId}
+    </select>
+
+    <insert id="createGroup" parameterType="PermissionGroup" useGeneratedKeys="true" keyProperty="id">
+        insert `gxw_permission_group` (name,type) value (#{name},#{type})
+    </insert>
+    <update id="updateGroup" parameterType="PermissionGroup">
+        update gxw_permission_group
+        <set>
+            <if test="type != null and type !=0">type = #{type},</if>
+            <if test="name != null and name !=''">name = #{name}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="getGroups" resultMap="PermissionGroupResult">
+        SELECT
+            a.id,
+            a.NAME,
+            a.type,
+            a.delete_flag,
+            b.id AS permission_id,
+            b.`name` AS permission_name
+        FROM
+            `gxw_permission_group` a
+            LEFT JOIN gxw_permission b ON a.id = b.group_id
+        WHERE
+            a.type = #{type}
+            AND a.delete_flag = 0
+    </select>
+
+    <update id="deleteGroup" parameterType="Long">
+        update `gxw_permission_group` set delete_flag = 1 where id = #{id}
+    </update>
+
+    <update id="deletePermissionGroupId">
+        update `gxw_permission` set group_id = 0 where group_id = #{groupId}
+    </update>
+
+    <select id="HasRoleUsedPermission" parameterType="Long" resultType="int">
+        select count(1) from gxw_business_role_permission_relation where permission_id = #{permissionId}
+    </select>
+
+    <delete id="deletePermission">
+        delete from gxw_permission where id = #{permissionId}
+    </delete>
+
+</mapper> 

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxw.store.project.user.mapper.BusinessMapper">
+    <resultMap type="Business" id="BusinessResult">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="address" column="address"/>
+        <result property="logoImg" column="logo_img"/>
+        <result property="scale" column="scale"/>
+        <result property="describe" column="info"/>
+        <result property="status" column="status"/>
+        <result property="deleteFlag" column="delete_flag"/>
+    </resultMap>
+
+
+    <resultMap id="StaffSimpleResult" type="Staff">
+        <id property="id" column="staff_id"/>
+        <id property="name" column="staff_name"/>
+    </resultMap>
+
+
+    <resultMap type="BusinessDepartment" id="DepartmentResult">
+        <id property="id" column="id"/>
+        <result property="businessId" column="business_id"/>
+        <result property="name" column="name"/>
+        <collection property="staffs" javaType="java.util.List" resultMap="StaffSimpleResult"/>
+    </resultMap>
+
+    <resultMap type="BusinessRole" id="RoleResult">
+        <id property="id" column="id"/>
+        <result property="businessId" column="business_id"/>
+        <result property="name" column="name"/>
+        <collection property="staffs" javaType="java.util.List" resultMap="StaffSimpleResult"/>
+    </resultMap>
+
+
+    <insert id="create" parameterType="Business" useGeneratedKeys="true" keyProperty="id">
+        insert `gxw_business`  (name,address,logo_img, scale, info) value (#{name},#{address},#{logoImg},#{scale},#{describe})
+    </insert>
+
+    <select id="getBusiness" parameterType="Long" resultMap="BusinessResult">
+        select id,name,address,logo_img,scale,info,status,delete_flag from `gxw_business` where id = #{id} and delete_flag = 0
+    </select>
+
+
+    <insert id="createDepartment" parameterType="BusinessDepartment" useGeneratedKeys="true" keyProperty="id">
+        insert `gxw_business_department`  (business_id,name) value (#{businessId},#{name})
+    </insert>
+
+    <select id="getDepartments" parameterType="Long" resultMap="DepartmentResult">
+        select id,business_id,name,delete_flag from `gxw_business_department` where business_id = #{businessId} and delete_flag = 0
+    </select>
+
+    <update id="deleteDepartmentById" parameterType="Long">
+        update  `gxw_business_department` set delete_flag = 1 where id =#{departmentId}
+    </update>
+
+    <insert id="createRole" parameterType="BusinessRole" useGeneratedKeys="true" keyProperty="id">
+        insert `gxw_business_role` (business_id,name) value (#{businessId},#{name})
+    </insert>
+
+    <select id="getRoles" parameterType="Long" resultMap="RoleResult">
+         select id,business_id,name,delete_flag from `gxw_business_role` where business_id = #{businessId} and delete_flag = 0
+    </select>
+
+    <update id="deleteRoleById" parameterType="Long">
+        update  `gxw_business_role` set delete_flag = 1 where id =#{roleId}
+    </update>
+
+    <select id="getDepartmentInfo" resultMap="DepartmentResult">
+        select
+        a.id,
+        a.`name`,
+        a.business_id,
+        c.id as staff_id,
+        c.`name` as staff_name
+        from
+        gxw_business_department a
+        left join gxw_business_staff_department_relation b on a.id = b.business_department_id
+        left join gxw_business_staff c on c.id = b.business_staff_id
+        where a.id = #{departmentId} and a.business_id = #{businessId}
+    </select>
+
+    <select id="getRoleInfo" resultMap="RoleResult">
+        select
+        a.id,
+        a.`name`,
+        a.business_id,
+        c.id as staff_id,
+        c.`name` as staff_name
+        from
+        gxw_business_role a
+        left join gxw_business_staff_role_relation b on a.id = b.business_role_id
+        left join gxw_business_staff c on c.id = b.business_staff_id
+        where a.id = #{roleId} and a.business_id = #{businessId}
+    </select>
+
+    <insert id="addRolePermission">
+        insert gxw_business_role_permission_relation (role_id,permission_id) values
+        <foreach collection="permissionIds" item="permissionId"  separator=",">
+            (#{roleId},#{permissionId})
+        </foreach>
+    </insert>
+
+    <delete id="deleteRolePermissions">
+        delete from gxw_business_role_permission_relation where role_id =#{roleId}
+    </delete>
+
+</mapper> 
