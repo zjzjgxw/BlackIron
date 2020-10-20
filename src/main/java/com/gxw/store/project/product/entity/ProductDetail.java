@@ -41,6 +41,12 @@ public class ProductDetail {
     @NotNull(message = "封面图不能为空")
     private String coverUrl; //封面图片
 
+    private Double price;//展示价格
+
+    private Long saleNum;//销量
+
+    private Long lastNum; //剩余库存
+
     private int deleteFlag;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -162,5 +168,29 @@ public class ProductDetail {
 
     public void setCoverUrl(String coverUrl) {
         this.coverUrl = coverUrl;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Long getSaleNum() {
+        return saleNum;
+    }
+
+    public void setSaleNum(Long saleNum) {
+        this.saleNum = saleNum;
+    }
+
+    public Long getLastNum() {
+        return lastNum;
+    }
+
+    public void setLastNum(Long lastNum) {
+        this.lastNum = lastNum;
     }
 }

@@ -33,6 +33,16 @@
         <collection property="specifications" javaType="java.util.List"  resultMap="StockSpecificationResult" />
     </resultMap>
 
+    <resultMap id="SimpleStockInfoResult" type="StockInfo">
+        <id property="id" column="id"/>
+        <result property="productId" column="product_id"/>
+        <result property="currencyCode" column="currency_code"/>
+        <result property="price" column="price"/>
+        <result property="lastNum" column="last_num"/>
+        <result property="saleNum" column="sale_num"/>
+        <result property="createTime" column="created_at"/>
+    </resultMap>
+
 
     <insert id="createStockInfo" parameterType="StockInfo" useGeneratedKeys="true" keyProperty="id">
         insert `gxw_stock_info`  (product_id,currency_code,price,last_num)
@@ -71,10 +81,50 @@
             c.sku
         FROM
             gxw_stock_info a
-            LEFT JOIN gxw_stock_specification b ON a.id = b.stock_info_id
+            LEFT JOIN gxw_stock_specification b ON a.id = b.stock_info_id and b.delete_flag = 0
             LEFT JOIN gxw_stock_specification_detail c ON c.stock_specification_id = b.id
         WHERE
             a.product_id = #{productId}
     </select>
 
+    <select id="getProductPrice" resultMap="SimpleStockInfoResult" >
+        select  a.id,
+        a.product_id,
+        a.currency_code,
+        a.price,
+        a.last_num,
+        a.sale_num,
+        a.created_at from gxw_stock_info a where a.product_id  in
+        <foreach collection="productIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <update id="deleteStockSpecification">
+        update gxw_stock_specification
+        <set>
+            delete_flag = 1
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateStockInfo" parameterType="StockInfo">
+        update gxw_stock_info
+        <set>
+            price = #{price},
+            last_num = #{lastNum}
+        </set>
+        where product_id = #{productId}
+    </update>
+
+    <update id="updateStockSpecificationDetail" parameterType="StockSpecificationDetail">
+        update gxw_stock_specification_detail
+        <set>
+            price = #{price},
+            last_num = #{lastNum},
+            sku = #{sku}
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

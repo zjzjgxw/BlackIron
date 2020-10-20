@@ -6,19 +6,26 @@ import com.gxw.store.project.product.dto.ProductImages;
 import com.gxw.store.project.product.entity.ProductDetail;
 import com.gxw.store.project.product.entity.ProductDetailImg;
 import com.gxw.store.project.product.entity.ProductDetailMainImg;
+import com.gxw.store.project.product.entity.StockInfo;
 import com.gxw.store.project.product.mapper.ProductMapper;
 import com.gxw.store.project.product.service.ProductService;
+import com.gxw.store.project.product.service.StockService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductServiceImp implements ProductService {
 
     @Resource
     private ProductMapper productMapper;
+
+    @Resource
+    private StockService stockService;
 
     @Override
     @Transactional
@@ -55,15 +62,37 @@ public class ProductServiceImp implements ProductService {
             }
         }
 
+        //依靠库存服务获取价格库存信息
+        Map<Long, StockInfo> res = stockService.getProductPrice(id);
+        StockInfo info = res.get(id);
+        if(info != null){
+            detail.setPrice(info.getPrice());
+            detail.setSaleNum(info.getSaleNum());
+            detail.setLastNum(info.getLastNum());
+        }
+
+
         return detail;
     }
 
     @Override
     public List<ProductDetail> selectProducts(Long businessId, Long categoryId) {
         List<ProductDetail> details = productMapper.selectProducts(businessId, categoryId);
+        List<Long> productIds = new ArrayList<>();
         for (ProductDetail detail : details) {
             detail.setCoverUrl(FileUtils.getPath(detail.getCoverUrl()));
+            productIds.add(detail.getId());
         }
+        Map<Long, StockInfo> stockInfoMap = stockService.getProductPrice(productIds.toArray(new Long[0]));
+        for (ProductDetail detail : details) {
+            StockInfo info = stockInfoMap.get(detail.getId());
+            if(info != null){
+                detail.setPrice(info.getPrice());
+                detail.setSaleNum(info.getSaleNum());
+                detail.setLastNum(info.getLastNum());
+            }
+        }
+
         return details;
     }
 

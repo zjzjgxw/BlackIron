@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateKeyException.class)
     public Object handleDuplicateKeyException(DuplicateKeyException e){
         log.info(e.getMessage(), e);
-        return ResponseResult.error(HttpStatus.CONFLICT, "唯一键冲突"+e.getMessage());
+        return ResponseResult.error(HttpStatus.CONFLICT, "唯一键冲突");
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)

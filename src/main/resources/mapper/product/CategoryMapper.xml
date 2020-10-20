@@ -70,7 +70,7 @@
     <update id="updateAttributeOption" parameterType="AttributeOption">
         update gxw_product_category_attribute_options
         <set>
-            <if test="attributeId != null and attributeId !=''">attribute_id = #{attributeId}</if>
+            <if test="attributeId != null and attributeId !=''">attribute_id = #{attributeId},</if>
             <if test="content != null and content !=''">content = #{content}</if>
         </set>
         where id = #{id}
