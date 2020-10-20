@@ -13,4 +13,6 @@ public interface StockMapper {
 
     void createStockSpecificationDetail(StockSpecificationDetail detail);
 
+    StockInfo getStockInfoByProductId(Long productId);
+
 }

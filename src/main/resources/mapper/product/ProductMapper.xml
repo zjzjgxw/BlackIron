@@ -9,6 +9,8 @@
         <result property="categoryId" column="category_id"/>
         <result property="name" column="name"/>
         <result property="mode" column="mode"/>
+        <result property="description" column="description"/>
+        <result property="coverUrl" column="cover_url"/>
         <result property="stockType" column="stock_type"/>
         <result property="statusType" column="status_type"/>
         <result property="deleteFlag" column="delete_flag"/>
@@ -16,6 +18,20 @@
         <collection property="attributes" javaType="java.util.List" resultMap="AttributeResult"/>
         <collection property="detailImages" javaType="java.util.List" resultMap="DetailImagesResult"/>
         <collection property="mainImages" javaType="java.util.List" resultMap="MainImagesResult"/>
+    </resultMap>
+
+    <resultMap type="ProductDetail" id="ProductListResult">
+        <id property="id" column="id"/>
+        <result property="businessId" column="business_id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="name" column="name"/>
+        <result property="mode" column="mode"/>
+        <result property="description" column="description"/>
+        <result property="coverUrl" column="cover_url"/>
+        <result property="stockType" column="stock_type"/>
+        <result property="statusType" column="status_type"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="createTime" column="created_at"/>
     </resultMap>
 
     <resultMap id="AttributeResult" type="ProductDetailAttribute">
@@ -41,8 +57,8 @@
 
 
     <insert id="createDetail" parameterType="ProductDetail" useGeneratedKeys="true" keyProperty="id">
-        insert `gxw_product_detail`  (business_id,category_id,name,mode,stock_type,status_type)
-        value (#{businessId},#{categoryId},#{name},#{mode},#{stockType},#{statusType})
+        insert `gxw_product_detail`  (business_id,category_id,name,mode,description,cover_url,stock_type,status_type)
+        value (#{businessId},#{categoryId},#{name},#{mode},#{description},#{coverUrl},#{stockType},#{statusType})
     </insert>
 
     <insert id="createAttributes">
@@ -77,6 +93,8 @@
             a.status_type,
             a.delete_flag,
             a.created_at,
+            a.description,
+            a.cover_url,
             b.id as attribute_id,
             b.detail_id,
             b.`name` as attribute_name,
@@ -93,6 +111,24 @@
             left join gxw_product_detail_main_img c on c.detail_id = a.id
             left join gxw_product_detail_desc_img d on d.detail_id = a.id
             where a.id = #{id} and a.delete_flag = 0
+    </select>
+
+    <select id="selectProducts" resultMap="ProductListResult">
+        SELECT
+            a.id,
+            a.business_id,
+            a.category_id,
+            a.`name`,
+            a.`mode`,
+            a.stock_type,
+            a.status_type,
+            a.delete_flag,
+            a.created_at,
+            a.description,
+            a.cover_url
+        FROM
+            gxw_product_detail a
+            where a.business_id = #{businessId}   <if test="categoryId != null and categoryId != 0"> and a.category_id= #{categoryId}</if>   and  a.delete_flag = 0 order by a.created_at desc
     </select>
 
 </mapper> 

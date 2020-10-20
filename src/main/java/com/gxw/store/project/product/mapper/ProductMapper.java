@@ -36,4 +36,8 @@ public interface ProductMapper {
      */
     ProductDetail getDetailById(Long id);
 
+
+
+    List<ProductDetail> selectProducts(Long businessId,Long categoryId);
+
 }

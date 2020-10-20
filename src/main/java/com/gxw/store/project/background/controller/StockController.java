@@ -27,5 +27,12 @@ public class StockController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @GetMapping
+    public ResponseResult getStockInfo(@RequestParam Long productId) {
+        StockInfo info = stockService.getStockInfoByProductId(productId);
+        HashMap<String, StockInfo> res = new HashMap<>();
+        res.put("info", info);
+        return ResponseResult.success(res);
+    }
 
 }

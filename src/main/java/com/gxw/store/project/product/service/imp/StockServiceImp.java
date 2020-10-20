@@ -32,4 +32,11 @@ public class StockServiceImp implements StockService {
 
         return info.getId();
     }
+
+    @Override
+    public StockInfo getStockInfoByProductId(Long productId) {
+        return stockMapper.getStockInfoByProductId(productId);
+    }
+
+
 }

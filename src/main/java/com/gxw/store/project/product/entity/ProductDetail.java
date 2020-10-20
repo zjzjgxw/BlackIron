@@ -35,6 +35,12 @@ public class ProductDetail {
     @NotNull(message = "商品状态不能为空")
     private int statusType; //商品状态，1为上架中，2为下架中
 
+
+    private String description; //商品描述
+
+    @NotNull(message = "封面图不能为空")
+    private String coverUrl; //封面图片
+
     private int deleteFlag;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -140,5 +146,21 @@ public class ProductDetail {
 
     public void setMainImages(List<ProductDetailMainImg> mainImages) {
         this.mainImages = mainImages;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCoverUrl() {
+        return coverUrl;
+    }
+
+    public void setCoverUrl(String coverUrl) {
+        this.coverUrl = coverUrl;
     }
 }

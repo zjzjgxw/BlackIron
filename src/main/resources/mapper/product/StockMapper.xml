@@ -4,6 +4,35 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gxw.store.project.product.mapper.StockMapper">
 
+    <resultMap id="DetailResult" type="StockSpecificationDetail">
+        <id property="id" column="detail_id"/>
+        <result property="stockSpecificationId" column="stock_specification_id"/>
+        <result property="price" column="detail_price"/>
+        <result property="lastNum" column="detail_last_num"/>
+        <result property="sku" column="sku"/>
+    </resultMap>
+
+    <resultMap id="StockSpecificationResult" type="StockSpecification">
+        <id property="id" column="specification_id"/>
+        <result property="stockInfoId" column="stock_info_id"/>
+        <result property="firstName" column="first_name"/>
+        <result property="firstValue" column="first_value"/>
+        <result property="secondName" column="second_name"/>
+        <result property="secondValue" column="second_value"/>
+        <association property="detail" resultMap="DetailResult" />
+    </resultMap>
+
+    <resultMap id="StockInfoResult" type="StockInfo">
+        <id property="id" column="id"/>
+        <result property="productId" column="product_id"/>
+        <result property="currencyCode" column="currency_code"/>
+        <result property="price" column="price"/>
+        <result property="lastNum" column="last_num"/>
+        <result property="saleNum" column="sale_num"/>
+        <result property="createTime" column="created_at"/>
+        <collection property="specifications" javaType="java.util.List"  resultMap="StockSpecificationResult" />
+    </resultMap>
+
 
     <insert id="createStockInfo" parameterType="StockInfo" useGeneratedKeys="true" keyProperty="id">
         insert `gxw_stock_info`  (product_id,currency_code,price,last_num)
@@ -19,5 +48,33 @@
         insert  gxw_stock_specification_detail (stock_specification_id,price,last_num,sku)
         value (#{stockSpecificationId},#{price},#{lastNum},#{sku})
     </insert>
+
+    <select id="getStockInfoByProductId" resultMap="StockInfoResult">
+        SELECT
+            a.id,
+            a.product_id,
+            a.currency_code,
+            a.price,
+            a.last_num,
+            a.sale_num,
+            a.created_at,
+            b.id as specification_id,
+            b.stock_info_id,
+            b.first_name,
+            b.first_value,
+            b.second_name,
+            b.second_value,
+            c.id as detail_id,
+            c.stock_specification_id,
+            c.price as detail_price,
+            c.last_num as detail_last_num,
+            c.sku
+        FROM
+            gxw_stock_info a
+            LEFT JOIN gxw_stock_specification b ON a.id = b.stock_info_id
+            LEFT JOIN gxw_stock_specification_detail c ON c.stock_specification_id = b.id
+        WHERE
+            a.product_id = #{productId}
+    </select>
 
 </mapper>

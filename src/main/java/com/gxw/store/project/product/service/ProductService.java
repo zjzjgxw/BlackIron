@@ -3,6 +3,8 @@ package com.gxw.store.project.product.service;
 import com.gxw.store.project.product.dto.ProductImages;
 import com.gxw.store.project.product.entity.ProductDetail;
 
+import java.util.List;
+
 public interface ProductService {
 
     /**
@@ -27,4 +29,11 @@ public interface ProductService {
      * @return
      */
     ProductDetail getDetailById(Long id);
+
+
+    /**
+     * 获取商品列表
+     * @return
+     */
+    List<ProductDetail> selectProducts(Long businessId,Long categoryId);
 }

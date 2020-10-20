@@ -1,5 +1,6 @@
 package com.gxw.store.project.product.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
@@ -26,6 +27,7 @@ public class StockInfo {
 
     private Long saleNum; //总销量
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     private List<StockSpecification> specifications; //规格详情
