@@ -1,5 +1,6 @@
 package com.gxw.store.project.order.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gxw.store.project.common.utils.enums.ExpressType;
 
 import javax.validation.constraints.NotBlank;
@@ -163,6 +164,7 @@ public class Order {
         this.status = status;
     }
 
+    @JsonIgnore
     public int getDeleteFlag() {
         return deleteFlag;
     }

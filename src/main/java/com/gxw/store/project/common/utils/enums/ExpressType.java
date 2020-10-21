@@ -5,9 +5,10 @@ import com.gxw.store.project.common.utils.enumHandler.BaseEnum;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ExpressType implements BaseEnum {
-    SHU_FENG(0, "顺丰"),
-    YUAN_TONG(1, "圆通"),
-    SHEN_TONG(2, "申通");
+    UN_KNOWN(0, "未知"),
+    SHU_FENG(1, "顺丰"),
+    YUAN_TONG(2, "圆通"),
+    SHEN_TONG(3, "申通");
 
     private Integer index;
     private String text;

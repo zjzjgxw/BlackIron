@@ -3,6 +3,7 @@ package com.gxw.store.project.order.service.imp;
 import com.alibaba.fastjson.JSON;
 import com.gxw.store.project.common.utils.exception.MissSpecificationException;
 import com.gxw.store.project.common.utils.exception.UnEnoughStockException;
+import com.gxw.store.project.order.dto.OrderSearchParam;
 import com.gxw.store.project.order.entity.Order;
 import com.gxw.store.project.order.entity.OrderItem;
 import com.gxw.store.project.order.entity.OrderStatus;
@@ -115,5 +116,10 @@ public class OrderServiceImp implements OrderService {
             orderMapper.createItem(item);
         }
         return order.getId();
+    }
+
+    @Override
+    public List<Order> selectOrders(OrderSearchParam param) {
+        return orderMapper.selectOrders(param);
     }
 }
