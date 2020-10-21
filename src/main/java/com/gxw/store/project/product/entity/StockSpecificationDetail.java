@@ -9,8 +9,7 @@ public class StockSpecificationDetail {
 
     private Long stockSpecificationId;
 
-
-    private Double price;
+    private Long price;
 
     private Long lastNum;
 
@@ -32,11 +31,11 @@ public class StockSpecificationDetail {
         this.stockSpecificationId = stockSpecificationId;
     }
 
-    public Double getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 

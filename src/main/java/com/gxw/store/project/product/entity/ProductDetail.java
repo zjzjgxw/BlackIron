@@ -41,7 +41,7 @@ public class ProductDetail {
     @NotNull(message = "封面图不能为空")
     private String coverUrl; //封面图片
 
-    private Double price;//展示价格
+    private Long price;//展示价格
 
     private Long saleNum;//销量
 
@@ -170,11 +170,11 @@ public class ProductDetail {
         this.coverUrl = coverUrl;
     }
 
-    public Double getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 

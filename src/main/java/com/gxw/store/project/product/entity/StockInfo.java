@@ -20,7 +20,7 @@ public class StockInfo {
     private String currencyCode;
 
     @NotNull(message = "价格不能为空")
-    private Double price;  // 展示价格
+    private Long price;  // 展示价格
 
     @NotNull(message = "剩余库存不能为空")
     private Long lastNum; //剩余库存
@@ -56,11 +56,11 @@ public class StockInfo {
         this.currencyCode = currencyCode;
     }
 
-    public Double getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 

@@ -1,8 +1,10 @@
 package com.gxw.store.project.common.utils;
 
+import com.gxw.store.project.common.utils.exception.ErrorTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +45,10 @@ public class JwtTokenUtil {
     }
 
     public static Claims parseToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        try{
+            return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        }catch (SignatureException e){
+            throw new ErrorTokenException("无效token");
+        }
     }
 }

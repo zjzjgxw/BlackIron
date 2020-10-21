@@ -2,6 +2,8 @@ package com.gxw.store.project.common.utils;
 
 
 import com.gxw.store.project.common.utils.constants.HttpStatus;
+import com.gxw.store.project.common.utils.exception.EmptyTokenException;
+import com.gxw.store.project.common.utils.exception.ErrorTokenException;
 import com.gxw.store.project.common.utils.exception.HasExistException;
 import com.gxw.store.project.common.utils.exception.InvalidUserException;
 import org.slf4j.Logger;
@@ -60,5 +62,17 @@ public class GlobalExceptionHandler {
     public Object handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e){
         log.info(e.getMessage(), e);
         return ResponseResult.error(HttpStatus.ERROR, "参数类型错误");
+    }
+
+    @ExceptionHandler(EmptyTokenException.class)
+    public Object handleEmptyTokenException(EmptyTokenException e){
+        log.info(e.getMessage(), e);
+        return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
+    }
+
+    @ExceptionHandler(ErrorTokenException.class)
+    public Object handleErrorTokenException(ErrorTokenException e){
+        log.info(e.getMessage(), e);
+        return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
     }
 }
