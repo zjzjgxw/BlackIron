@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxw.store.project.order.mapper.OrderMapper">
+
+    <insert id="create" parameterType="Order" useGeneratedKeys="true" keyProperty="id">
+        insert `gxw_order`  (business_id,business_name,user_id,order_code,price,original_price,express_price,receiver,telphone,address,status)
+        value (#{businessId},#{businessName},#{userId},#{code},#{price},#{originalPrice},#{expressPrice},#{receiver},#{telphone},#{address},#{status})
+    </insert>
+
+    <insert id="createItem" parameterType="OrderItem" useGeneratedKeys="true" keyProperty="id">
+        insert `gxw_order_item`  (order_id,
+        name,
+        product_id,
+        cover_url,
+        specification_id,
+        first_specification_name,
+        first_specification_value,
+        second_specification_name,
+        second_specification_value,
+        product_snap,
+        price,
+        original_price,
+        num)
+        value (#{orderId},
+        #{name},
+        #{productId},
+        #{coverUrl},
+        #{specificationId},
+        #{firstSpecificationName},
+        #{firstSpecificationValue},
+        #{secondSpecificationName},
+        #{secondSpecificationValue},
+        #{productSnap},
+        #{price},
+        #{originalPrice},
+        #{num})
+    </insert>
+
+
+
+</mapper>

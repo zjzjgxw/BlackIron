@@ -11,6 +11,11 @@ public interface StockService {
 
     Long create(StockInfo info);
 
+    /**
+     * 获取商品价格库存详情
+     * @param productId
+     * @return
+     */
     StockInfo getStockInfoByProductId(Long productId);
 
     /**
@@ -35,4 +40,15 @@ public interface StockService {
      * @return
      */
     Boolean updateStockInfo(StockUpdateInfo info);
+
+
+    /**
+     * 下单
+     * @param productId  商品id
+     * @param specificationId 规格id
+     * @param num 数量
+     * @return
+     */
+    Boolean book(Long productId,Long specificationId,Long num);
+
 }

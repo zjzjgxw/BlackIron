@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan({"com.gxw.store.project.user.mapper","com.gxw.store.project.product.mapper"})
+@MapperScan({"com.gxw.store.project.user.mapper","com.gxw.store.project.product.mapper","com.gxw.store.project.order.mapper"})
 public class StoreApplication {
 
     public static void main(String[] args) {

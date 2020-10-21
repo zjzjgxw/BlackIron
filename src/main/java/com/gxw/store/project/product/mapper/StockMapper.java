@@ -20,10 +20,11 @@ public interface StockMapper {
 
 
     @MapKey("productId")
-    Map<Long,StockInfo>  getProductPrice(Long[] productIds);
+    Map<Long, StockInfo> getProductPrice(Long[] productIds);
 
     /**
      * 删除某个库存规格
+     *
      * @param id 库存规格id
      */
     void deleteStockSpecification(Long id);
@@ -31,5 +32,29 @@ public interface StockMapper {
     void updateStockInfo(StockInfo info);
 
     void updateStockSpecificationDetail(StockSpecificationDetail detail);
+
+    /**
+     * 修改库存数量
+     *
+     * @param productId
+     * @param num
+     */
+    void updateStockNum(Long productId, Long num);
+
+    /**
+     * 修改总销量
+     *
+     * @param productId
+     * @param num
+     */
+    void updateStockSaleNum(Long productId, Long num);
+
+    /**
+     * 修改库存规格数量
+     *
+     * @param stockSpecificationId
+     * @param num
+     */
+    void updateSpecificationDetailNum(Long stockSpecificationId, Long num);
 
 }

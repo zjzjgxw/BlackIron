@@ -8,8 +8,8 @@ import java.util.Date;
 public class OrderItem {
     private Long id;
     private Long orderId;
-    private Long productId;
     private String name; //商品名称
+    private Long productId;
     private String coverUrl; //商品封面图
     private Long specificationId; //规格id
     private String firstSpecificationName; //第一个规格名
@@ -20,6 +20,7 @@ public class OrderItem {
     private Long price; //实际价格
     private Long originalPrice; //商品原价
     private int num; //数量
+    private int stockType; //库存方式
     private Date createTime;
 
     public Long getId() {
@@ -140,5 +141,13 @@ public class OrderItem {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public int getStockType() {
+        return stockType;
+    }
+
+    public void setStockType(int stockType) {
+        this.stockType = stockType;
     }
 }

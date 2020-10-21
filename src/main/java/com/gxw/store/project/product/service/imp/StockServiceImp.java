@@ -62,15 +62,28 @@ public class StockServiceImp implements StockService {
     @Transactional
     public Boolean updateStockInfo(StockUpdateInfo info) {
         stockMapper.updateStockInfo(info);
-        for(StockSpecification specification : info.getSpecifications()){
+        for (StockSpecification specification : info.getSpecifications()) {
             stockMapper.updateStockSpecificationDetail(specification.getDetail());
         }
-        for(StockSpecification specification : info.getNewSpecifications()){
+        for (StockSpecification specification : info.getNewSpecifications()) {
             specification.setStockInfoId(info.getId());
             stockMapper.createStockSpecification(specification);
             specification.getDetail().setStockSpecificationId(specification.getId());
             stockMapper.createStockSpecificationDetail(specification.getDetail());
         }
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public Boolean book(Long productId, Long specificationId, Long num) {
+        //出入的购买数量为正，更新库存时需要变为负数
+        if (specificationId == 0) {
+            stockMapper.updateStockNum(productId, -num);
+        } else {
+            stockMapper.updateSpecificationDetailNum(specificationId, -num);
+        }
+        stockMapper.updateStockSaleNum(productId, num);
         return true;
     }
 

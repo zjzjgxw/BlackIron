@@ -14,13 +14,11 @@ public class Order {
     @NotNull
     private Long businessId;//商户id
 
-    private Long businessName; //商户名称
+    private String businessName; //商户名称
 
     private Long userId; //下单人id
 
     private String code; //生成的订单编号
-
-    private String title; //订单名
 
     private Long price; //实付金额
 
@@ -69,11 +67,11 @@ public class Order {
         this.businessId = businessId;
     }
 
-    public Long getBusinessName() {
+    public String getBusinessName() {
         return businessName;
     }
 
-    public void setBusinessName(Long businessName) {
+    public void setBusinessName(String businessName) {
         this.businessName = businessName;
     }
 
@@ -91,14 +89,6 @@ public class Order {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public Long getPrice() {

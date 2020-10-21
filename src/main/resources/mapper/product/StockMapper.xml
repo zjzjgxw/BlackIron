@@ -127,4 +127,29 @@
         </set>
         where id = #{id}
     </update>
+
+    <update id="updateStockNum">
+        update gxw_stock_info
+        <set>
+            last_num = last_num + #{num}
+        </set>
+        where product_id=#{productId}
+    </update>
+
+    <update id="updateStockSaleNum">
+        update gxw_stock_info
+        <set>
+            sale_num = sale_num + #{num}
+        </set>
+        where product_id=#{productId}
+    </update>
+
+    <update id="updateSpecificationDetailNum">
+        update gxw_stock_specification_detail
+        <set>
+            last_num =last_num + #{num}
+        </set>
+        where stock_specification_id=#{stockSpecificationId}
+    </update>
+
 </mapper>

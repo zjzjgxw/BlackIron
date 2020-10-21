@@ -2,10 +2,7 @@ package com.gxw.store.project.common.utils;
 
 
 import com.gxw.store.project.common.utils.constants.HttpStatus;
-import com.gxw.store.project.common.utils.exception.EmptyTokenException;
-import com.gxw.store.project.common.utils.exception.ErrorTokenException;
-import com.gxw.store.project.common.utils.exception.HasExistException;
-import com.gxw.store.project.common.utils.exception.InvalidUserException;
+import com.gxw.store.project.common.utils.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
@@ -72,6 +69,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ErrorTokenException.class)
     public Object handleErrorTokenException(ErrorTokenException e){
+        log.info(e.getMessage(), e);
+        return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
+    }
+
+    @ExceptionHandler(MissSpecificationException.class)
+    public Object handleMissSpecificationException(MissSpecificationException e){
+        log.info(e.getMessage(), e);
+        return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
+    }
+
+    @ExceptionHandler(UnEnoughStockException.class)
+    public Object handleUnEnoughStockException(UnEnoughStockException e){
         log.info(e.getMessage(), e);
         return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
     }
