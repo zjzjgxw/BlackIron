@@ -38,7 +38,7 @@
     </insert>
 
     <delete id="clearProducts">
-        delete from gxw_discount_product where discountId =#{discountId}
+        delete from gxw_discount_product where discount_id =#{discountId}
     </delete>
 
     <select id="selectDiscounts" resultMap="DiscountResult">
@@ -60,4 +60,26 @@
         where a.business_id = #{businessId} and a.delete_flag = 0
     </select>
 
+    <update id="update" parameterType="Discount">
+        update gxw_discount
+        <set>
+            <if test="name != null and name != ''">name= #{name},</if>
+            <if test="content != null and content != ''">content= #{content},</if>
+            <if test="discount != null and discount != 0">discount= #{discount},</if>
+            <if test="startTime != null ">start_time= #{startTime},</if>
+            <if test="endTime != null ">end_time= #{endTime},</if>
+            <if test="mode != null ">mode= #{mode},</if>
+            delete_flag = #{deleteFlag}
+        </set>
+        where id=#{id}
+    </update>
+
+
+    <update id="delete">
+        update gxw_discount
+        <set>
+            delete_flag = 1
+        </set>
+        where id=#{id} and business_id =#{businessId}
+    </update>
 </mapper>

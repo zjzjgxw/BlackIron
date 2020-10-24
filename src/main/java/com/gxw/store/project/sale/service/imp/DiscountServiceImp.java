@@ -20,11 +20,11 @@ public class DiscountServiceImp implements DiscountService {
     @Transactional
     public Long create(Discount discount) {
         discountMapper.create(discount);
-        if(discount.getMode() == 2){
-            if(discount.getProducts().size() == 0){
+        if (discount.getMode() == 2) {
+            if (discount.getProducts().size() == 0) {
                 throw new ErrorParamException("请指定参与活动的商品");
             }
-            discountMapper.addProducts(discount.getId(),discount.getProducts());
+            discountMapper.addProducts(discount.getId(), discount.getProducts());
         }
         return discount.getId();
     }
@@ -35,12 +35,22 @@ public class DiscountServiceImp implements DiscountService {
     }
 
     @Override
+    @Transactional
     public Boolean update(Discount discount) {
-        return null;
+        discountMapper.update(discount);
+        if (discount.getMode() == 2) {
+            if (discount.getProducts().size() == 0) {
+                throw new ErrorParamException("请指定参与活动的商品");
+            }
+            discountMapper.clearProducts(discount.getId());
+            discountMapper.addProducts(discount.getId(), discount.getProducts());
+        }
+        return true;
     }
 
     @Override
-    public Boolean delete(Discount discount) {
-        return null;
+    public Boolean delete(Long id, Long businessId) {
+        discountMapper.delete(id, businessId);
+        return true;
     }
 }

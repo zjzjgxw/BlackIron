@@ -2,7 +2,6 @@ package com.gxw.store.project.sale.mapper;
 
 
 import com.gxw.store.project.sale.entity.Discount;
-import com.gxw.store.project.sale.entity.DiscountProduct;
 
 import java.util.List;
 
@@ -32,4 +31,13 @@ public interface DiscountMapper {
      * @param businessId
      */
     List<Discount> selectDiscounts(Long businessId);
+
+
+    /**
+     * 更新活动信息
+     * @param discount
+     */
+    void update(Discount discount);
+
+    void delete(Long id, Long businessId);
 }

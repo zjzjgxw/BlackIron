@@ -17,5 +17,5 @@ public interface DiscountService {
 
     Boolean update(Discount discount);
 
-    Boolean delete(Discount discount);
+    Boolean delete(Long id, Long businessId);
 }

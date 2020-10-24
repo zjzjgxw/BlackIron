@@ -29,12 +29,27 @@ public class DiscountController {
     }
 
     @GetMapping()
-    public ResponseResult getDiscounts()
-    {
+    public ResponseResult getDiscounts() {
         List<Discount> discounts = discountService.getDiscounts(SessionUtils.getBusinessId());
         HashMap<String, List<Discount>> res = new HashMap<>();
         res.put("discounts", discounts);
         return ResponseResult.success(res);
+    }
+
+    @PutMapping()
+    public ResponseResult updateDiscount(@Valid @RequestBody Discount discount) {
+        discount.setUserId(SessionUtils.getUserId());
+        discount.setBusinessId(SessionUtils.getBusinessId());
+        discountService.update(discount);
+        return ResponseResult.success();
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseResult deleteDiscount(@PathVariable Long id)
+    {
+        discountService.delete(id,SessionUtils.getBusinessId());
+        return ResponseResult.success();
     }
 
 }
