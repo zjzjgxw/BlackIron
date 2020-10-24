@@ -23,14 +23,14 @@ public class JwtTokenServiceImp implements TokenService {
 
     protected static final long MILLIS_MINUTE = 60 * 1000;
 
-    private  ThreadLocal<String> customPrefix = new ThreadLocal<String>();
+    private ThreadLocal<String> customPrefix = new ThreadLocal<String>();
 
     @Resource
     private RedisCache redisCache;
 
     @Override
     public HashMap<String, String> createToken(Long id, String name) {
-        //放入缓存 ，放缓存不是不许的，依靠jwt就可以实现用户会话。
+        //放入缓存 ，放缓存不是必须的，依靠jwt就可以实现用户会话。
         //但是如果需求需要支持能够主动失效用户登陆状态，那么可以通过加缓存
         //或者有关用户的个别信息字段比较隐私，直接放在jwt中容易泄露，则也可放缓存
         setCache(id);
@@ -42,10 +42,27 @@ public class JwtTokenServiceImp implements TokenService {
         return hashMap;
     }
 
+    @Override
+    public HashMap<String, String> createToken(Long id, String name, Long businessId) {
+        setCache(id);
+        String accessToken = JwtTokenUtil.createToken(id, name, businessId, expireTime);
+        String refreshToken = JwtTokenUtil.createToken(id, name, businessId, expireTime + 1000);
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("accessToken", accessToken);
+        hashMap.put("refreshToken", refreshToken);
+        return hashMap;
+    }
 
-    public HashMap<String, String> createToken(Long id, String name, String keyPrefix){
+
+    public HashMap<String, String> createToken(Long id, String name, String keyPrefix) {
         customPrefix.set(keyPrefix);
-        return createToken(id,name);
+        return createToken(id, name);
+    }
+
+    @Override
+    public HashMap<String, String> createToken(Long id, String name, Long businessId, String keyPrefix) {
+        customPrefix.set(keyPrefix);
+        return createToken(id, name, businessId);
     }
 
 
@@ -91,10 +108,10 @@ public class JwtTokenServiceImp implements TokenService {
     }
 
     private String getRedisKey(Long userId) {
-        if(customPrefix.get() == null){
+        if (customPrefix.get() == null) {
             return LOGIN_CACHE_PRE + userId;
-        }else{
-            return customPrefix.get()+LOGIN_CACHE_PRE +userId;
+        } else {
+            return customPrefix.get() + LOGIN_CACHE_PRE + userId;
         }
     }
 

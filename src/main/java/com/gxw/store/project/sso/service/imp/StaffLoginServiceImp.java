@@ -43,7 +43,7 @@ public class StaffLoginServiceImp implements SsoService {
         //验证账号密码
         if (checkPassword(loginUser, staff.getPassword())) {
             //生成token
-            HashMap<String, String> token = tokenService.createToken(staff.getId(), staff.getName(), KEY_PREFIX);
+            HashMap<String, String> token = tokenService.createToken(staff.getId(), staff.getName(), staff.getBusinessId(), KEY_PREFIX);
             return ResponseResult.success(token);
         } else { //记录失败次数
             loginTriedService.record(loginUser.getAccount(), KEY_PREFIX);

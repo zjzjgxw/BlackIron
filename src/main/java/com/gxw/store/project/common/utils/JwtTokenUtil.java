@@ -22,14 +22,28 @@ public class JwtTokenUtil {
         return createToken(claims);
     }
 
-    public static Long getUserId(String token){
-        Claims claims = parseToken(token);
-        return claims.get("id",Long.class);
+    public static String createToken(Long id, String name, Long businessId, int expireTime) {
+        Map<String, Object> claims = new HashMap<String, Object>();
+        claims.put("id", id);
+        claims.put("name", name);
+        claims.put("businessId", businessId);
+        claims.put("expireTime", System.currentTimeMillis() + MILLIS_MINUTE * expireTime);
+        return createToken(claims);
     }
 
-    public static String getUserName(String token){
+    public static Long getUserId(String token) {
         Claims claims = parseToken(token);
-        return claims.get("name",String.class);
+        return claims.get("id", Long.class);
+    }
+
+    public static String getUserName(String token) {
+        Claims claims = parseToken(token);
+        return claims.get("name", String.class);
+    }
+
+    public static Long getBusinessId(String token){
+        Claims claims = parseToken(token);
+        return claims.get("businessId", Long.class);
     }
 
     /**
@@ -45,9 +59,9 @@ public class JwtTokenUtil {
     }
 
     public static Claims parseToken(String token) {
-        try{
+        try {
             return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-        }catch (SignatureException e){
+        } catch (SignatureException e) {
             throw new ErrorTokenException("无效token");
         }
     }

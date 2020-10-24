@@ -16,7 +16,7 @@ public class SessionUtils {
 
     public static Long getUserId() {
         String token = getToken();
-        if(StringUtils.isEmpty(token)){
+        if (StringUtils.isEmpty(token)) {
             throw new EmptyTokenException("token 为空");
         }
         return JwtTokenUtil.getUserId(token);
@@ -24,20 +24,32 @@ public class SessionUtils {
 
     /**
      * 获取用户id
+     *
      * @param allowNull 允许返回为null
      * @return
      */
-    public static Long getUserId(boolean allowNull)
-    {
+    public static Long getUserId(boolean allowNull) {
         String token = getToken();
-        if(StringUtils.isEmpty(token)){
-           if(allowNull){
-               return null;
-           }else {
-               throw new EmptyTokenException("token 为空");
-           }
+        if (StringUtils.isEmpty(token)) {
+            if (allowNull) {
+                return null;
+            } else {
+                throw new EmptyTokenException("token 为空");
+            }
         }
         return JwtTokenUtil.getUserId(token);
+    }
+
+    /**
+     * 获取商户id
+     * @return
+     */
+    public static Long getBusinessId() {
+        String token = getToken();
+        if (StringUtils.isEmpty(token)) {
+            throw new EmptyTokenException("token 为空");
+        }
+        return JwtTokenUtil.getBusinessId(token);
     }
 
     public static String getUserName() {
@@ -55,14 +67,14 @@ public class SessionUtils {
 
     public static Long getAdminId() {
         String token = getAccessToken();
-        if(StringUtils.isEmpty(token)){
+        if (StringUtils.isEmpty(token)) {
             throw new EmptyTokenException("token 为空");
         }
         return JwtTokenUtil.getUserId(token);
     }
 
 
-    public static String getAccessToken(){
+    public static String getAccessToken() {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = servletRequestAttributes.getRequest();
         String token = request.getHeader(ACCESS_TOKEN);
