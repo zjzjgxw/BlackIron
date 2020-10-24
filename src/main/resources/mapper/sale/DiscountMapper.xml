@@ -5,7 +5,7 @@
 <mapper namespace="com.gxw.store.project.sale.mapper.DiscountMapper">
 
     <resultMap id="DiscountResult" type="Discount">
-        <id property="id" column="item_id"/>
+        <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="businessId" column="business_id"/>
         <result property="name" column="name"/>
@@ -16,8 +16,13 @@
         <result property="mode" column="mode"/>
         <result property="deleteFlag" column="delete_flag"/>
         <result property="createTime" column="created_at"/>
-        <collection property="products" javaType="java.util.List" column="product_id" />
+        <collection property="products" javaType="ArrayList"  resultMap="ProductIdResult" />
     </resultMap>
+
+    <resultMap id="ProductIdResult" type="Long">
+        <result property="productId" column="product_id"/>
+    </resultMap>
+
 
 
     <insert id="create" parameterType="Discount" useGeneratedKeys="true" keyProperty="id">
@@ -45,7 +50,7 @@
         a.content,
         a.discount,
         a.start_time,
-        a.ent_time,
+        a.end_time,
         a.mode,
         a.delete_flag,
         a.created_at,

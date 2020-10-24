@@ -31,7 +31,7 @@ public class DiscountServiceImp implements DiscountService {
 
     @Override
     public List<Discount> getDiscounts(Long businessId) {
-        return null;
+        return discountMapper.selectDiscounts(businessId);
     }
 
     @Override

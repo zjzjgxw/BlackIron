@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/discounts")
@@ -30,7 +31,10 @@ public class DiscountController {
     @GetMapping()
     public ResponseResult getDiscounts()
     {
-        return ResponseResult.success();
+        List<Discount> discounts = discountService.getDiscounts(SessionUtils.getBusinessId());
+        HashMap<String, List<Discount>> res = new HashMap<>();
+        res.put("discounts", discounts);
+        return ResponseResult.success(res);
     }
 
 }

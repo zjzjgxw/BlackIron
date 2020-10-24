@@ -31,5 +31,5 @@ public interface DiscountMapper {
      * 获取商户下所有的活动
      * @param businessId
      */
-    void selectDiscounts(Long businessId);
+    List<Discount> selectDiscounts(Long businessId);
 }
