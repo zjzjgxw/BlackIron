@@ -15,9 +15,9 @@
         <result property="status" column="status"/>
         <result property="deleteFlag" column="delete_flag"/>
         <collection property="departments" javaType="java.util.List"
-                    resultMap="com.gxw.userservice.mapper.common.DepartmentResult"/>
+                    resultMap="com.gxw.store.project.user.mapper.common.DepartmentResult"/>
         <collection property="roles" javaType="java.util.List"
-                    resultMap="com.gxw.userservice.mapper.common.RoleResult" />
+                    resultMap="com.gxw.store.project.user.mapper.common.RoleResult" />
     </resultMap>
 
     <sql id="selectStaff">

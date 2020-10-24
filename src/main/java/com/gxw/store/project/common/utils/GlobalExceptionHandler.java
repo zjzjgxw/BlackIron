@@ -84,4 +84,10 @@ public class GlobalExceptionHandler {
         log.info(e.getMessage(), e);
         return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
     }
+
+    @ExceptionHandler(ErrorParamException.class)
+    public Object handleErrorParamException(ErrorParamException e){
+        log.info(e.getMessage(), e);
+        return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
+    }
 }
