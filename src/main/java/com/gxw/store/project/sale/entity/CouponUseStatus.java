@@ -5,15 +5,15 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.gxw.store.project.common.utils.enumHandler.BaseEnum;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum Mode implements BaseEnum {
-    ALL(0, "全场"),
-    PRODUCT(1, "指定商品");
+public enum CouponUseStatus implements BaseEnum {
+    UN_USED(0, "未使用"),
+    USED(1, "已使用");
 
     @JsonValue
     private Integer index;
     private String text;
 
-    Mode(Integer i, String s) {
+    CouponUseStatus(Integer i, String s) {
         index = i;
         text = s;
     }

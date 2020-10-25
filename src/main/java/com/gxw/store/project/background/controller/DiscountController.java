@@ -1,5 +1,6 @@
 package com.gxw.store.project.background.controller;
 
+import com.gxw.store.project.common.controller.BaseController;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.sale.entity.Discount;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/discounts")
-public class DiscountController {
+public class DiscountController extends BaseController {
 
     @Resource
     private DiscountService discountService;
@@ -30,10 +31,9 @@ public class DiscountController {
 
     @GetMapping()
     public ResponseResult getDiscounts() {
+        startPage();
         List<Discount> discounts = discountService.getDiscounts(SessionUtils.getBusinessId());
-        HashMap<String, List<Discount>> res = new HashMap<>();
-        res.put("discounts", discounts);
-        return ResponseResult.success(res);
+        return ResponseResult.success(getDataTable(discounts));
     }
 
     @PutMapping()

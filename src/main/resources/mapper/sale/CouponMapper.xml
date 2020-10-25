@@ -2,18 +2,20 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gxw.store.project.sale.mapper.DiscountMapper">
+<mapper namespace="com.gxw.store.project.sale.mapper.CouponMapper">
 
-    <resultMap id="DiscountResult" type="Discount">
+    <resultMap id="CouponResult" type="Coupon">
         <id property="id" column="id"/>
         <result property="staffId" column="staff_id"/>
         <result property="businessId" column="business_id"/>
         <result property="name" column="name"/>
         <result property="content" column="content"/>
-        <result property="discount" column="discount"/>
+        <result property="price" column="price"/>
         <result property="startTime" column="start_time"/>
         <result property="endTime" column="end_time"/>
         <result property="mode" column="mode"/>
+        <result property="targetPrice" column="target_price"/>
+        <result property="num" column="num"/>
         <result property="deleteFlag" column="delete_flag"/>
         <result property="createTime" column="created_at"/>
         <collection property="products" javaType="ArrayList"  resultMap="ProductIdResult" />
@@ -23,74 +25,69 @@
         <result property="productId" column="product_id"/>
     </resultMap>
 
-
-
-    <insert id="create" parameterType="Discount" useGeneratedKeys="true" keyProperty="id">
-        insert `gxw_discount`  (staff_id,business_id,name,content,discount,start_time,end_time,mode)
-        value (#{staffId},#{businessId},#{name},#{content},#{discount},#{startTime},#{endTime},#{mode})
+    <insert id="create" parameterType="Coupon" useGeneratedKeys="true" keyProperty="id">
+        insert `gxw_coupon`  (staff_id,business_id,name,content,price,start_time,end_time,mode,target_price,num)
+        value (#{staffId},#{businessId},#{name},#{content},#{price},#{startTime},#{endTime},#{mode},#{targetPrice},#{num})
     </insert>
 
     <insert id="addProducts">
-        insert into gxw_discount_product(discount_id,product_id) values
+        insert into gxw_coupon_product(coupon_id,product_id) values
         <foreach collection="products" item="productId"  separator=",">
-            (#{discountId},#{productId})
+            (#{couponId},#{productId})
         </foreach>
     </insert>
 
     <delete id="clearProducts">
-        delete from gxw_discount_product where discount_id =#{discountId}
+        delete from gxw_coupon_product where coupon_id =#{couponId}
     </delete>
 
-    <sql id="sqlDiscount">
+    <update id="update" parameterType="Coupon">
+        update gxw_coupon
+        <set>
+            <if test="name != null and name != ''">name= #{name},</if>
+            <if test="content != null and content != ''">content= #{content},</if>
+            <if test="price != null and price != 0">price= #{price},</if>
+            <if test="startTime != null ">start_time= #{startTime},</if>
+            <if test="endTime != null ">end_time= #{endTime},</if>
+            <if test="mode != null ">mode= #{mode},</if>
+            <if test="targetPrice != null and targetPrice != 0">target_price= #{targetPrice},</if>
+            <if test="num != null ">num= #{num},</if>
+            delete_flag = #{deleteFlag}
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="delete">
+        update gxw_coupon
+        <set>
+            delete_flag = 1
+        </set>
+        where id=#{id} and business_id =#{businessId}
+    </update>
+
+    <sql id="sqlCoupon">
         select
         a.id,
         a.staff_id,
         a.business_id,
         a.name,
         a.content,
-        a.discount,
+        a.price,
         a.start_time,
         a.end_time,
+        a.target_price,
         a.mode,
+        a.num,
         a.delete_flag,
         a.created_at,
         b.product_id
-        from gxw_discount a
-        left join gxw_discount_product b on a.id = b.discount_id
+        from gxw_coupon a
+        left join gxw_coupon_product b on a.id = b.coupon_id
     </sql>
 
-    <select id="selectDiscounts" resultMap="DiscountResult">
-        <include refid="sqlDiscount" />
+    <select id="selectCoupons" resultMap="CouponResult">
+        <include refid="sqlCoupon" />
         where a.business_id = #{businessId} and a.delete_flag = 0 order by a.created_at desc
     </select>
 
-    <select id="getDiscountOfStore" resultMap="DiscountResult">
-        <include refid="sqlDiscount" />
-        where a.business_id = #{businessId} and a.start_time &lt; #{now} and a.end_time &gt; #{now}
-        and a.delete_flag = 0
-    </select>
-
-
-    <update id="update" parameterType="Discount">
-        update gxw_discount
-        <set>
-            <if test="name != null and name != ''">name= #{name},</if>
-            <if test="content != null and content != ''">content= #{content},</if>
-            <if test="discount != null and discount != 0">discount= #{discount},</if>
-            <if test="startTime != null ">start_time= #{startTime},</if>
-            <if test="endTime != null ">end_time= #{endTime},</if>
-            <if test="mode != null ">mode= #{mode},</if>
-            delete_flag = #{deleteFlag}
-        </set>
-        where id=#{id}
-    </update>
-
-
-    <update id="delete">
-        update gxw_discount
-        <set>
-            delete_flag = 1
-        </set>
-        where id=#{id} and business_id =#{businessId}
-    </update>
 </mapper>
