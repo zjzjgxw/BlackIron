@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DiscountServiceImp implements DiscountService {
@@ -52,5 +53,14 @@ public class DiscountServiceImp implements DiscountService {
     public Boolean delete(Long id, Long businessId) {
         discountMapper.delete(id, businessId);
         return true;
+    }
+
+    @Override
+    public Map<Long, Integer> getDiscountOfProducts(Long Business, Long[] productIds) {
+
+        //获取
+
+
+        return null;
     }
 }

@@ -3,6 +3,7 @@ package com.gxw.store.project.sale.service;
 import com.gxw.store.project.sale.entity.Discount;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DiscountService {
 
@@ -18,4 +19,11 @@ public interface DiscountService {
     Boolean update(Discount discount);
 
     Boolean delete(Long id, Long businessId);
+
+    /**
+     * 获取产品的折扣
+     * @param productIds
+     * @return
+     */
+    Map<Long,Integer> getDiscountOfProducts(Long Business, Long[] productIds);
 }
