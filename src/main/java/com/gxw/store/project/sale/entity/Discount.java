@@ -24,7 +24,7 @@ public class Discount {
     @NotNull(message = "促销结束时间不能为空")
     private Date endTime;
     @NotNull(message = "促销类型不饿能够为空")
-    private int mode;
+    private Mode mode;
 
     private List<Long> products; //指定的商品列表
     private int deleteFlag;
@@ -102,11 +102,11 @@ public class Discount {
         this.endTime = endTime;
     }
 
-    public int getMode() {
+    public Mode getMode() {
         return mode;
     }
 
-    public void setMode(int mode) {
+    public void setMode(Mode mode) {
         this.mode = mode;
     }
 

@@ -14,6 +14,7 @@ import com.gxw.store.project.product.entity.StockInfo;
 import com.gxw.store.project.product.entity.StockSpecification;
 import com.gxw.store.project.product.service.ProductService;
 import com.gxw.store.project.product.service.StockService;
+import com.gxw.store.project.sale.service.DiscountService;
 import com.gxw.store.project.user.entity.business.Business;
 import com.gxw.store.project.user.service.BusinessService;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -21,8 +22,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class OrderServiceImp implements OrderService {
@@ -40,6 +43,9 @@ public class OrderServiceImp implements OrderService {
     private BusinessService businessService;
 
     @Resource
+    private DiscountService discountService;
+
+    @Resource
     private OrderMapper orderMapper;
 
     @Override
@@ -52,6 +58,7 @@ public class OrderServiceImp implements OrderService {
 
         List<OrderItem> items = order.getItems();
         Long totalPrice = 0L;
+        Long actualPrice = 0L;
         for (OrderItem item : items) {
             //获取产品信息
             ProductDetail detail = productService.getDetailById(item.getProductId());
@@ -69,8 +76,8 @@ public class OrderServiceImp implements OrderService {
                     throw new UnEnoughStockException();
                 }
                 item.setOriginalPrice(stockInfo.getPrice());
-                //TODO 后续增加优惠策略
-                item.setPrice(stockInfo.getPrice());
+                //根据促销活动那个获得实际价格
+                item.setPrice(getDiscountPrice(detail,item.getOriginalPrice()));
             }
             if (item.getSpecificationId() != 0) {
                 //查找到对应的规格
@@ -84,21 +91,35 @@ public class OrderServiceImp implements OrderService {
                         item.setSecondSpecificationName(specification.getSecondName());
                         item.setSecondSpecificationValue(specification.getSecondValue());
                         item.setOriginalPrice(specification.getDetail().getPrice()); //设置原价
-                        //TODO 后续增加优惠策略
-                        item.setPrice(item.getOriginalPrice()); //设置实际价格
+                        //根据促销活动那个获得实际价格
+                        item.setPrice(getDiscountPrice(detail,item.getOriginalPrice())); //设置实际价格
                     }
                 }
             }
             totalPrice += item.getOriginalPrice();
+            actualPrice += item.getPrice();
         }
 
         order.setOriginalPrice(totalPrice);
         //TODO 后续添加快递费
         order.setExpressPrice(500L);
-        //TODO 后续增加优惠策略
-        order.setPrice(totalPrice + order.getExpressPrice());
+        //订单最终价为实际价格 + 邮费
+        order.setPrice(actualPrice + order.getExpressPrice());
 
         return proxySelf.doCreate(order);
+    }
+
+    /**
+     * 获取折扣价
+     * @param detail
+     * @return
+     */
+    private Long getDiscountPrice(ProductDetail detail, Long originalPrice) {
+        Map<Long, Long> discountMap = discountService.getDiscountOfProducts(detail.getBusinessId(), new Long[]{detail.getId()});
+        if (discountMap.get(detail.getId()) != null) {
+            return originalPrice * discountMap.get(detail.getId()) / 100;
+        }
+        return originalPrice;
     }
 
     @Transactional
@@ -107,9 +128,9 @@ public class OrderServiceImp implements OrderService {
         for (OrderItem item : order.getItems()) {
             item.setOrderId(order.getId());
             //TODO 魔术数字，后续修改
-            if(item.getStockType() == 1){ //拍下减库存
+            if (item.getStockType() == 1) { //拍下减库存
                 //库存操作
-                stockService.book(item.getProductId(),item.getSpecificationId(), (long) item.getNum());
+                stockService.book(item.getProductId(), item.getSpecificationId(), (long) item.getNum());
             }
 
             //添加订单项

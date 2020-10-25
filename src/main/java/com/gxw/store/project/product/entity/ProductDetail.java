@@ -1,10 +1,13 @@
 package com.gxw.store.project.product.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.gxw.store.project.common.utils.json.Decimal2Serializer;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -41,7 +44,10 @@ public class ProductDetail {
     @NotNull(message = "封面图不能为空")
     private String coverUrl; //封面图片
 
-    private Long price;//展示价格
+    @JsonSerialize(using = Decimal2Serializer.class)
+    private BigDecimal price;//展示价格
+    @JsonSerialize(using = Decimal2Serializer.class)
+    private BigDecimal originalPrice; //商品原价
 
     private Long saleNum;//销量
 
@@ -170,12 +176,21 @@ public class ProductDetail {
         this.coverUrl = coverUrl;
     }
 
-    public Long getPrice() {
+
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public BigDecimal getOriginalPrice() {
+        return originalPrice;
+    }
+
+    public void setOriginalPrice(BigDecimal originalPrice) {
+        this.originalPrice = originalPrice;
     }
 
     public Long getSaleNum() {

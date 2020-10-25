@@ -47,8 +47,6 @@ public class StockServiceImp implements StockService {
 
     @Override
     public Map<Long, StockInfo> getProductPrice(Long[] productIds) {
-        //TODO 后续价格需要整合 折扣，优惠系统
-
         return stockMapper.getProductPrice(productIds);
     }
 

@@ -3,6 +3,7 @@ package com.gxw.store.project.common.utils.enumHandler;
 
 import com.gxw.store.project.common.utils.enums.ExpressType;
 import com.gxw.store.project.order.entity.OrderStatus;
+import com.gxw.store.project.sale.entity.Mode;
 import com.gxw.store.project.user.entity.admin.AdminStatus;
 import com.gxw.store.project.user.entity.business.BusinessScale;
 import com.gxw.store.project.user.entity.business.BusinessStatus;
@@ -16,7 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@MappedTypes(value = {BusinessScale.class, BusinessStatus.class, StaffStatus.class, AdminStatus.class, ExpressType.class, OrderStatus.class})
+@MappedTypes(value = {BusinessScale.class, BusinessStatus.class, StaffStatus.class, AdminStatus.class, ExpressType.class, OrderStatus.class, Mode.class})
 public class BaseEnumTypeHandle<E extends Enum<E> & BaseEnum> extends BaseTypeHandler<E> {
     private final Class<E> type;
 

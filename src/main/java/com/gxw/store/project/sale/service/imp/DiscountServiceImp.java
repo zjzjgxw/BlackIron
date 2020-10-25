@@ -2,12 +2,15 @@ package com.gxw.store.project.sale.service.imp;
 
 import com.gxw.store.project.common.utils.exception.ErrorParamException;
 import com.gxw.store.project.sale.entity.Discount;
+import com.gxw.store.project.sale.entity.Mode;
 import com.gxw.store.project.sale.mapper.DiscountMapper;
 import com.gxw.store.project.sale.service.DiscountService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +24,7 @@ public class DiscountServiceImp implements DiscountService {
     @Transactional
     public Long create(Discount discount) {
         discountMapper.create(discount);
-        if (discount.getMode() == 2) {
+        if (discount.getMode() == Mode.PRODUCT) {
             if (discount.getProducts().size() == 0) {
                 throw new ErrorParamException("请指定参与活动的商品");
             }
@@ -39,7 +42,7 @@ public class DiscountServiceImp implements DiscountService {
     @Transactional
     public Boolean update(Discount discount) {
         discountMapper.update(discount);
-        if (discount.getMode() == 2) {
+        if (discount.getMode() == Mode.PRODUCT) {
             if (discount.getProducts().size() == 0) {
                 throw new ErrorParamException("请指定参与活动的商品");
             }
@@ -56,11 +59,28 @@ public class DiscountServiceImp implements DiscountService {
     }
 
     @Override
-    public Map<Long, Integer> getDiscountOfProducts(Long Business, Long[] productIds) {
-
-        //获取
-
-
-        return null;
+    public Map<Long, Long> getDiscountOfProducts(Long businessId, Long[] productIds) {
+        //获取符合要求的全局优惠
+        Date date = new Date();
+        List<Discount> discounts = discountMapper.getDiscountOfStore(businessId, date);
+        Map<Long, Long> result = new HashMap<>();
+        for (Discount discount : discounts) {
+            if (discount.getMode() == Mode.ALL) {
+                for (Long productId : productIds) {
+                    if (result.get(productId) == null || (result.get(productId) != null && result.get(productId) >= discount.getDiscount())) {
+                        result.put(productId, discount.getDiscount());
+                    }
+                }
+            } else if (discount.getMode() == Mode.PRODUCT) {
+                for (Long productId : productIds) {
+                    if (discount.getProducts().contains(productId)) {
+                        if (result.get(productId) == null || (result.get(productId) != null && result.get(productId) >= discount.getDiscount())) {
+                            result.put(productId, discount.getDiscount());
+                        }
+                    }
+                }
+            }
+        }
+        return result;
     }
 }

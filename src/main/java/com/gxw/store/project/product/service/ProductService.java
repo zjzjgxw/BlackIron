@@ -36,4 +36,5 @@ public interface ProductService {
      * @return
      */
     List<ProductDetail> selectProducts(Long businessId,Long categoryId);
+
 }

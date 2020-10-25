@@ -11,6 +11,7 @@ public interface DiscountService {
 
     /**
      * 获取限时折扣活动列表
+     *
      * @param businessId
      * @return
      */
@@ -22,8 +23,9 @@ public interface DiscountService {
 
     /**
      * 获取产品的折扣
+     *
      * @param productIds
      * @return
      */
-    Map<Long,Integer> getDiscountOfProducts(Long Business, Long[] productIds);
+    Map<Long, Long> getDiscountOfProducts(Long businessId, Long[] productIds);
 }

@@ -4,6 +4,7 @@ package com.gxw.store.project.sale.mapper;
 import com.gxw.store.project.sale.entity.Discount;
 import org.apache.ibatis.annotations.MapKey;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -43,11 +44,11 @@ public interface DiscountMapper {
 
     void delete(Long id, Long businessId);
 
+
     /**
-     * 获取产品的折扣信息
-     * @param productIds
+     * 获取有效的全场优惠
+     * @param businessId
      * @return
      */
-    @MapKey("productId")
-    Map<Long, Discount> getDiscountOfProducts(Long Business, Long[] productIds);
+    List<Discount> getDiscountOfStore(Long businessId, Date now);
 }
