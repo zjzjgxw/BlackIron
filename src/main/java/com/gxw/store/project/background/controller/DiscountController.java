@@ -20,7 +20,7 @@ public class DiscountController {
 
     @PostMapping()
     public ResponseResult create(@Valid @RequestBody Discount discount) {
-        discount.setUserId(SessionUtils.getUserId());
+        discount.setStaffId(SessionUtils.getUserId());
         discount.setBusinessId(SessionUtils.getBusinessId());
         Long id = discountService.create(discount);
         HashMap<String, Long> res = new HashMap<>();
@@ -38,7 +38,7 @@ public class DiscountController {
 
     @PutMapping()
     public ResponseResult updateDiscount(@Valid @RequestBody Discount discount) {
-        discount.setUserId(SessionUtils.getUserId());
+        discount.setStaffId(SessionUtils.getUserId());
         discount.setBusinessId(SessionUtils.getBusinessId());
         discountService.update(discount);
         return ResponseResult.success();

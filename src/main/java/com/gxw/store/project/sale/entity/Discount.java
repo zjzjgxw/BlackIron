@@ -11,7 +11,7 @@ import java.util.List;
 public class Discount {
 
     private Long id;
-    private Long userId;
+    private Long staffId;
     private Long businessId;
     @NotBlank(message = "促销名不能为空")
     private String name;
@@ -82,12 +82,13 @@ public class Discount {
         return endTime;
     }
 
-    public Long getUserId() {
-        return userId;
+
+    public Long getStaffId() {
+        return staffId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setStaffId(Long staffId) {
+        this.staffId = staffId;
     }
 
     public List<Long> getProducts() {

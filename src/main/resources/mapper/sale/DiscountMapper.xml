@@ -6,7 +6,7 @@
 
     <resultMap id="DiscountResult" type="Discount">
         <id property="id" column="id"/>
-        <result property="userId" column="user_id"/>
+        <result property="staffId" column="staff_id"/>
         <result property="businessId" column="business_id"/>
         <result property="name" column="name"/>
         <result property="content" column="content"/>
@@ -26,7 +26,7 @@
 
 
     <insert id="create" parameterType="Discount" useGeneratedKeys="true" keyProperty="id">
-        insert `gxw_discount`  (user_id,business_id,name,content,discount,start_time,end_time,mode)
+        insert `gxw_discount`  (staff_id,business_id,name,content,discount,start_time,end_time,mode)
         value (#{userId},#{businessId},#{name},#{content},#{discount},#{startTime},#{endTime},#{mode})
     </insert>
 
@@ -44,7 +44,7 @@
     <sql id="sqlDiscount">
         select
         a.id,
-        a.user_id,
+        a.staff_id,
         a.business_id,
         a.name,
         a.content,
