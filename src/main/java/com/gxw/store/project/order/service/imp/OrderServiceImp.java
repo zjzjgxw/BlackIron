@@ -68,6 +68,7 @@ public class OrderServiceImp implements OrderService {
         List<OrderItem> items = order.getItems();
         Long totalPrice = 0L;
         Long actualPrice = 0L;
+        Long expressPrice = 0L;
         LinkedList<Long> productIds = new LinkedList<>();
         for (OrderItem item : items) {
             //获取产品信息
@@ -79,6 +80,9 @@ public class OrderServiceImp implements OrderService {
             item.setStockType(detail.getStockType());
             //获取库存信息
             StockInfo stockInfo = stockService.getStockInfoByProductId(item.getProductId());
+            if (expressPrice < stockInfo.getExpressPrice()) {
+                expressPrice = stockInfo.getExpressPrice();
+            }
             if (item.getSpecificationId() == 0 && stockInfo.getSpecifications().size() != 0) {
                 throw new MissSpecificationException(); //缺少规格信息
             }
@@ -111,9 +115,7 @@ public class OrderServiceImp implements OrderService {
         }
 
         order.setOriginalPrice(totalPrice);
-        //TODO 后续添加快递费
-        order.setExpressPrice(500L);
-
+        order.setExpressPrice(expressPrice);
         Coupon coupon = getCoupon(order.getUserId(), order.getCouponId());
         Long couponPrice = 0L;
         if (coupon != null) {

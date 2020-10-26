@@ -22,6 +22,9 @@ public class StockInfo {
     @NotNull(message = "价格不能为空")
     private Long price;  // 展示价格
 
+    @NotNull(message = "快递费用不能为空")
+    private Long expressPrice; //快递费
+
     @NotNull(message = "剩余库存不能为空")
     private Long lastNum; //剩余库存
 
@@ -94,5 +97,13 @@ public class StockInfo {
 
     public void setSpecifications(List<StockSpecification> specifications) {
         this.specifications = specifications;
+    }
+
+    public Long getExpressPrice() {
+        return expressPrice;
+    }
+
+    public void setExpressPrice(Long expressPrice) {
+        this.expressPrice = expressPrice;
     }
 }
