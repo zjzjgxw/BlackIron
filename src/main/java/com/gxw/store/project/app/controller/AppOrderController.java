@@ -51,4 +51,13 @@ public class AppOrderController {
         res.put("orders", orders);
         return ResponseResult.success(res);
     }
+
+    @GetMapping("/payCallback")
+    public ResponseResult payCallBack(@RequestParam Long orderId)
+    {
+        orderService.paid(orderId);
+        return ResponseResult.success();
+
+    }
+
 }

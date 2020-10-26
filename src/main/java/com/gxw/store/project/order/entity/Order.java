@@ -52,6 +52,8 @@ public class Order {
 
     private Long couponId; //优惠券id
 
+    private String remark; //备注
+
     private List<OrderItem> items;
 
     public Long getId() {
@@ -213,5 +215,13 @@ public class Order {
 
     public void setCouponId(Long couponId) {
         this.couponId = couponId;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

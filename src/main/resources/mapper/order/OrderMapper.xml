@@ -23,6 +23,7 @@
         <result property="createTime" column="created_at"/>
         <result property="payTime" column="pay_at"/>
         <result property="sendTime" column="send_at"/>
+        <result property="remark" column="remark"/>
         <collection property="items" javaType="java.util.List" resultMap="OrderItemResult"/>
     </resultMap>
 
@@ -38,6 +39,7 @@
         <result property="secondSpecificationName" column="second_specification_name"/>
         <result property="secondSpecificationValue" column="second_specification_value"/>
         <result property="price" column="price"/>
+        <result property="stockType" column="stock_type"/>
         <result property="originalPrice" column="original_price"/>
         <result property="num" column="num"/>
     </resultMap>
@@ -59,6 +61,7 @@
         second_specification_value,
         product_snap,
         price,
+        stock_type,
         original_price,
         num)
         value (#{orderId},
@@ -72,11 +75,12 @@
         #{secondSpecificationValue},
         #{productSnap},
         #{price},
+        #{stockType},
         #{originalPrice},
         #{num})
     </insert>
 
-    <select id="selectOrders"  resultMap="OrderResult">
+    <sql id="sqlOrder">
         select a.id,
         a.business_id,
         a.business_name,
@@ -95,6 +99,7 @@
         a.created_at,
         a.pay_at,
         a.send_at,
+        a.remark,
         b.id as item_id,
         b.order_id,
         b.name as product_name,
@@ -106,10 +111,15 @@
         b.second_specification_name,
         b.second_specification_value,
         b.price,
+        b.stock_type,
         b.original_price,
         b.num
         from gxw_order a
         left join gxw_order_item b on a.id = b.order_id
+    </sql>
+
+    <select id="selectOrders"  resultMap="OrderResult">
+        <include refid="sqlOrder" />
         where a.delete_flag = 0
         <if test="id != null and id != 0">and a.id= #{id}</if>
         <if test="code != null and code != ''">and a.order_code= #{code}</if>
@@ -125,5 +135,28 @@
         order by a.created_at desc
     </select>
 
+
+    <select id="getOrder" resultMap="OrderResult">
+        <include refid="sqlOrder" />
+        where a.id = #{id} and a.delete_flag = 0
+    </select>
+
+    <update id="update" parameterType="Order">
+        update gxw_order
+        <set>
+            <if test="price != null and price != 0">price= #{price},</if>
+            <if test="expressType != null">express_type= #{expressType},</if>
+            <if test="expressCode != null and expressCode != ''">express_code= #{expressCode},</if>
+            <if test="receiver != null and receiver !='' ">receiver= #{receiver},</if>
+            <if test="telphone != null and telphone !='' ">telphone= #{telphone},</if>
+            <if test="address != null and address !='' ">address= #{address},</if>
+            <if test="status != null ">status= #{status},</if>
+            <if test="payTime != null ">pay_at= #{payTime},</if>
+            <if test="sendTime != null ">send_at= #{sendTime},</if>
+            <if test="remark != null and remark != '' ">remark= #{remark},</if>
+            delete_flag = #{deleteFlag}
+        </set>
+        where id=#{id}
+    </update>
 
 </mapper>

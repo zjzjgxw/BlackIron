@@ -13,4 +13,10 @@ public interface OrderService {
 
     List<Order> selectOrders(OrderSearchParam param);
 
+    /**
+     * 支付成功
+     * @param orderId
+     * @return
+     */
+    Boolean paid(Long orderId);
 }

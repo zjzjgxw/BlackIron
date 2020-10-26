@@ -107,6 +107,9 @@ public class OrderServiceImp implements OrderService {
                         item.setOriginalPrice(specification.getDetail().getPrice() * item.getNum()); //设置原价
                     }
                 }
+                if (item.getOriginalPrice() == null) {
+                    throw new MissSpecificationException(); //缺少规格信息
+                }
             }
             //根据促销活动那个获得实际价格
             item.setPrice(getDiscountPrice(detail, item.getOriginalPrice()));
@@ -214,5 +217,26 @@ public class OrderServiceImp implements OrderService {
     @Override
     public List<Order> selectOrders(OrderSearchParam param) {
         return orderMapper.selectOrders(param);
+    }
+
+    @Override
+    @Transactional
+    public Boolean paid(Long orderId) {
+        Order order = orderMapper.getOrder(orderId);
+        if (order == null || order.getStatus() != OrderStatus.UNPAID) {
+            throw new NotExistException("查找不到对应的待支付订单");
+        }
+
+        order.setStatus(OrderStatus.WAIT_SEND);
+        for (OrderItem item : order.getItems()) {
+            if (item.getStockType() == 2) { //付款减库存
+                //库存操作
+                stockService.book(item.getProductId(), order.getId(), item.getSpecificationId(), (long) item.getNum());
+            }
+        }
+        order.setPayTime(new Date());
+        orderMapper.update(order);
+
+        return true;
     }
 }
