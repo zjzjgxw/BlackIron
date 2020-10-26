@@ -18,12 +18,24 @@
         <result property="num" column="num"/>
         <result property="deleteFlag" column="delete_flag"/>
         <result property="createTime" column="created_at"/>
-        <collection property="products" javaType="ArrayList"  resultMap="ProductIdResult" />
+        <collection property="products" javaType="ArrayList" resultMap="ProductIdResult"/>
+        <collection property="users" javaType="ArrayList" resultMap="CouponUserResult"/>
     </resultMap>
 
     <resultMap id="ProductIdResult" type="Long">
         <result property="productId" column="product_id"/>
     </resultMap>
+
+    <resultMap id="CouponUserResult" type="CouponUser">
+        <id property="id" column="coupon_user_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="couponId" column="coupon_id"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="user_created_at"/>
+        <result property="useTime" column="use_at"/>
+    </resultMap>
+
 
     <insert id="create" parameterType="Coupon" useGeneratedKeys="true" keyProperty="id">
         insert `gxw_coupon`  (staff_id,business_id,name,content,price,start_time,end_time,mode,target_price,num)
@@ -32,7 +44,7 @@
 
     <insert id="addProducts">
         insert into gxw_coupon_product(coupon_id,product_id) values
-        <foreach collection="products" item="productId"  separator=",">
+        <foreach collection="products" item="productId" separator=",">
             (#{couponId},#{productId})
         </foreach>
     </insert>
@@ -85,9 +97,59 @@
         left join gxw_coupon_product b on a.id = b.coupon_id
     </sql>
 
+    <sql id="sqlCouponUser">
+        select
+            a.id,
+            a.staff_id,
+            a.business_id,
+            a.name,
+            a.content,
+            a.price,
+            a.start_time,
+            a.end_time,
+            a.target_price,
+            a.mode,
+            a.num,
+            a.delete_flag,
+            a.created_at,
+            b.product_id,
+            c.id as coupon_user_id,
+            c.user_id,
+            c.order_id,
+            c.coupon_id,
+            c.`status`,
+            c.created_at as user_created_at,
+            c.use_at
+            from gxw_coupon a
+            left join gxw_coupon_product b on a.id = b.coupon_id
+            left join gxw_coupon_user c on a.id = c.coupon_id
+    </sql>
+
+
     <select id="selectCoupons" resultMap="CouponResult">
-        <include refid="sqlCoupon" />
+        <include refid="sqlCoupon"/>
         where a.business_id = #{businessId} and a.delete_flag = 0 order by a.created_at desc
+    </select>
+
+    <select id="getCoupon" resultMap="CouponResult">
+        <include refid="sqlCoupon"/>
+        where a.id = #{id} and a.delete_flag = 0
+    </select>
+
+
+    <insert id="send">
+        insert into gxw_coupon_user(user_id,coupon_id,status) values
+        <foreach collection="userIds" item="userId" separator=",">
+            (#{userId},#{id},0)
+        </foreach>
+    </insert>
+
+    <select id="selectCouponsOfUser" resultMap="CouponResult">
+        <include refid="sqlCouponUser" />
+        where c.user_id = #{userId}
+        <if test="now != null  "> and a.start_time &lt; #{now} and a.end_time &gt; #{now} </if>
+        <if test="status != null  "> and c.status = #{status} </if>
+        and  a.delete_flag = 0
     </select>
 
 </mapper>

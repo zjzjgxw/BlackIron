@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateKeyException.class)
     public Object handleDuplicateKeyException(DuplicateKeyException e){
         log.info(e.getMessage(), e);
-        return ResponseResult.error(HttpStatus.CONFLICT, "唯一键冲突");
+        return ResponseResult.error(HttpStatus.CONFLICT, "不允许重复");
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
@@ -87,6 +87,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ErrorParamException.class)
     public Object handleErrorParamException(ErrorParamException e){
+        log.info(e.getMessage(), e);
+        return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
+    }
+
+    @ExceptionHandler(NotExistException.class)
+    public Object handleNotExistException(NotExistException e){
         log.info(e.getMessage(), e);
         return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
     }

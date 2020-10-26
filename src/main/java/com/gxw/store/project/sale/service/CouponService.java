@@ -13,4 +13,22 @@ public interface CouponService {
 
     List<Coupon> getCoupons(Long businessId);
 
+    /**
+     * 发放优惠券
+     *
+     * @param id
+     * @param userIds
+     * @return
+     */
+    Boolean send(Long id, Long[] userIds);
+
+    /**
+     * 获取
+     *
+     * @param userId
+     * @param productId
+     * @param onlyUse
+     * @return
+     */
+    List<Coupon> getCouponsOfUser(Long userId, Long productId, boolean onlyUse);
 }

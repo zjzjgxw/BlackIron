@@ -31,6 +31,7 @@ public class Coupon {
     private Long num;
 
     private List<Long> products; //指定的商品列表
+    private List<CouponUser> users; //优惠券领取用户
     private int deleteFlag;
     private Date createTime;
 
@@ -145,5 +146,13 @@ public class Coupon {
 
     public void setNum(Long num) {
         this.num = num;
+    }
+
+    public List<CouponUser> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<CouponUser> users) {
+        this.users = users;
     }
 }

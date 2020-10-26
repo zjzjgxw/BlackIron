@@ -2,7 +2,10 @@ package com.gxw.store.project.sale.mapper;
 
 
 import com.gxw.store.project.sale.entity.Coupon;
+import com.gxw.store.project.sale.entity.CouponUseStatus;
 
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -32,6 +35,14 @@ public interface CouponMapper {
      */
     List<Coupon> selectCoupons(Long businessId);
 
+    /**
+     * 获取优惠券详情
+     * @param id
+     * @return
+     */
+    Coupon getCoupon(Long id);
+
+
 
     /**
      * 更新活动信息
@@ -41,5 +52,21 @@ public interface CouponMapper {
 
     void delete(Long id, Long businessId);
 
+
+    /**
+     * 发放优惠券
+     * @param id
+     * @param userIds
+     */
+    void send(Long id, Long[] userIds);
+
+    /**
+     * 搜索用户优惠券
+     * @param userId
+     * @param now
+     * @param status
+     * @return
+     */
+    LinkedList<Coupon> selectCouponsOfUser(Long userId, Date now, CouponUseStatus status);
 
 }
