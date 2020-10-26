@@ -45,10 +45,11 @@ public interface StockService {
     /**
      * 下单
      * @param productId  商品id
+     * @param orderId 订单id
      * @param specificationId 规格id
      * @param num 数量
      * @return
      */
-    Boolean book(Long productId,Long specificationId,Long num);
+    Boolean book(Long productId,Long orderId, Long specificationId,Long num);
 
 }

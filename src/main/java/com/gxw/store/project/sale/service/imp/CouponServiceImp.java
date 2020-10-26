@@ -82,10 +82,10 @@ public class CouponServiceImp implements CouponService {
         List<Coupon> coupons;
         if (onlyUse) {
             coupons = couponMapper.selectCouponsOfUser(userId, new Date(), CouponUseStatus.UN_USED);
-            if(productId != null){
-                for(Coupon coupon: coupons){
-                    if(coupon.getMode() == Mode.PRODUCT){
-                        if(!coupon.getProducts().contains(productId)){
+            if (productId != null) {
+                for (Coupon coupon : coupons) {
+                    if (coupon.getMode() == Mode.PRODUCT) {
+                        if (!coupon.getProducts().contains(productId)) {
                             coupons.remove(coupon);
                         }
                     }
@@ -95,5 +95,19 @@ public class CouponServiceImp implements CouponService {
             coupons = couponMapper.selectCouponsOfUser(userId, null, null);
         }
         return coupons;
+    }
+
+    @Override
+    public Boolean useCoupon(Long userId, Long couponId, Long orderId) {
+        int row = couponMapper.useCoupon(userId, couponId, orderId, new Date());
+        if (row == 0) {
+            throw new NotExistException("找不到对应的优惠券领取记录");
+        }
+        return true;
+    }
+
+    @Override
+    public Coupon getUseAbleCouponInfo(Long userId, Long couponId) {
+        return couponMapper.getCouponInfo(userId, couponId, new Date(), CouponUseStatus.UN_USED);
     }
 }

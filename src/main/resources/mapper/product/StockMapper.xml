@@ -152,4 +152,8 @@
         where stock_specification_id=#{stockSpecificationId}
     </update>
 
+    <insert id="addSaleRecord">
+        insert gxw_stock_sale_record (product_id,order_id,num,stock_specification_id)
+        values (#{productId},#{orderId},#{num},#{specificationId})
+    </insert>
 </mapper>

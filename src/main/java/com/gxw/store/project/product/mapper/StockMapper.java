@@ -57,4 +57,12 @@ public interface StockMapper {
      */
     void updateSpecificationDetailNum(Long stockSpecificationId, Long num);
 
+    /**
+     * 添加销售记录
+     * @param productId 商品id
+     * @param orderId  订单id
+     * @param num 销售数量
+     * @param specificationId 规格id
+     */
+    void addSaleRecord(Long productId,Long orderId,Long num, Long specificationId);
 }

@@ -74,14 +74,16 @@ public class StockServiceImp implements StockService {
 
     @Override
     @Transactional
-    public Boolean book(Long productId, Long specificationId, Long num) {
-        //出入的购买数量为正，更新库存时需要变为负数
+    public Boolean book(Long productId, Long orderId, Long specificationId, Long num) {
+        //减去库存
         if (specificationId == 0) {
             stockMapper.updateStockNum(productId, -num);
         } else {
             stockMapper.updateSpecificationDetailNum(specificationId, -num);
         }
+        //增加销量
         stockMapper.updateStockSaleNum(productId, num);
+        stockMapper.addSaleRecord(productId, orderId, num, specificationId);
         return true;
     }
 

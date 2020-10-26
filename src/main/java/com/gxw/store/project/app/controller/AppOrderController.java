@@ -15,8 +15,8 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/orders")
-public class OrderController {
+@RequestMapping("app/orders")
+public class AppOrderController {
 
     @Resource
     private OrderService orderService;

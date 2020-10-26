@@ -50,6 +50,8 @@ public class Order {
 
     private Date sendTime; //发货时间
 
+    private Long couponId; //优惠券id
+
     private List<OrderItem> items;
 
     public Long getId() {
@@ -203,5 +205,13 @@ public class Order {
 
     public void setItems(List<OrderItem> items) {
         this.items = items;
+    }
+
+    public Long getCouponId() {
+        return couponId;
+    }
+
+    public void setCouponId(Long couponId) {
+        this.couponId = couponId;
     }
 }

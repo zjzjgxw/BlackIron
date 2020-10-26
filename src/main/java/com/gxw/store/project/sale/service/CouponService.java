@@ -31,4 +31,15 @@ public interface CouponService {
      * @return
      */
     List<Coupon> getCouponsOfUser(Long userId, Long productId, boolean onlyUse);
+
+    /**
+     * 获取用户的一个优惠券
+     *
+     * @param userId
+     * @param couponId
+     * @return
+     */
+    Coupon getUseAbleCouponInfo(Long userId, Long couponId);
+
+    Boolean useCoupon(Long userId, Long couponId, Long orderId);
 }
