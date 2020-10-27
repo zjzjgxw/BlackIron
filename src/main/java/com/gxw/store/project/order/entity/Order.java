@@ -27,7 +27,7 @@ public class Order {
 
     private Long expressPrice; //邮费
 
-    private ExpressType expressType; //快递类型
+    private Long expressId; //快递类型
 
     private String expressCode; //快递单号
 
@@ -120,12 +120,12 @@ public class Order {
         this.expressPrice = expressPrice;
     }
 
-    public ExpressType getExpressType() {
-        return expressType;
+    public Long getExpressId() {
+        return expressId;
     }
 
-    public void setExpressType(ExpressType expressType) {
-        this.expressType = expressType;
+    public void setExpressId(Long expressId) {
+        this.expressId = expressId;
     }
 
     public String getExpressCode() {

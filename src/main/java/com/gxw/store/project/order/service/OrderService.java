@@ -15,8 +15,31 @@ public interface OrderService {
 
     /**
      * 支付成功
+     *
      * @param orderId
      * @return
      */
     Boolean paid(Long orderId);
+
+
+    /**
+     * 发货
+     * @param businessId
+     * @param orderId
+     * @param expressId
+     * @param expressCode
+     * @return
+     */
+    Boolean send(Long businessId, Long orderId, Long expressId, String expressCode);
+
+    /**
+     * 修个快递信息
+     * @param businessId
+     * @param orderId
+     * @param expressId
+     * @param expressCode
+     * @return
+     */
+    Boolean updateExpressInfo(Long businessId, Long orderId, Long expressId, String expressCode);
+
 }

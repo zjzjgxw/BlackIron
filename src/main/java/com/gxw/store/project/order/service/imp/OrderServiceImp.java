@@ -222,7 +222,7 @@ public class OrderServiceImp implements OrderService {
     @Override
     @Transactional
     public Boolean paid(Long orderId) {
-        Order order = orderMapper.getOrder(orderId);
+        Order order = orderMapper.getOrder(orderId, null);
         if (order == null || order.getStatus() != OrderStatus.UNPAID) {
             throw new NotExistException("查找不到对应的待支付订单");
         }
@@ -237,6 +237,35 @@ public class OrderServiceImp implements OrderService {
         order.setPayTime(new Date());
         orderMapper.update(order);
 
+        return true;
+    }
+
+    @Override
+    public Boolean send(Long businessId, Long orderId, Long expressId, String expressCode) {
+        Order order = orderMapper.getOrder(orderId, businessId);
+        if (order == null || order.getStatus() != OrderStatus.WAIT_SEND) {
+            throw new NotExistException("查找不到对应的待发货订单");
+        }
+        order.setExpressId(expressId);
+        order.setExpressCode(expressCode);
+        order.setSendTime(new Date());
+
+        order.setStatus(OrderStatus.HAS_SEND);
+        orderMapper.update(order);
+
+        //TODO 可以加短信通知收件人已发货
+        return true;
+    }
+
+    @Override
+    public Boolean updateExpressInfo(Long businessId, Long orderId, Long expressId, String expressCode) {
+        Order order = orderMapper.getOrder(orderId, businessId);
+        if(order == null){
+            throw new NotExistException("查找不到对应的订单");
+        }
+        order.setExpressId(expressId);
+        order.setExpressCode(expressCode);
+        orderMapper.update(order);
         return true;
     }
 }

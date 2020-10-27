@@ -15,7 +15,7 @@ public interface OrderMapper {
 
     List<Order> selectOrders(OrderSearchParam searchParam);
 
-    Order getOrder(Long id);
+    Order getOrder(Long id, Long businessId);
 
     int update(Order order);
 }

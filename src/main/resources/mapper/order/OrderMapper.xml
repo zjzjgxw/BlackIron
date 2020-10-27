@@ -13,7 +13,7 @@
         <result property="price" column="price"/>
         <result property="originalPrice" column="original_price"/>
         <result property="expressPrice" column="express_price"/>
-        <result property="expressType" column="express_type"/>
+        <result property="expressId" column="express_id"/>
         <result property="expressCode" column="express_code"/>
         <result property="receiver" column="receiver"/>
         <result property="telphone" column="telphone"/>
@@ -89,7 +89,7 @@
         a.price,
         a.original_price,
         a.express_price,
-        a.express_type,
+        a.express_id,
         a.express_code,
         a.receiver,
         a.telphone,
@@ -118,8 +118,8 @@
         left join gxw_order_item b on a.id = b.order_id
     </sql>
 
-    <select id="selectOrders"  resultMap="OrderResult">
-        <include refid="sqlOrder" />
+    <select id="selectOrders" resultMap="OrderResult">
+        <include refid="sqlOrder"/>
         where a.delete_flag = 0
         <if test="id != null and id != 0">and a.id= #{id}</if>
         <if test="code != null and code != ''">and a.order_code= #{code}</if>
@@ -137,15 +137,15 @@
 
 
     <select id="getOrder" resultMap="OrderResult">
-        <include refid="sqlOrder" />
-        where a.id = #{id} and a.delete_flag = 0
+        <include refid="sqlOrder"/>
+        where a.id = #{id}  <if test="businessId != null"> and a.business_id = #{businessId} </if> and a.delete_flag = 0
     </select>
 
     <update id="update" parameterType="Order">
         update gxw_order
         <set>
             <if test="price != null and price != 0">price= #{price},</if>
-            <if test="expressType != null">express_type= #{expressType},</if>
+            <if test="expressId != null">express_id= #{expressId},</if>
             <if test="expressCode != null and expressCode != ''">express_code= #{expressCode},</if>
             <if test="receiver != null and receiver !='' ">receiver= #{receiver},</if>
             <if test="telphone != null and telphone !='' ">telphone= #{telphone},</if>
