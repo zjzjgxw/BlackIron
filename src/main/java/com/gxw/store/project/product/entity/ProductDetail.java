@@ -17,7 +17,6 @@ import java.util.List;
 public class ProductDetail {
 
     private Long id;
-    @NotNull(message = "bussinessId不能为空")
     private Long businessId;
 
     @NotBlank(message = "商品名不能为空")

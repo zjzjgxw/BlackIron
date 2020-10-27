@@ -3,6 +3,8 @@ package com.gxw.store.project.background.controller;
 
 import com.gxw.store.project.common.controller.BaseController;
 import com.gxw.store.project.common.utils.ResponseResult;
+import com.gxw.store.project.common.utils.SessionUtils;
+import com.gxw.store.project.product.dto.AddProductAttributes;
 import com.gxw.store.project.product.dto.ProductImages;
 import com.gxw.store.project.product.entity.*;
 import com.gxw.store.project.product.service.ProductService;
@@ -21,10 +23,54 @@ public class ProductController extends BaseController {
 
     @PostMapping("/detail")
     public ResponseResult create(@Valid @RequestBody ProductDetail detail) {
+        detail.setBusinessId(SessionUtils.getBusinessId());
         Long id = productService.createProductDetail(detail);
         HashMap<String, Long> res = new HashMap<>();
         res.put("id", id);
         return ResponseResult.success(res);
+    }
+
+    @PutMapping("/detail")
+    public ResponseResult update(@Valid @RequestBody ProductDetail detail) {
+        detail.setBusinessId(SessionUtils.getBusinessId());
+        boolean success = productService.updateDetail(detail);
+        if (success) {
+            return ResponseResult.success();
+        } else {
+            return ResponseResult.error();
+        }
+    }
+
+    /**
+     * 删除属性
+     *
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/detail/attributes/{id}")
+    public ResponseResult removeAttribute(@PathVariable Long id, @RequestParam Long detailId) {
+        boolean success = productService.removeAttribute(id, detailId);
+        if (success) {
+            return ResponseResult.success();
+        } else {
+            return ResponseResult.error();
+        }
+    }
+
+
+    /**
+     * 添加属性
+     * @param addProductAttributes
+     * @return
+     */
+    @PostMapping("/detail/attributes")
+    public ResponseResult addAttributes(@Valid @RequestBody AddProductAttributes addProductAttributes){
+        boolean success = productService.addAttributes(addProductAttributes.getDetailId(),addProductAttributes.getAttributes());
+        if (success) {
+            return ResponseResult.success();
+        } else {
+            return ResponseResult.error();
+        }
     }
 
     @PostMapping("/detail/images/{id}")
@@ -33,6 +79,12 @@ public class ProductController extends BaseController {
         HashMap<String, Long> res = new HashMap<>();
         res.put("id", id);
         return ResponseResult.success(res);
+    }
+
+    @PutMapping("/detail/images/{id}")
+    public ResponseResult updateImages(@PathVariable(name = "id") Long detailId, @RequestBody ProductImages images) {
+        productService.updateProductImages(detailId, images);
+        return ResponseResult.success();
     }
 
 

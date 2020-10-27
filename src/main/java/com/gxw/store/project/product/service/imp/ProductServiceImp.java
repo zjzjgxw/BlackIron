@@ -3,10 +3,7 @@ package com.gxw.store.project.product.service.imp;
 import com.gxw.store.project.common.utils.FileUtils;
 import com.gxw.store.project.common.utils.StringUtils;
 import com.gxw.store.project.product.dto.ProductImages;
-import com.gxw.store.project.product.entity.ProductDetail;
-import com.gxw.store.project.product.entity.ProductDetailImg;
-import com.gxw.store.project.product.entity.ProductDetailMainImg;
-import com.gxw.store.project.product.entity.StockInfo;
+import com.gxw.store.project.product.entity.*;
 import com.gxw.store.project.product.mapper.ProductMapper;
 import com.gxw.store.project.product.service.ProductService;
 import com.gxw.store.project.product.service.StockService;
@@ -43,9 +40,31 @@ public class ProductServiceImp implements ProductService {
     @Override
     @Transactional
     public Long createProductImages(Long detailId, ProductImages productImages) {
-        productMapper.createMainImages(detailId, productImages.getMainImages());
-        productMapper.createDetailImages(detailId, productImages.getDetailImages());
+        if(productImages.getMainImages() != null && productImages.getMainImages().size() > 0){
+            productMapper.createMainImages(detailId, productImages.getMainImages());
+        }
+        if(productImages.getDetailImages() != null && productImages.getMainImages().size() > 0){
+            productMapper.createDetailImages(detailId, productImages.getDetailImages());
+        }
         return detailId;
+    }
+
+    @Override
+    @Transactional
+    public Boolean updateProductImages(Long detailId, ProductImages productImages) {
+        if (productImages.getMainImages() != null) {
+            productMapper.deleteMainImages(detailId);
+            if (productImages.getMainImages().size() > 0) {
+                productMapper.createMainImages(detailId, productImages.getMainImages());
+            }
+        }
+        if (productImages.getDetailImages() != null) {
+            productMapper.deleteDetailImages(detailId);
+            if (productImages.getDetailImages().size() > 0) {
+                productMapper.createDetailImages(detailId, productImages.getDetailImages());
+            }
+        }
+        return true;
     }
 
     @Override
@@ -115,6 +134,24 @@ public class ProductServiceImp implements ProductService {
         }
 
         return details;
+    }
+
+    @Override
+    public Boolean updateDetail(ProductDetail detail) {
+        int row = productMapper.updateDetail(detail);
+        return row != 0;
+    }
+
+    @Override
+    public Boolean removeAttribute(Long id, Long detailId) {
+        int row = productMapper.deleteAttribute(id, detailId);
+        return row != 0;
+    }
+
+    @Override
+    public Boolean addAttributes(Long detailId, List<ProductDetailAttribute> attributes) {
+        productMapper.createAttributes(detailId, attributes);
+        return true;
     }
 
 

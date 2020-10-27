@@ -61,12 +61,31 @@
         value (#{businessId},#{categoryId},#{name},#{mode},#{description},#{coverUrl},#{stockType},#{statusType})
     </insert>
 
+    <update id="updateDetail" parameterType="ProductDetail">
+        update gxw_product_detail
+        <set>
+            <if test="categoryId != null and categoryId != 0">category_id= #{categoryId},</if>
+            <if test="name != null and name != ''">name= #{name},</if>
+            <if test="mode != null and mode != 0">mode= #{mode},</if>
+            <if test="description != null and description != ''">description= #{description},</if>
+            <if test="coverUrl != null and coverUrl != ''">cover_url= #{coverUrl},</if>
+            <if test="stockType != null and stockType != 0">stock_type= #{stockType},</if>
+            <if test="statusType != null and statusType != 0">status_type= #{statusType},</if>
+            delete_flag = #{deleteFlag}
+        </set>
+        where id = #{id}
+    </update>
+
     <insert id="createAttributes">
         insert gxw_product_detail_attribute (detail_id,name,content) values
         <foreach collection="attributes" item="item" separator=",">
             (#{detailId},#{item.name},#{item.content})
         </foreach>
     </insert>
+
+    <delete id="deleteAttribute">
+        delete from gxw_product_detail_attribute where id = #{id} and detail_id = #{detailId}
+    </delete>
 
     <insert id="createMainImages">
         insert gxw_product_detail_main_img (detail_id,img_url,index_no) values
@@ -75,12 +94,20 @@
         </foreach>
     </insert>
 
+    <delete id="deleteMainImages">
+        delete  from gxw_product_detail_main_img where detail_id = #{detailId}
+    </delete>
+
     <insert id="createDetailImages">
         insert gxw_product_detail_desc_img (detail_id,img_url,index_no) values
         <foreach collection="images" item="item" separator=",">
             (#{detailId},#{item.imgUrl},#{item.indexNo})
         </foreach>
     </insert>
+
+    <delete id="deleteDetailImages">
+        delete  from gxw_product_detail_desc_img where detail_id = #{detailId}
+    </delete>
 
     <select id="getDetailById" resultMap="ProductDetailResult">
         SELECT
@@ -115,20 +142,22 @@
 
     <select id="selectProducts" resultMap="ProductListResult">
         SELECT
-            a.id,
-            a.business_id,
-            a.category_id,
-            a.`name`,
-            a.`mode`,
-            a.stock_type,
-            a.status_type,
-            a.delete_flag,
-            a.created_at,
-            a.description,
-            a.cover_url
+        a.id,
+        a.business_id,
+        a.category_id,
+        a.`name`,
+        a.`mode`,
+        a.stock_type,
+        a.status_type,
+        a.delete_flag,
+        a.created_at,
+        a.description,
+        a.cover_url
         FROM
-            gxw_product_detail a
-            where a.business_id = #{businessId}   <if test="categoryId != null and categoryId != 0"> and a.category_id= #{categoryId}</if>   and  a.delete_flag = 0 order by a.created_at desc
+        gxw_product_detail a
+        where a.business_id = #{businessId}   <if test="categoryId != null and categoryId != 0">and a.category_id=
+        #{categoryId}
+    </if>   and a.delete_flag = 0 order by a.created_at desc
     </select>
 
 </mapper> 
