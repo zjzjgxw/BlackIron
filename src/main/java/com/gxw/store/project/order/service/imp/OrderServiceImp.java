@@ -260,12 +260,17 @@ public class OrderServiceImp implements OrderService {
     @Override
     public Boolean updateExpressInfo(Long businessId, Long orderId, Long expressId, String expressCode) {
         Order order = orderMapper.getOrder(orderId, businessId);
-        if(order == null){
+        if (order == null) {
             throw new NotExistException("查找不到对应的订单");
         }
         order.setExpressId(expressId);
         order.setExpressCode(expressCode);
         orderMapper.update(order);
         return true;
+    }
+
+    @Override
+    public Boolean hasOrderOfUser(Long orderId, Long productId, Long userId) {
+        return orderMapper.hasOrderOfUser(orderId, productId, userId) > 0;
     }
 }

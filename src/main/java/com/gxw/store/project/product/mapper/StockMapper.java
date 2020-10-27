@@ -65,4 +65,5 @@ public interface StockMapper {
      * @param specificationId 规格id
      */
     void addSaleRecord(Long productId,Long orderId,Long num, Long specificationId);
+
 }

@@ -42,4 +42,13 @@ public interface OrderService {
      */
     Boolean updateExpressInfo(Long businessId, Long orderId, Long expressId, String expressCode);
 
+    /**
+     * 判断用户是否拥有某个订单
+     * @param orderId
+     * @param productId
+     * @param userId
+     * @return
+     */
+    Boolean hasOrderOfUser(Long orderId, Long productId, Long userId);
+
 }

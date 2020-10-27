@@ -18,4 +18,13 @@ public interface OrderMapper {
     Order getOrder(Long id, Long businessId);
 
     int update(Order order);
+
+    /**
+     * 判断是否有用户记录
+     * @param orderId
+     * @param productId
+     * @param userId
+     * @return
+     */
+    int hasOrderOfUser(Long orderId, Long productId, Long userId);
 }
