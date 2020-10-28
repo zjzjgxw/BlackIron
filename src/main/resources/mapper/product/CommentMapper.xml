@@ -5,24 +5,39 @@
 <mapper namespace="com.gxw.store.project.product.mapper.CommentMapper">
 
     <resultMap id="CommentResult" type="Comment">
-        <id property="id" column="io"/>
+        <id property="id" column="id"/>
         <result property="businessId" column="business_id"/>
         <result property="productId" column="product_id"/>
         <result property="orderId" column="order_id"/>
         <result property="userId" column="user_id"/>
         <result property="userName" column="user_name"/>
-        <result property="coverUrl" column="coverUrl"/>
+        <result property="coverUrl" column="cover_url"/>
         <result property="content" column="content"/>
         <result property="score" column="score"/>
         <result property="deleteFlag" column="delete_flag"/>
         <result property="createTime" column="created_at"/>
     </resultMap>
 
-
     <insert id="create" parameterType="Comment" useGeneratedKeys="true" keyProperty="id">
         insert `gxw_product_comment`  (business_id,product_id,order_id,user_id,user_name,cover_url,content,score)
         value (#{businessId},#{productId},#{orderId},#{userId},#{userName},#{coverUrl},#{content},#{score})
     </insert>
+
+    <select id="getComments" resultMap="CommentResult">
+        select a.id, a.business_id,a.product_id,a.order_id,a.user_id,a.user_name,a.cover_url,a.content,a.score,a.delete_flag,a.created_at
+        from gxw_product_comment a where a.business_id = #{businessId}
+        <if test="productId != null and productId !=0  "> and a.product_id = #{productId} </if>
+        <if test="orderId != null and orderId !=0  "> and a.order_id = #{orderId} </if>
+        order by a.id desc
+    </select>
+
+    <update id="delete">
+        update  gxw_product_comment
+        <set>
+            delete_flag = 1
+        </set>
+        where id = #{id}
+    </update>
 
 
 </mapper>

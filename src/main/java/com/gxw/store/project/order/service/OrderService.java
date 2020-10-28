@@ -51,4 +51,10 @@ public interface OrderService {
      */
     Boolean hasOrderOfUser(Long orderId, Long productId, Long userId);
 
+    /**
+     * 完成订单
+     * @param orderId
+     * @return
+     */
+    Boolean finished(Long orderId, Long businessId);
 }

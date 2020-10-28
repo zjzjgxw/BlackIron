@@ -273,4 +273,19 @@ public class OrderServiceImp implements OrderService {
     public Boolean hasOrderOfUser(Long orderId, Long productId, Long userId) {
         return orderMapper.hasOrderOfUser(orderId, productId, userId) > 0;
     }
+
+    @Override
+    public Boolean finished(Long orderId, Long businessId) {
+        Order order = orderMapper.getOrder(orderId, businessId);
+        if (order == null ) {
+            throw new NotExistException("查找不到对应的订单");
+        }
+        if(order.getStatus() == OrderStatus.HAS_SEND || order.getStatus() == OrderStatus.WAIT_COMMENT){
+            order.setStatus(OrderStatus.FINISHED);
+        }else{
+            throw new NotExistException("查找不到对应的发货订单");
+        }
+        orderMapper.update(order);
+        return true;
+    }
 }
