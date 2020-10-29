@@ -102,4 +102,12 @@ public interface UserMapper {
       * @return
       */
      List<User> getFans(Long userId);
+
+     /**
+      * 为用户增加消费金额
+      * @param id
+      * @param price
+      * @return
+      */
+     int addConsumePrice(Long id, Long price);
 }

@@ -64,7 +64,7 @@ public class UserServiceImp implements UserService {
     public User selectUserByOpenId(String openId, boolean canCreate) {
         if (canCreate) { //运行不存在就创建一个新用户
             User user = userMapper.selectUserByOpenId(openId);
-            if(user == null){
+            if (user == null) {
                 user = new User();
                 user.setName("WX_USER");
                 user.setPassword("123456");
@@ -121,6 +121,12 @@ public class UserServiceImp implements UserService {
     @Override
     public List<User> getFans(Long userId) {
         return userMapper.getFans(userId);
+    }
+
+    @Override
+    public Boolean addConsumePrice(Long id, Long price) {
+        int row = userMapper.addConsumePrice(id, price);
+        return row != 0;
     }
 
 }

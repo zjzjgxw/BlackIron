@@ -44,6 +44,9 @@ public class User {
      */
     private int fansNum;
 
+
+    private Long consumePrice; //总消费金额
+
     @JsonIgnore
     private int deleteFlag;
 
@@ -149,5 +152,13 @@ public class User {
 
     public void setUnionId(String unionId) {
         this.unionId = unionId;
+    }
+
+    public Long getConsumePrice() {
+        return consumePrice;
+    }
+
+    public void setConsumePrice(Long consumePrice) {
+        this.consumePrice = consumePrice;
     }
 }

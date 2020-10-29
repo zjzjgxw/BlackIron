@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxw.store.project.user.mapper.VipMapper">
+    <resultMap type="VipInfo" id="VipResult">
+        <id property="id" column="id"/>
+        <result property="businessId" column="business_id"/>
+        <result property="level" column="level"/>
+        <result property="name" column="name"/>
+        <result property="freeExpress" column="free_express"/>
+        <result property="discount" column="discount"/>
+        <result property="couponId" column="coupon_id"/>
+        <result property="consumePrice" column="consume_price"/>
+
+    </resultMap>
+
+    <insert id="create" parameterType="VipInfo" useGeneratedKeys="true" keyProperty="id">
+         insert `gxw_user_vip`  (business_id,level,name,free_express, discount, coupon_id,consume_price)
+         value (#{businessId},#{level},#{name},#{freeExpress},#{discount},#{couponId},#{consumePrice})
+    </insert>
+
+    <sql id="sqlVip">
+        select a.id,a.business_id,a.level,a.name,a.free_express,a.discount,a.coupon_id,a.consume_price
+        from gxw_user_vip a
+    </sql>
+
+    <select id="getVips" resultMap="VipResult">
+        <include refid="sqlVip"/>
+        where a.business_id = #{businessId}
+    </select>
+
+    <select id="getVipInfo" resultMap="VipResult">
+        <include refid="sqlVip"/>
+        where a.id = #{id} and a.business_id = #{businessId}
+    </select>
+
+</mapper> 

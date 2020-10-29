@@ -15,18 +15,19 @@
         <result property="openId" column="open_id"/>
         <result property="idolNum" column="idol_num"/>
         <result property="fansNum" column="fans_num"/>
+        <result property="consumePrice" column="consume_price"/>
         <result property="deleteFlag" column="delete_flag"/>
     </resultMap>
 
     <insert id="create" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-        insert `gxw_user`  (account,password,name,tel,email,profile_url,status
+        insert `gxw_user` (account,password,name,tel,email,profile_url,status
         <if test="openId != null and openId != ''">,open_id</if>) value
         (#{account},#{password},#{name},#{tel},#{email},#{profileUrl},#{status}
         <if test="openId != null and openId != ''">,#{openId}</if>)
     </insert>
 
     <sql id="selectUser">
-        select a.id,a.account,a.password,a.name,a.open_id,a.union_id,a.tel,a.email,a.status,a.profile_url,a.idol_num,a.fans_num,a.delete_flag from `gxw_user` a
+        select a.id,a.account,a.password,a.name,a.open_id,a.union_id,a.tel,a.email,a.status,a.profile_url,a.idol_num,a.fans_num,a.consume_price,a.delete_flag from `gxw_user` a
     </sql>
 
     <select id="selectUserByAccount" parameterType="String" resultMap="UserResult">
@@ -55,13 +56,13 @@
     </select>
 
     <select id="getUsers" parameterType="UserSearchParams" resultMap="UserResult">
-        <include refid="selectUser" />
+        <include refid="selectUser"/>
         where a.delete_flag = 0
-        <if test="id != null"> and a.id= #{id}</if>
-        <if test="account != null and account != ''"> and a.account= #{account}</if>
-        <if test="name != null and name != ''"> and a.name= #{name}</if>
-        <if test="tel != null and tel != ''"> and a.tel= #{tel}</if>
-        <if test="email != null and email != ''"> and a.email= #{email}</if>
+        <if test="id != null">and a.id= #{id}</if>
+        <if test="account != null and account != ''">and a.account= #{account}</if>
+        <if test="name != null and name != ''">and a.name= #{name}</if>
+        <if test="tel != null and tel != ''">and a.tel= #{tel}</if>
+        <if test="email != null and email != ''">and a.email= #{email}</if>
         <if test="status != null">
             and a.status in
             <foreach collection="status" item="item" open="(" separator="," close=")">
@@ -151,5 +152,9 @@
         AND a.delete_flag = 0 order by b.create_time desc
     </select>
 
+
+    <update id="addConsumePrice">
+         update gxw_user set consume_price = consume_price + #{price} where id=#{id}
+    </update>
 
 </mapper> 

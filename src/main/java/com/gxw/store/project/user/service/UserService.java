@@ -62,4 +62,12 @@ public interface UserService {
      * @return
      */
     List<User> getFans(Long userId);
+
+    /**
+     * 增加消费金额
+     * @param id 用户id
+     * @param price
+     * @return
+     */
+    Boolean addConsumePrice(Long id, Long price);
 }

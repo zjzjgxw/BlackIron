@@ -22,6 +22,7 @@ import com.gxw.store.project.sale.service.CouponService;
 import com.gxw.store.project.sale.service.DiscountService;
 import com.gxw.store.project.user.entity.business.Business;
 import com.gxw.store.project.user.service.BusinessService;
+import com.gxw.store.project.user.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +48,9 @@ public class OrderServiceImp implements OrderService {
 
     @Resource
     private BusinessService businessService;
+
+    @Resource
+    private UserService userService;
 
     @Resource
     private DiscountService discountService;
@@ -237,6 +241,8 @@ public class OrderServiceImp implements OrderService {
         order.setPayTime(new Date());
         orderMapper.update(order);
 
+        //增加用户消费金额
+        userService.addConsumePrice(order.getUserId(),order.getPrice());
         return true;
     }
 
