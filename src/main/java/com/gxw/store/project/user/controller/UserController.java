@@ -3,6 +3,7 @@ package com.gxw.store.project.user.controller;
 
 import com.gxw.store.project.common.controller.BaseController;
 import com.gxw.store.project.common.utils.ResponseResult;
+import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.user.dto.FollowRel;
 import com.gxw.store.project.user.dto.UserSearchParams;
 import com.gxw.store.project.user.entity.User;
@@ -45,7 +46,7 @@ public class UserController extends BaseController {
                                    @RequestParam(required = false) List<Integer> status) {
         startPage();
         List<User> users = null;
-        UserSearchParams searchParams = new UserSearchParams(id, account, tel, name, email, status);
+        UserSearchParams searchParams = new UserSearchParams(id, SessionUtils.getBusinessId(), account, tel, name, email, status);
         users = userService.getUsers(searchParams);
         return ResponseResult.success(getDataTable(users));
     }

@@ -5,21 +5,27 @@ import com.gxw.store.project.common.utils.exception.HasExistException;
 import com.gxw.store.project.common.utils.exception.InvalidUserException;
 import com.gxw.store.project.user.dto.UserSearchParams;
 import com.gxw.store.project.user.entity.User;
+import com.gxw.store.project.user.entity.VipInfo;
 import com.gxw.store.project.user.mapper.UserMapper;
 import com.gxw.store.project.user.service.UserService;
+import com.gxw.store.project.user.service.VipService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 
 @Service
 public class UserServiceImp implements UserService {
 
-    @Autowired
+    @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private VipService vipService;
 
     @Override
     public Long create(User user) {
@@ -57,7 +63,11 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User selectUserById(Long id) {
-        return userMapper.selectUserById(id);
+        User user = userMapper.selectUserById(id);
+        List<VipInfo> vipInfos = vipService.getVips(user.getBusinessId());
+        VipInfo vipInfo = vipService.getCurrentVipInfo(user.getConsumePrice(), vipInfos);
+        user.setVip(vipInfo);
+        return user;
     }
 
     @Override

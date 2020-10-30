@@ -5,6 +5,7 @@
 <mapper namespace="com.gxw.store.project.user.mapper.UserMapper">
     <resultMap type="User" id="UserResult">
         <id property="id" column="id"/>
+        <result property="businessId" column="business_id"/>
         <result property="account" column="account"/>
         <result property="password" column="password"/>
         <result property="name" column="name"/>
@@ -20,14 +21,14 @@
     </resultMap>
 
     <insert id="create" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-        insert `gxw_user` (account,password,name,tel,email,profile_url,status
+        insert `gxw_user` (business_id,account,password,name,tel,email,profile_url,status
         <if test="openId != null and openId != ''">,open_id</if>) value
-        (#{account},#{password},#{name},#{tel},#{email},#{profileUrl},#{status}
+        (#{businessId}, #{account},#{password},#{name},#{tel},#{email},#{profileUrl},#{status}
         <if test="openId != null and openId != ''">,#{openId}</if>)
     </insert>
 
     <sql id="selectUser">
-        select a.id,a.account,a.password,a.name,a.open_id,a.union_id,a.tel,a.email,a.status,a.profile_url,a.idol_num,a.fans_num,a.consume_price,a.delete_flag from `gxw_user` a
+        select a.id,a.business_id,a.account,a.password,a.name,a.open_id,a.union_id,a.tel,a.email,a.status,a.profile_url,a.idol_num,a.fans_num,a.consume_price,a.delete_flag from `gxw_user` a
     </sql>
 
     <select id="selectUserByAccount" parameterType="String" resultMap="UserResult">
@@ -59,6 +60,7 @@
         <include refid="selectUser"/>
         where a.delete_flag = 0
         <if test="id != null">and a.id= #{id}</if>
+        <if test="businessId != null and businessId != 0 ">and a.business_id= #{businessId}</if>
         <if test="account != null and account != ''">and a.account= #{account}</if>
         <if test="name != null and name != ''">and a.name= #{name}</if>
         <if test="tel != null and tel != ''">and a.tel= #{tel}</if>

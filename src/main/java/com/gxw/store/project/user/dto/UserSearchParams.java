@@ -5,6 +5,7 @@ import java.util.List;
 
 public class UserSearchParams {
     private Long id;
+    private Long businessId;
     private String account;
     private String email;
     private String tel;
@@ -14,8 +15,9 @@ public class UserSearchParams {
     public UserSearchParams() {
     }
 
-    public UserSearchParams(Long id, String account, String tel, String name, String email, List<Integer> status) {
+    public UserSearchParams(Long id, Long businessId, String account, String tel, String name, String email, List<Integer> status) {
         this.id = id;
+        this.businessId = businessId;
         this.account = account;
         this.tel = tel;
         this.name = name;
@@ -69,5 +71,13 @@ public class UserSearchParams {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(Long businessId) {
+        this.businessId = businessId;
     }
 }

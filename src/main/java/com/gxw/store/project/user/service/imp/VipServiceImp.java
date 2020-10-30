@@ -29,4 +29,17 @@ public class VipServiceImp implements VipService {
     public VipInfo getVipInfo(Long id, Long businessId) {
         return vipMapper.getVipInfo(id, businessId);
     }
+
+    @Override
+    public VipInfo getCurrentVipInfo(Long consumePrice, List<VipInfo> vipInfos) {
+        VipInfo current = vipInfos.get(0);
+        for (VipInfo vipInfo: vipInfos){
+            if(consumePrice >= vipInfo.getConsumePrice()){
+                current = vipInfo;
+            }else{
+                break;
+            }
+        }
+        return current;
+    }
 }

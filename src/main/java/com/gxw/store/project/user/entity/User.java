@@ -5,9 +5,13 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class User {
     private Long id;
+
+    @NotNull
+    private Long businessId;
 
     @NotBlank(message = "account 不能为空")
     @Length(min = 5,max = 50,message = "账号长度需在5-50个字符之间")
@@ -46,6 +50,8 @@ public class User {
 
 
     private Long consumePrice; //总消费金额
+
+    private VipInfo vip; //vip信息
 
     @JsonIgnore
     private int deleteFlag;
@@ -160,5 +166,21 @@ public class User {
 
     public void setConsumePrice(Long consumePrice) {
         this.consumePrice = consumePrice;
+    }
+
+    public VipInfo getVip() {
+        return vip;
+    }
+
+    public void setVip(VipInfo vip) {
+        this.vip = vip;
+    }
+
+    public Long getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(Long businessId) {
+        this.businessId = businessId;
     }
 }

@@ -11,5 +11,7 @@ public interface VipService {
 
     List<VipInfo> getVips(Long businessId);
 
-    VipInfo getVipInfo(Long id,Long businessId);
+    VipInfo getVipInfo(Long id, Long businessId);
+
+    VipInfo getCurrentVipInfo(Long consumePrice, List<VipInfo> vipInfos);
 }
