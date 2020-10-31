@@ -9,6 +9,30 @@ public interface CategoryService {
     Long create(Category category);
 
     /**
+     * 获取类别列表
+     * @param businessId
+     * @return
+     */
+    List<Category> getCategories(Long businessId);
+
+    /**
+     * 删除类目
+     * @param id
+     * @param businessId
+     * @return
+     */
+    Boolean deleteCategory(Long id, Long businessId);
+
+    /**
+     * 修改类目
+     * @param name
+     * @param id
+     * @param businessId
+     * @return
+     */
+    Boolean updateCategory(String name, Long id, Long businessId);
+
+    /**
      * 创建类的属性
      * @param categoryAttribute
      * @return

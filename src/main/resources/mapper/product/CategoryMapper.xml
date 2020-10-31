@@ -37,6 +37,26 @@
         value (#{businessId},#{name},#{parentId})
     </insert>
 
+    <select id="getCategories" resultMap="CategoryResult">
+        select a.id,a.business_id,a.name,a.parent_id,a.delete_flag from gxw_product_category a where a.business_id = #{businessId}
+    </select>
+
+    <update id="deleteCategory" >
+        update gxw_product_category
+        <set>
+            delete_flag = 1
+        </set>
+        where id = #{id} and business_id = #{businessId}
+    </update>
+
+    <update id="updateCategory" >
+        update gxw_product_category
+        <set>
+            name = #{name}
+        </set>
+        where id = #{id} and business_id = #{businessId}
+    </update>
+
     <insert id="createAttribute" parameterType="CategoryAttribute" useGeneratedKeys="true" keyProperty="id">
         insert `gxw_product_category_attribute`  (category_id,name,type)
         value (#{categoryId},#{name},#{type})

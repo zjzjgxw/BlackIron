@@ -8,6 +8,12 @@ import java.util.List;
 public interface CategoryMapper {
     void create(Category category);
 
+    List<Category> getCategories(Long businessId);
+
+    int deleteCategory(Long id, Long businessId);
+
+    int updateCategory(String name, Long id, Long businessId);
+
     void createAttribute(CategoryAttribute categoryAttribute);
 
     void createAttributeOption(AttributeOption attributeOption);

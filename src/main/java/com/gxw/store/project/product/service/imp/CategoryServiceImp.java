@@ -19,6 +19,23 @@ public class CategoryServiceImp implements CategoryService {
         categoryMapper.create(category);
         return category.getId();
     }
+
+    @Override
+    public List<Category> getCategories(Long businessId) {
+        return categoryMapper.getCategories(businessId);
+    }
+
+    @Override
+    public Boolean deleteCategory(Long id, Long businessId) {
+        int row = categoryMapper.deleteCategory(id, businessId);
+        return row != 0;
+    }
+
+    @Override
+    public Boolean updateCategory(String name, Long id, Long businessId) {
+        int row = categoryMapper.updateCategory(name, id, businessId);
+        return row != 0;
+    }
     //  ----------  属性   ------------//
 
     @Override

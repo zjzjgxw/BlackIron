@@ -3,6 +3,7 @@ package com.gxw.store.project.background.controller;
 
 import com.gxw.store.project.common.controller.BaseController;
 import com.gxw.store.project.common.utils.ResponseResult;
+import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.product.entity.*;
 import com.gxw.store.project.product.service.CategoryService;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +21,38 @@ public class CategoryController extends BaseController {
 
     @PostMapping()
     public ResponseResult create(@Valid @RequestBody Category category) {
+        category.setBusinessId(SessionUtils.getBusinessId());
         Long id = categoryService.create(category);
         HashMap<String, Long> res = new HashMap<>();
         res.put("id", id);
         return ResponseResult.success(res);
     }
 
+    @GetMapping()
+    public ResponseResult getCategories() {
+        List<Category> categories = categoryService.getCategories(SessionUtils.getBusinessId());
+        HashMap<String, List<Category>> res = new HashMap<>();
+        res.put("categories", categories);
+        return ResponseResult.success(res);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseResult deleteCategory(@PathVariable Long id) {
+        if (categoryService.deleteCategory(id, SessionUtils.getBusinessId())) {
+            return ResponseResult.success();
+        } else {
+            return ResponseResult.error();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseResult updateCategory(@PathVariable Long id, @RequestParam String name) {
+        if (categoryService.updateCategory(name, id, SessionUtils.getBusinessId())) {
+            return ResponseResult.success();
+        } else {
+            return ResponseResult.error();
+        }
+    }
 
     //------- 类目属性
 
@@ -100,7 +127,7 @@ public class CategoryController extends BaseController {
     @GetMapping("/specifications")
     public ResponseResult getCategorySpecifications(@RequestParam Long categoryId) {
         List<CategorySpecification> specifications = categoryService.selectCategorySpecifications(categoryId);
-        HashMap<String,  List<CategorySpecification>> res = new HashMap<>();
+        HashMap<String, List<CategorySpecification>> res = new HashMap<>();
         res.put("list", specifications);
         return ResponseResult.success(res);
     }
