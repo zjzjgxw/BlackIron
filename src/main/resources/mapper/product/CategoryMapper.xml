@@ -11,8 +11,16 @@
         <result property="deleteFlag" column="delete_flag"/>
     </resultMap>
 
-    <resultMap id="AttributeOptionResult" type="AttributeOption">
+    <resultMap id="CategoryAttributeResult" type="CategoryAttribute">
         <id property="id" column="id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <collection property="options" javaType="java.util.List" resultMap="AttributeOptionResult"/>
+    </resultMap>
+
+    <resultMap id="AttributeOptionResult" type="AttributeOption">
+        <id property="id" column="option_id"/>
         <result property="attributeId" column="attribute_id"/>
         <result property="content" column="content"/>
     </resultMap>
@@ -41,7 +49,7 @@
         select a.id,a.business_id,a.name,a.parent_id,a.delete_flag from gxw_product_category a where a.business_id = #{businessId}
     </select>
 
-    <update id="deleteCategory" >
+    <update id="deleteCategory">
         update gxw_product_category
         <set>
             delete_flag = 1
@@ -49,7 +57,7 @@
         where id = #{id} and business_id = #{businessId}
     </update>
 
-    <update id="updateCategory" >
+    <update id="updateCategory">
         update gxw_product_category
         <set>
             name = #{name}
@@ -61,6 +69,33 @@
         insert `gxw_product_category_attribute`  (category_id,name,type)
         value (#{categoryId},#{name},#{type})
     </insert>
+
+    <select id="getAttributes" resultMap="CategoryAttributeResult">
+        SELECT
+        a.id,a.category_id,a.name,a.type,
+        b.id as option_id,
+        b.attribute_id,
+        b.content
+        from
+        gxw_product_category_attribute a
+        left join gxw_product_category_attribute_options b on a.id = b.attribute_id
+        where a.category_id  = #{categoryId}
+    </select>
+
+    <update id="updateAttributes">
+        update gxw_product_category_attribute
+        <set>
+            name = #{name}
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAttribute">
+        delete from gxw_product_category_attribute where id = #{id}
+    </delete>
+    <delete id="deleteOptionOfAttribute">
+        delete from gxw_product_category_attribute_options where attribute_id = #{attributeId}
+    </delete>
 
     <insert id="createAttributeOption" parameterType="AttributeOption" useGeneratedKeys="true" keyProperty="id">
         insert `gxw_product_category_attribute_options`  (attribute_id, content)
@@ -80,7 +115,7 @@
 
 
     <select id="selectAttributeOptions" resultMap="AttributeOptionResult" parameterType="Long">
-        select id,attribute_id,content from gxw_product_category_attribute_options where attribute_id = #{attributeId}
+        select option_id,attribute_id,content from gxw_product_category_attribute_options where attribute_id = #{attributeId}
     </select>
 
     <delete id="deleteAttributeOption" parameterType="Long">

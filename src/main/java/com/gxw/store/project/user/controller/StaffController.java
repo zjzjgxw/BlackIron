@@ -1,6 +1,7 @@
 package com.gxw.store.project.user.controller;
 
 import com.gxw.store.project.common.utils.ResponseResult;
+import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.user.dto.StaffDepartmentRel;
 import com.gxw.store.project.user.dto.StaffRoleRel;
 import com.gxw.store.project.user.entity.business.Staff;
@@ -25,6 +26,15 @@ public class StaffController {
         Long id = staffService.create(staff);
         HashMap<String,Long> res= new HashMap<>();
         res.put("id",id);
+        return ResponseResult.success(res);
+    }
+
+    @GetMapping("/current")
+    public ResponseResult currentStaff()
+    {
+        Staff staff = staffService.getStaff(SessionUtils.getUserId());
+        HashMap<String, Staff> res= new HashMap<>();
+        res.put("staff", staff);
         return ResponseResult.success(res);
     }
 

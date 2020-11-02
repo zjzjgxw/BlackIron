@@ -39,6 +39,24 @@ public interface CategoryService {
      */
     Long createAttribute(CategoryAttribute categoryAttribute);
 
+    /**
+     * 获取属性列表
+     * @param categoryId
+     * @return
+     */
+    List<CategoryAttribute> getAttributes(Long categoryId);
+
+
+    /**
+     * 修改属性名称
+     * @param id
+     * @param name
+     * @return
+     */
+    Boolean updateAttribute(Long id, String name);
+
+
+    Boolean deleteAttribute(Long id);
 
     /**
      * 创建属性选择内容

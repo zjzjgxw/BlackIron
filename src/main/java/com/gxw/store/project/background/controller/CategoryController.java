@@ -64,6 +64,30 @@ public class CategoryController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @GetMapping("/attributes")
+    public ResponseResult getAttributes(@RequestParam Long categoryId) {
+        List<CategoryAttribute> attributes = categoryService.getAttributes(categoryId);
+        HashMap<String, List<CategoryAttribute>> res = new HashMap<>();
+        res.put("attributes", attributes);
+        return ResponseResult.success(res);
+    }
+
+    @PutMapping("/attributes/{id}")
+    public ResponseResult getAttributes(@PathVariable Long id, @RequestParam String name) {
+        if(categoryService.updateAttribute(id,name)){
+            return ResponseResult.success();
+        }else{
+            return ResponseResult.error();
+        }
+    }
+    @DeleteMapping("/attributes/{id}")
+    public ResponseResult deleteAttribute(@PathVariable Long id){
+        if(categoryService.deleteAttribute(id)){
+            return ResponseResult.success();
+        }else{
+            return ResponseResult.error();
+        }
+    }
 
     @PostMapping("/attributes/options")
     public ResponseResult createAttributeOptions(@Valid @RequestBody AttributeOption attributeOption) {
@@ -78,7 +102,7 @@ public class CategoryController extends BaseController {
     public ResponseResult getAttributeOptions(@RequestParam Long attributeId) {
         List<AttributeOption> attributeOptions = categoryService.selectAttributeOptions(attributeId);
         HashMap<String, List<AttributeOption>> res = new HashMap<>();
-        res.put("admin", attributeOptions);
+        res.put("options", attributeOptions);
         return ResponseResult.success(res);
     }
 

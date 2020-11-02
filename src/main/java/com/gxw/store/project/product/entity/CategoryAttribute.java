@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * 类目属性
@@ -21,6 +22,8 @@ public class CategoryAttribute {
     @NotNull(message = "类型不能为空")
     @Range(min = 1,max = 2,message = "类型值错误")
     private int type;
+
+    private List<AttributeOption> options;
 
     public Long getId() {
         return id;
@@ -52,5 +55,13 @@ public class CategoryAttribute {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public List<AttributeOption> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<AttributeOption> options) {
+        this.options = options;
     }
 }

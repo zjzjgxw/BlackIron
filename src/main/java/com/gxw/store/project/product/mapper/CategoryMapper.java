@@ -16,12 +16,25 @@ public interface CategoryMapper {
 
     void createAttribute(CategoryAttribute categoryAttribute);
 
+    List<CategoryAttribute> getAttributes(Long categoryId);
+
+    int updateAttributes(Long id, String name);
+
+    int deleteAttribute(Long id);
+
+    /**
+     * 删除属性下的所有选项
+     * @param attributeId
+     * @return
+     */
+    int deleteOptionOfAttribute(Long attributeId);
+
     void createAttributeOption(AttributeOption attributeOption);
 
     List<AttributeOption> selectAttributeOptions(Long attributeId);
 
     /**
-     * 删除属性选项
+     * 删除某一个属性选项
      * @param id
      */
     void deleteAttributeOption(Long id);

@@ -4,6 +4,7 @@ import com.gxw.store.project.product.entity.*;
 import com.gxw.store.project.product.mapper.CategoryMapper;
 import com.gxw.store.project.product.service.CategoryService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -42,6 +43,25 @@ public class CategoryServiceImp implements CategoryService {
     public Long createAttribute(CategoryAttribute categoryAttribute) {
         categoryMapper.createAttribute(categoryAttribute);
         return categoryAttribute.getId();
+    }
+
+    @Override
+    public List<CategoryAttribute> getAttributes(Long categoryId) {
+        return categoryMapper.getAttributes(categoryId);
+    }
+
+    @Override
+    public Boolean updateAttribute(Long id, String name) {
+        int row = categoryMapper.updateAttributes(id, name);
+        return row != 0;
+    }
+
+    @Override
+    @Transactional
+    public Boolean deleteAttribute(Long id) {
+        int row = categoryMapper.deleteAttribute(id);
+        categoryMapper.deleteOptionOfAttribute(id);
+        return row != 0;
     }
 
 
