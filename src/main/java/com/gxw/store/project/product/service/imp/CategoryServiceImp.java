@@ -1,5 +1,6 @@
 package com.gxw.store.project.product.service.imp;
 
+import com.gxw.store.project.common.utils.exception.HasExistException;
 import com.gxw.store.project.product.entity.*;
 import com.gxw.store.project.product.mapper.CategoryMapper;
 import com.gxw.store.project.product.service.CategoryService;
@@ -67,6 +68,10 @@ public class CategoryServiceImp implements CategoryService {
 
     @Override
     public Long createAttributeOption(AttributeOption attributeOption) {
+        int count = categoryMapper.hasAttributeOption(attributeOption);
+        if (count > 0) {
+            throw new HasExistException("选项已经存在");
+        }
         categoryMapper.createAttributeOption(attributeOption);
         return attributeOption.getId();
     }
@@ -97,6 +102,10 @@ public class CategoryServiceImp implements CategoryService {
 
     @Override
     public Long createSpecificationOption(SpecificationOption option) {
+        int count = categoryMapper.hasSpecificationOption(option);
+        if (count > 0) {
+            throw new HasExistException("选项已经存在");
+        }
         categoryMapper.createSpecificationOption(option);
         return option.getId();
     }
@@ -116,6 +125,18 @@ public class CategoryServiceImp implements CategoryService {
     @Override
     public List<CategorySpecification> selectCategorySpecifications(Long categoryId) {
         return categoryMapper.selectCategorySpecifications(categoryId);
+    }
+
+    @Override
+    public Boolean updateSpecification(Long id, String name) {
+        int row = categoryMapper.updateSpecification(id, name);
+        return row != 0;
+    }
+
+    @Override
+    public Boolean deleteSpecification(Long id) {
+        int row = categoryMapper.deleteSpecification(id);
+        return row != 0;
     }
 
 

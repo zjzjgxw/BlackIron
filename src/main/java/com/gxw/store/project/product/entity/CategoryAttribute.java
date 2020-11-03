@@ -19,10 +19,6 @@ public class CategoryAttribute {
     @Length(min = 1, max = 5, message = "属性名称在1-5")
     private String name;
 
-    @NotNull(message = "类型不能为空")
-    @Range(min = 1,max = 2,message = "类型值错误")
-    private int type;
-
     private List<AttributeOption> options;
 
     public Long getId() {
@@ -49,13 +45,6 @@ public class CategoryAttribute {
         this.name = name;
     }
 
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
 
     public List<AttributeOption> getOptions() {
         return options;

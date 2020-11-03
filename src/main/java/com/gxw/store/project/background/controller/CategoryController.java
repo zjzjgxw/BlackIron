@@ -73,13 +73,14 @@ public class CategoryController extends BaseController {
     }
 
     @PutMapping("/attributes/{id}")
-    public ResponseResult getAttributes(@PathVariable Long id, @RequestParam String name) {
+    public ResponseResult updateAttributes(@PathVariable Long id, @RequestParam String name) {
         if(categoryService.updateAttribute(id,name)){
             return ResponseResult.success();
         }else{
             return ResponseResult.error();
         }
     }
+
     @DeleteMapping("/attributes/{id}")
     public ResponseResult deleteAttribute(@PathVariable Long id){
         if(categoryService.deleteAttribute(id)){
@@ -154,6 +155,24 @@ public class CategoryController extends BaseController {
         HashMap<String, List<CategorySpecification>> res = new HashMap<>();
         res.put("list", specifications);
         return ResponseResult.success(res);
+    }
+
+    @PutMapping("/specifications/{id}")
+    public ResponseResult updateSpecifications(@PathVariable Long id, @RequestParam String name) {
+        if(categoryService.updateSpecification(id,name)){
+            return ResponseResult.success();
+        }else{
+            return ResponseResult.error();
+        }
+    }
+
+    @DeleteMapping("/specifications/{id}")
+    public ResponseResult deleteSpecification(@PathVariable Long id){
+        if(categoryService.deleteSpecification(id)){
+            return ResponseResult.success();
+        }else{
+            return ResponseResult.error();
+        }
     }
 
 }

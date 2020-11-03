@@ -15,7 +15,6 @@
         <id property="id" column="id"/>
         <result property="categoryId" column="category_id"/>
         <result property="name" column="name"/>
-        <result property="type" column="type"/>
         <collection property="options" javaType="java.util.List" resultMap="AttributeOptionResult"/>
     </resultMap>
 
@@ -66,13 +65,13 @@
     </update>
 
     <insert id="createAttribute" parameterType="CategoryAttribute" useGeneratedKeys="true" keyProperty="id">
-        insert `gxw_product_category_attribute`  (category_id,name,type)
-        value (#{categoryId},#{name},#{type})
+        insert `gxw_product_category_attribute`  (category_id,name)
+        value (#{categoryId},#{name})
     </insert>
 
     <select id="getAttributes" resultMap="CategoryAttributeResult">
         SELECT
-        a.id,a.category_id,a.name,a.type,
+        a.id,a.category_id,a.name,
         b.id as option_id,
         b.attribute_id,
         b.content
@@ -113,9 +112,16 @@
         value (#{specificationId},#{content})
     </insert>
 
+    <select id="hasSpecificationOption" resultType="Integer">
+        select count(1) from gxw_product_category_specification_options where specification_id=#{specificationId} and content=#{content}
+    </select>
+
+    <select id="hasAttributeOption" resultType="Integer">
+         select count(1) from gxw_product_category_attribute_options where attribute_id=#{attributeId} and content=#{content}
+    </select>
 
     <select id="selectAttributeOptions" resultMap="AttributeOptionResult" parameterType="Long">
-        select option_id,attribute_id,content from gxw_product_category_attribute_options where attribute_id = #{attributeId}
+        select id as option_id,attribute_id,content from gxw_product_category_attribute_options where attribute_id = #{attributeId}
     </select>
 
     <delete id="deleteAttributeOption" parameterType="Long">
@@ -159,5 +165,17 @@
         a.category_id =#{id}
         order by a.id
     </select>
+
+    <update id="updateSpecification">
+        update gxw_product_category_specification
+        <set>
+            name = #{name}
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSpecification">
+        delete  from gxw_product_category_specification where id = #{id}
+    </delete>
 
 </mapper> 

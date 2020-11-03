@@ -31,6 +31,15 @@ public interface CategoryMapper {
 
     void createAttributeOption(AttributeOption attributeOption);
 
+
+    /**
+     * 查找是否有某种规格
+     * @param option
+     * @return
+     */
+    int hasAttributeOption(AttributeOption option);
+
+
     List<AttributeOption> selectAttributeOptions(Long attributeId);
 
     /**
@@ -60,6 +69,13 @@ public interface CategoryMapper {
     void createSpecificationOption(SpecificationOption option);
 
     /**
+     * 查找是否有某种规格
+     * @param option
+     * @return
+     */
+    int hasSpecificationOption(SpecificationOption option);
+
+    /**
      * 修改规格选项
      * @param option
      * @return
@@ -81,5 +97,21 @@ public interface CategoryMapper {
      * @return
      */
     List<CategorySpecification> selectCategorySpecifications(Long categoryId);
+
+    /**
+     * 修改规格名称
+     * @param id
+     * @param name
+     * @return
+     */
+    int updateSpecification(Long id, String name);
+
+
+    /**
+     * 删除规格
+     * @param id
+     * @return
+     */
+    int deleteSpecification(Long id);
 
 }

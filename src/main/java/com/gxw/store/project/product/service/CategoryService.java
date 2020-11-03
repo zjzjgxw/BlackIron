@@ -123,4 +123,20 @@ public interface CategoryService {
      * @return
      */
     List<CategorySpecification> selectCategorySpecifications(Long categoryId);
+
+    /**
+     * 修改规格名称
+     * @param id
+     * @param name
+     * @return
+     */
+    Boolean updateSpecification(Long id, String name);
+
+
+    /**
+     * 删除规格
+     * @param id
+     * @return
+     */
+    Boolean deleteSpecification(Long id);
 }

@@ -41,11 +41,11 @@ public class CategorySpecification {
         this.name = name;
     }
 
-    public List<SpecificationOption> getOptionList() {
+    public List<SpecificationOption> getOptions() {
         return options;
     }
 
-    public void setOptionList(List<SpecificationOption> optionList) {
-        this.options = optionList;
+    public void setOptions(List<SpecificationOption> options) {
+        this.options = options;
     }
 }
