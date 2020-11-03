@@ -20,7 +20,7 @@ public class ProductDetail {
     private Long businessId;
 
     @NotBlank(message = "商品名不能为空")
-    @Length(min = 1, max = 25, message = "商品名长度在1-5")
+    @Length(min = 1, max = 50, message = "商品名长度在1-50")
     private String name;
 
     @NotNull(message = "categoryId不能为空")
