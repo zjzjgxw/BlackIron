@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -40,10 +41,10 @@ public class ProductServiceImp implements ProductService {
     @Override
     @Transactional
     public Long createProductImages(Long detailId, ProductImages productImages) {
-        if(productImages.getMainImages() != null && productImages.getMainImages().size() > 0){
+        if (productImages.getMainImages() != null && productImages.getMainImages().size() > 0) {
             productMapper.createMainImages(detailId, productImages.getMainImages());
         }
-        if(productImages.getDetailImages() != null && productImages.getMainImages().size() > 0){
+        if (productImages.getDetailImages() != null && productImages.getMainImages().size() > 0) {
             productMapper.createDetailImages(detailId, productImages.getDetailImages());
         }
         return detailId;
@@ -74,15 +75,27 @@ public class ProductServiceImp implements ProductService {
         ProductDetail detail = productMapper.getDetailById(id);
 
         List<ProductDetailImg> images = detail.getDetailImages();
-        for (ProductDetailImg image : images) {
+        Iterator<ProductDetailImg> iterator = images.iterator();
+        while (iterator.hasNext()) {
+            ProductDetailImg image = iterator.next();
             if (StringUtils.isNotEmpty(image.getImgUrl())) {
                 image.setImgUrl(FileUtils.getPath(image.getImgUrl()));
             }
+            if (image.getId() == null) {
+                iterator.remove();
+            }
+
         }
+
         List<ProductDetailMainImg> mainImages = detail.getMainImages();
-        for (ProductDetailMainImg mainImage : mainImages) {
-            if (StringUtils.isNotEmpty(mainImage.getImgUrl())) {
-                mainImage.setImgUrl(FileUtils.getPath(mainImage.getImgUrl()));
+        Iterator<ProductDetailMainImg> mainImgIterator = mainImages.iterator();
+        while (mainImgIterator.hasNext()) {
+            ProductDetailMainImg image = mainImgIterator.next();
+            if (StringUtils.isNotEmpty(image.getImgUrl())) {
+                image.setImgUrl(FileUtils.getPath(image.getImgUrl()));
+            }
+            if (image.getId() == null) {
+                mainImgIterator.remove();
             }
         }
 
