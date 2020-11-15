@@ -140,8 +140,8 @@
             where a.id = #{id} and a.delete_flag = 0
     </select>
 
-    <select id="selectProducts" resultMap="ProductListResult">
-        SELECT
+    <sql id="sqlSelectProducts">
+         SELECT
         a.id,
         a.business_id,
         a.category_id,
@@ -155,9 +155,41 @@
         a.cover_url
         FROM
         gxw_product_detail a
+    </sql>
+
+    <select id="selectProducts" resultMap="ProductListResult">
+        <include refid="sqlSelectProducts"/>
         where a.business_id = #{businessId}   <if test="categoryId != null and categoryId != 0">and a.category_id=
         #{categoryId}
-    </if>   and a.delete_flag = 0 order by a.created_at desc
+        </if>   and a.delete_flag = 0 order by a.created_at desc
+    </select>
+
+    <insert id="addRecommend">
+        insert gxw_product_recommend (business_id,product_id,index_no) values
+        <foreach collection="recommends" item="item" separator=",">
+            (#{item.businessId},#{item.productId},#{item.indexNo})
+        </foreach>
+    </insert>
+
+    <delete id="deleteRecommend">
+        delete from gxw_product_recommend where business_id = #{businessId} and product_id in
+        <foreach collection="productIds" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <update id="updateRecommend" parameterType="ProductRecommend">
+        update gxw_product_recommend
+        <set>
+            index_no = #{indexNo}
+        </set>
+        where id=#{id} and business_id=#{businessId}
+    </update>
+
+    <select id="getRecommendProducts" resultMap="ProductListResult">
+        <include refid="sqlSelectProducts"/>
+        left join gxw_product_recommend b on a.id = b.product_id
+        where b.business_id = #{businessId} order by b.index_no desc
     </select>
 
 </mapper> 

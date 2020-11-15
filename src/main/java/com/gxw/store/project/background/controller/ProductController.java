@@ -60,12 +60,13 @@ public class ProductController extends BaseController {
 
     /**
      * 添加属性
+     *
      * @param addProductAttributes
      * @return
      */
     @PostMapping("/detail/attributes")
-    public ResponseResult addAttributes(@Valid @RequestBody AddProductAttributes addProductAttributes){
-        boolean success = productService.addAttributes(addProductAttributes.getDetailId(),addProductAttributes.getAttributes());
+    public ResponseResult addAttributes(@Valid @RequestBody AddProductAttributes addProductAttributes) {
+        boolean success = productService.addAttributes(addProductAttributes.getDetailId(), addProductAttributes.getAttributes());
         if (success) {
             return ResponseResult.success();
         } else {
@@ -101,6 +102,50 @@ public class ProductController extends BaseController {
     public ResponseResult selectProduct(@RequestParam Long businessId, @RequestParam(required = false) Long categoryId) {
         startPage();
         List<ProductDetail> details = productService.selectProducts(businessId, categoryId);
+        return ResponseResult.success(getDataTable(details));
+    }
+
+    /**
+     * 添加推荐商品
+     *
+     * @param recommends
+     * @return
+     */
+    @PostMapping("/recommend")
+    public ResponseResult addRecommend(@RequestBody List<ProductRecommend> recommends) {
+        Long businessId = SessionUtils.getBusinessId();
+        for (ProductRecommend item : recommends) {
+            item.setBusinessId(businessId);
+        }
+        productService.addRecommend(recommends);
+        return ResponseResult.success();
+    }
+
+
+    @DeleteMapping("/recommend")
+    public ResponseResult deleteRecommend(@RequestBody List<Long> productIds) {
+        if( productService.deleteRecommend(SessionUtils.getBusinessId(), productIds)){
+            return ResponseResult.success();
+        }else{
+            return ResponseResult.error();
+        }
+    }
+
+    @PutMapping("/recommend")
+    public ResponseResult updateRecommend(@RequestBody ProductRecommend recommend){
+        recommend.setBusinessId(SessionUtils.getBusinessId());
+        if(productService.updateRecommend(recommend)){
+            return ResponseResult.success();
+        }else{
+            return ResponseResult.error();
+        }
+    }
+
+    @GetMapping("/recommend")
+    public ResponseResult getRecommend()
+    {
+        startPage();
+        List<ProductDetail> details = productService.getRecommendProducts(SessionUtils.getBusinessId());
         return ResponseResult.success(getDataTable(details));
     }
 }

@@ -96,4 +96,10 @@ public class GlobalExceptionHandler {
         log.info(e.getMessage(), e);
         return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
     }
+
+    @ExceptionHandler(WxRequestFailedException.class)
+    public Object handleWxRequestFailedException(WxRequestFailedException e){
+        log.info(e.getMessage(), e);
+        return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
+    }
 }

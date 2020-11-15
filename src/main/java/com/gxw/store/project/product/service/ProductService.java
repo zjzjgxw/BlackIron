@@ -3,6 +3,7 @@ package com.gxw.store.project.product.service;
 import com.gxw.store.project.product.dto.ProductImages;
 import com.gxw.store.project.product.entity.ProductDetail;
 import com.gxw.store.project.product.entity.ProductDetailAttribute;
+import com.gxw.store.project.product.entity.ProductRecommend;
 
 import java.util.List;
 
@@ -75,4 +76,34 @@ public interface ProductService {
      */
     Boolean updateProductImages(Long detailId, ProductImages productImages);
 
+
+    /**
+     * 添加推荐商品
+     * @param recommends
+     * @return
+     */
+    Boolean addRecommend(List<ProductRecommend> recommends);
+
+
+    /**
+     * 删除推荐
+     * @param businessId
+     * @param productIds
+     * @return
+     */
+    Boolean deleteRecommend(Long businessId, List<Long> productIds);
+
+    /**
+     * 更新
+     * @param recommend
+     * @return
+     */
+    Boolean updateRecommend(ProductRecommend recommend);
+
+    /**
+     * 获取推荐商品
+     * @param businessId
+     * @return
+     */
+    List<ProductDetail> getRecommendProducts(Long businessId);
 }

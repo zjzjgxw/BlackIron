@@ -68,6 +68,7 @@ public class ProductServiceImp implements ProductService {
         return true;
     }
 
+
     @Override
     public ProductDetail getDetailById(Long id) {
         //TODO 访问计数更新
@@ -118,9 +119,7 @@ public class ProductServiceImp implements ProductService {
         return detail;
     }
 
-    @Override
-    public List<ProductDetail> selectProducts(Long businessId, Long categoryId) {
-        List<ProductDetail> details = productMapper.selectProducts(businessId, categoryId);
+    private List<ProductDetail> handelProductDetails(Long businessId, List<ProductDetail> details) {
         List<Long> productIds = new ArrayList<>();
         for (ProductDetail detail : details) {
             detail.setCoverUrl(FileUtils.getPath(detail.getCoverUrl()));
@@ -133,11 +132,9 @@ public class ProductServiceImp implements ProductService {
             StockInfo info = stockInfoMap.get(detail.getId());
             BigDecimal originalPrice = BigDecimal.valueOf(info.getPrice().doubleValue() / 100);
             BigDecimal price = BigDecimal.valueOf(info.getPrice().doubleValue() / 100);//库存中价格存储单位为分，转为元除100
-
             if (discountMap.get(detail.getId()) != null) {
                 price = BigDecimal.valueOf(info.getPrice().doubleValue() * discountMap.get(detail.getId()) / 10000); //优惠折扣需要再除100
             }
-
             if (info != null) {
                 detail.setPrice(price);
                 detail.setOriginalPrice(originalPrice);
@@ -145,8 +142,13 @@ public class ProductServiceImp implements ProductService {
                 detail.setLastNum(info.getLastNum());
             }
         }
-
         return details;
+    }
+
+    @Override
+    public List<ProductDetail> selectProducts(Long businessId, Long categoryId) {
+        List<ProductDetail> details = productMapper.selectProducts(businessId, categoryId);
+        return handelProductDetails(businessId, details);
     }
 
     @Override
@@ -167,5 +169,29 @@ public class ProductServiceImp implements ProductService {
         return true;
     }
 
+
+    @Override
+    public Boolean addRecommend(List<ProductRecommend> recommends) {
+        productMapper.addRecommend(recommends);
+        return true;
+    }
+
+    @Override
+    public Boolean deleteRecommend(Long businessId, List<Long> productIds) {
+        int row = productMapper.deleteRecommend(businessId, productIds);
+        return row != 0;
+    }
+
+    @Override
+    public Boolean updateRecommend(ProductRecommend recommend) {
+        int row = productMapper.updateRecommend(recommend);
+        return row != 0;
+    }
+
+    @Override
+    public List<ProductDetail> getRecommendProducts(Long businessId) {
+        List<ProductDetail> details = productMapper.getRecommendProducts(businessId);
+        return handelProductDetails(businessId, details);
+    }
 
 }

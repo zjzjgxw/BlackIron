@@ -1,10 +1,7 @@
 package com.gxw.store.project.product.mapper;
 
 
-import com.gxw.store.project.product.entity.ProductDetail;
-import com.gxw.store.project.product.entity.ProductDetailAttribute;
-import com.gxw.store.project.product.entity.ProductDetailImg;
-import com.gxw.store.project.product.entity.ProductDetailMainImg;
+import com.gxw.store.project.product.entity.*;
 
 import java.util.List;
 
@@ -63,5 +60,35 @@ public interface ProductMapper {
 
 
     List<ProductDetail> selectProducts(Long businessId, Long categoryId);
+
+
+    /**
+     * 新增推荐
+     * @param recommends
+     */
+    void addRecommend(List<ProductRecommend> recommends);
+
+
+    /**
+     * 删除推荐
+     * @param businessId
+     * @param productIds
+     * @return
+     */
+    int deleteRecommend(Long businessId, List<Long> productIds);
+
+    /**
+     * 更新推荐
+     * @param recommend
+     * @return
+     */
+    int updateRecommend(ProductRecommend recommend);
+
+    /**
+     * 获取推荐的商品列表
+     * @param businessId
+     * @return
+     */
+    List<ProductDetail> getRecommendProducts(Long businessId);
 
 }

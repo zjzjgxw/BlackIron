@@ -11,7 +11,7 @@ public class FileUtils {
      */
     public static String getPath(String url){
         if(storeType == 1){
-            return ServletUtils.getRequest().getServerName()+url;
+            return ServletUtils.getRequest().getServerName()+"/"+url;
         }
         return url;
     }
