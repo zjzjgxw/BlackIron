@@ -1,6 +1,7 @@
 package com.gxw.store.project.user.service.imp;
 
 
+import com.gxw.store.project.user.entity.business.Banner;
 import com.gxw.store.project.user.entity.business.Business;
 import com.gxw.store.project.user.entity.business.BusinessDepartment;
 import com.gxw.store.project.user.entity.business.BusinessRole;
@@ -78,6 +79,17 @@ public class BusinessServiceImp implements BusinessService {
         businessMapper.deleteRolePermissions(roleId);
         businessMapper.addRolePermission(roleId,permissions);
         return true;
+    }
+
+    @Override
+    public Long addBanner(Banner banner) {
+        businessMapper.addBanner(banner);
+        return banner.getId();
+    }
+
+    @Override
+    public List<Banner> getBanners(Long businessId) {
+        return businessMapper.getBanners(businessId);
     }
 
 }

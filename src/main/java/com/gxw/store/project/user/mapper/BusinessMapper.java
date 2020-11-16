@@ -1,6 +1,7 @@
 package com.gxw.store.project.user.mapper;
 
 
+import com.gxw.store.project.user.entity.business.Banner;
 import com.gxw.store.project.user.entity.business.Business;
 import com.gxw.store.project.user.entity.business.BusinessDepartment;
 import com.gxw.store.project.user.entity.business.BusinessRole;
@@ -42,4 +43,13 @@ public interface BusinessMapper {
 
      //删除某个角色下的所有权限
      int deleteRolePermissions(Long roleId);
+
+     /**
+      * 添加banner
+      * @param banner
+      * @return
+      */
+     void addBanner(Banner banner);
+
+     List<Banner> getBanners(Long businessId);
 }

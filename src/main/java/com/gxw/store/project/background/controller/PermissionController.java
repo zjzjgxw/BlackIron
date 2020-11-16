@@ -1,4 +1,4 @@
-package com.gxw.store.project.user.controller;
+package com.gxw.store.project.background.controller;
 
 
 import com.gxw.store.project.common.controller.BaseController;

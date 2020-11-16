@@ -14,6 +14,15 @@
         <result property="deleteFlag" column="delete_flag"/>
     </resultMap>
 
+    <resultMap type="Banner" id="BannerResult">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="businessId" column="business_id"/>
+        <result property="imgUrl" column="img_url"/>
+        <result property="url" column="url"/>
+        <result property="indexNo" column="index_no"/>
+        <result property="createTime" column="created_at"/>
+    </resultMap>
 
     <resultMap id="StaffSimpleResult" type="Staff">
         <id property="id" column="staff_id"/>
@@ -99,7 +108,7 @@
 
     <insert id="addRolePermission">
         insert gxw_business_role_permission_relation (role_id,permission_id) values
-        <foreach collection="permissionIds" item="permissionId"  separator=",">
+        <foreach collection="permissionIds" item="permissionId" separator=",">
             (#{roleId},#{permissionId})
         </foreach>
     </insert>
@@ -108,4 +117,12 @@
         delete from gxw_business_role_permission_relation where role_id =#{roleId}
     </delete>
 
+    <insert id="addBanner" parameterType="Banner" useGeneratedKeys="true" keyProperty="id">
+        insert gxw_business_banner (business_id,img_url,url,index_no) values
+        (#{businessId},#{imgUrl},#{url},#{indexNo})
+    </insert>
+
+    <select id="getBanners" resultMap="BannerResult">
+        select a.id,a.business_id,a.img_url,a.url,a.index_no,a.created_at from gxw_business_banner a where business_id=#{businessId} order by index_no
+    </select>
 </mapper> 

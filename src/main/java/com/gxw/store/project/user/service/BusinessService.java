@@ -1,6 +1,7 @@
 package com.gxw.store.project.user.service;
 
 
+import com.gxw.store.project.user.entity.business.Banner;
 import com.gxw.store.project.user.entity.business.Business;
 import com.gxw.store.project.user.entity.business.BusinessDepartment;
 import com.gxw.store.project.user.entity.business.BusinessRole;
@@ -89,4 +90,19 @@ public interface BusinessService {
      * @return
      */
     boolean saveRolePermissions(Long roleId, Long[] permissions);
+
+
+    /**
+     * 添加banner
+     * @param banner
+     * @return
+     */
+    Long addBanner(Banner banner);
+
+    /**
+     * 获取所有banner
+     * @param businessId
+     * @return
+     */
+    List<Banner> getBanners(Long businessId);
 }

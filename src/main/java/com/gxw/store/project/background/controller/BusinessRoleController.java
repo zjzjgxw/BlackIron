@@ -1,7 +1,6 @@
-package com.gxw.store.project.user.controller;
+package com.gxw.store.project.background.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.view.ViewUtils;
 import com.gxw.store.project.user.dto.RolePermissionRel;
