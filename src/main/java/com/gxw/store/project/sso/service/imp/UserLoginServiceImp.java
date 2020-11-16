@@ -100,7 +100,7 @@ public class UserLoginServiceImp implements SsoService {
         //保存sessionKey 到缓存中，用于后续获取微信用户详情时进行数据校验。
         redisCache.setCacheObject(OPEN_ID_PREFIX + user.getId(), wxSession, EXPIRE_TIME);
         //生成token
-        HashMap<String, String> token = tokenService.createToken(user.getId(), user.getName());
+        HashMap<String, String> token = tokenService.createToken(user.getId(), user.getName(), user.getBusinessId());
         return ResponseResult.success(token);
     }
 

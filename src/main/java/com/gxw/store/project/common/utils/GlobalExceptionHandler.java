@@ -102,4 +102,23 @@ public class GlobalExceptionHandler {
         log.info(e.getMessage(), e);
         return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
     }
+
+    @ExceptionHandler(FileNameLengthLimitExceededException.class)
+    public Object handleFileNameLengthLimitExceededException(FileNameLengthLimitExceededException e){
+        log.info(e.getMessage(), e);
+        return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
+    }
+
+    @ExceptionHandler(FileSizeLimitExceededException.class)
+    public Object handleFileSizeLimitExceededException(FileSizeLimitExceededException e){
+        log.info(e.getMessage(), e);
+        return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidFileTypeException.class)
+    public Object handleInvalidFileTypeException(InvalidFileTypeException e){
+        log.info(e.getMessage(), e);
+        return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
+    }
+
 }
