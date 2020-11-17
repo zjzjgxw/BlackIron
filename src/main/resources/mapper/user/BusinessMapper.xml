@@ -125,4 +125,19 @@
     <select id="getBanners" resultMap="BannerResult">
         select a.id,a.business_id,a.img_url,a.url,a.index_no,a.created_at from gxw_business_banner a where business_id=#{businessId} order by index_no
     </select>
+
+    <update id="updateBanner">
+        update gxw_business_banner
+        <set>
+            img_url = #{imgUrl},
+            url = #{url},
+            index_no = #{indexNo}
+        </set>
+        where id =#{id} and business_id = #{businessId}
+    </update>
+
+    <delete id="deleteBanner">
+        delete from gxw_business_banner where id = #{id} and business_id = #{businessId}
+    </delete>
+
 </mapper> 

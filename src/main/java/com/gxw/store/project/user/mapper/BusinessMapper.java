@@ -52,4 +52,20 @@ public interface BusinessMapper {
      void addBanner(Banner banner);
 
      List<Banner> getBanners(Long businessId);
+
+
+     /**
+      * 修改banner
+      * @param banner
+      * @return
+      */
+     int updateBanner(Banner banner);
+
+     /**
+      * 删除banner
+      * @param id
+      * @param businessId
+      * @return
+      */
+     int deleteBanner(Long id, Long businessId);
 }

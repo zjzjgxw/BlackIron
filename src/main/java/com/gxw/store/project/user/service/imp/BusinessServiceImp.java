@@ -92,4 +92,16 @@ public class BusinessServiceImp implements BusinessService {
         return businessMapper.getBanners(businessId);
     }
 
+    @Override
+    public Boolean updateBanner(Banner banner) {
+        int row = businessMapper.updateBanner(banner);
+        return row != 0;
+    }
+
+    @Override
+    public Boolean deleteBanner(Long id, Long businessId) {
+        int row  = businessMapper.deleteBanner(id,businessId);
+        return row != 0;
+    }
+
 }

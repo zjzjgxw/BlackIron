@@ -53,4 +53,20 @@ public class BusinessController {
         return ResponseResult.success(res);
     }
 
+    @PutMapping("/banners")
+    public ResponseResult updateBanner(@RequestBody Banner banner) {
+        banner.setBusinessId(SessionUtils.getBusinessId());
+        if(businessService.updateBanner(banner)){
+            return ResponseResult.success();
+        };
+        return ResponseResult.error();
+    }
+
+    @DeleteMapping("/banners/{id}")
+    public ResponseResult deleteBanner(@PathVariable Long id) {
+        if(businessService.deleteBanner(id,SessionUtils.getBusinessId())){
+            return ResponseResult.success();
+        };
+        return ResponseResult.error();
+    }
 }

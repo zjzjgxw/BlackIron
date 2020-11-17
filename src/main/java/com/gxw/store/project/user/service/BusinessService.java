@@ -105,4 +105,20 @@ public interface BusinessService {
      * @return
      */
     List<Banner> getBanners(Long businessId);
+
+
+    /**
+     * 修改banner
+     * @param banner
+     * @return
+     */
+    Boolean updateBanner(Banner banner);
+
+    /**
+     * 删除banner
+     * @param id
+     * @param businessId
+     * @return
+     */
+    Boolean deleteBanner(Long id, Long businessId);
 }
