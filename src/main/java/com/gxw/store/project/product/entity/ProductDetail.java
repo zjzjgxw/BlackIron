@@ -47,6 +47,8 @@ public class ProductDetail {
     private BigDecimal price;//展示价格
     @JsonSerialize(using = Decimal2Serializer.class)
     private BigDecimal originalPrice; //商品原价
+    @JsonSerialize(using = Decimal2Serializer.class)
+    private BigDecimal expressPrice;//快递费
 
     private Long saleNum;//销量
 
@@ -206,5 +208,13 @@ public class ProductDetail {
 
     public void setLastNum(Long lastNum) {
         this.lastNum = lastNum;
+    }
+
+    public BigDecimal getExpressPrice() {
+        return expressPrice;
+    }
+
+    public void setExpressPrice(BigDecimal expressPrice) {
+        this.expressPrice = expressPrice;
     }
 }

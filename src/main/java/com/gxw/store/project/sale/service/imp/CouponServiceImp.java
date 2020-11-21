@@ -78,15 +78,19 @@ public class CouponServiceImp implements CouponService {
     }
 
     @Override
-    public List<Coupon> getCouponsOfUser(Long userId, Long productId, boolean onlyUse) {
+    public List<Coupon> getCouponsOfUser(Long userId, List<Long> productIds, boolean onlyUse) {
         List<Coupon> coupons;
         if (onlyUse) {
             coupons = couponMapper.selectCouponsOfUser(userId, new Date(), CouponUseStatus.UN_USED);
-            if (productId != null) {
+            if (productIds != null) {
                 for (Coupon coupon : coupons) {
+                    coupon.setCanUse(true);
                     if (coupon.getMode() == Mode.PRODUCT) {
-                        if (!coupon.getProducts().contains(productId)) {
-                            coupons.remove(coupon);
+                        coupon.getProducts().retainAll(productIds);
+                        if(coupon.getProducts().size() > 0){
+                            coupon.setCanUse(true);
+                        }else{
+                            coupon.setCanUse(false);
                         }
                     }
                 }

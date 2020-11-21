@@ -75,6 +75,7 @@ public class ProductServiceImp implements ProductService {
 
         ProductDetail detail = productMapper.getDetailById(id);
 
+        detail.setCoverUrl(FileUtils.getPath((detail.getCoverUrl())));
         List<ProductDetailImg> images = detail.getDetailImages();
         Iterator<ProductDetailImg> iterator = images.iterator();
         while (iterator.hasNext()) {
@@ -105,7 +106,7 @@ public class ProductServiceImp implements ProductService {
         StockInfo info = res.get(id);
         BigDecimal originalPrice = BigDecimal.valueOf(info.getPrice().doubleValue() / 100);
         BigDecimal price = BigDecimal.valueOf(info.getPrice().doubleValue() / 100);//库存中价格存储单位为分，转为元除100
-
+        BigDecimal expressPrice = BigDecimal.valueOf(info.getExpressPrice().doubleValue() / 100);
         Map<Long, Long> discountMap = discountService.getDiscountOfProducts(detail.getBusinessId(), new Long[]{id});
         if (discountMap.get(detail.getId()) != null) {
             price = BigDecimal.valueOf(info.getPrice().doubleValue() * discountMap.get(detail.getId()) / 10000); //优惠折扣需要再除100
@@ -115,6 +116,7 @@ public class ProductServiceImp implements ProductService {
             detail.setOriginalPrice(originalPrice);
             detail.setSaleNum(info.getSaleNum());
             detail.setLastNum(info.getLastNum());
+            detail.setExpressPrice(expressPrice);
         }
         return detail;
     }

@@ -1,6 +1,7 @@
 package com.gxw.store.project.user.service.imp;
 
 
+import com.gxw.store.project.common.utils.FileUtils;
 import com.gxw.store.project.user.entity.business.Banner;
 import com.gxw.store.project.user.entity.business.Business;
 import com.gxw.store.project.user.entity.business.BusinessDepartment;
@@ -89,7 +90,11 @@ public class BusinessServiceImp implements BusinessService {
 
     @Override
     public List<Banner> getBanners(Long businessId) {
-        return businessMapper.getBanners(businessId);
+        List<Banner> banners = businessMapper.getBanners(businessId);
+        for (Banner banner : banners){
+            banner.setImgUrl(FileUtils.getPath(banner.getImgUrl()));
+        }
+        return banners;
     }
 
     @Override

@@ -30,7 +30,7 @@ public interface CouponService {
      * @param onlyUse
      * @return
      */
-    List<Coupon> getCouponsOfUser(Long userId, Long productId, boolean onlyUse);
+    List<Coupon> getCouponsOfUser(Long userId, List<Long> productId, boolean onlyUse);
 
     /**
      * 获取用户的一个优惠券

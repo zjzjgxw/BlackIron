@@ -30,6 +30,8 @@ public class Coupon {
     @NotNull(message = "剩余张数不能为空")
     private Long num;
 
+    private Boolean canUse;
+
     private List<Long> products; //指定的商品列表
     private List<CouponUser> users; //优惠券领取用户
     private int deleteFlag;
@@ -154,5 +156,13 @@ public class Coupon {
 
     public void setUsers(List<CouponUser> users) {
         this.users = users;
+    }
+
+    public Boolean getCanUse() {
+        return canUse;
+    }
+
+    public void setCanUse(Boolean canUse) {
+        this.canUse = canUse;
     }
 }

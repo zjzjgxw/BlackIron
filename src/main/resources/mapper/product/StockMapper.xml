@@ -41,6 +41,7 @@
         <result property="price" column="price"/>
         <result property="lastNum" column="last_num"/>
         <result property="saleNum" column="sale_num"/>
+        <result property="expressPrice" column="express_price"/>
         <result property="createTime" column="created_at"/>
     </resultMap>
 
