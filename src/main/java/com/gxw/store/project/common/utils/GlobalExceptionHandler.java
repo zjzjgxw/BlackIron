@@ -3,6 +3,7 @@ package com.gxw.store.project.common.utils;
 
 import com.gxw.store.project.common.utils.constants.HttpStatus;
 import com.gxw.store.project.common.utils.exception.*;
+import io.jsonwebtoken.MalformedJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
@@ -119,6 +120,12 @@ public class GlobalExceptionHandler {
     public Object handleInvalidFileTypeException(InvalidFileTypeException e){
         log.info(e.getMessage(), e);
         return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
+    }
+
+    @ExceptionHandler(MalformedJwtException.class)
+    public Object handleMalformedJwtException(MalformedJwtException e){
+        log.info(e.getMessage(), e);
+        return ResponseResult.error(HttpStatus.UNAUTHORIZED, "无效token");
     }
 
 }

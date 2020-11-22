@@ -26,11 +26,11 @@ public interface CouponService {
      * 获取
      *
      * @param userId
-     * @param productId
-     * @param onlyUse
+     * @param productIds
+
      * @return
      */
-    List<Coupon> getCouponsOfUser(Long userId, List<Long> productId, boolean onlyUse);
+    List<Coupon> getCouponsOfUser(Long userId, List<Long> productIds);
 
     /**
      * 获取用户的一个优惠券

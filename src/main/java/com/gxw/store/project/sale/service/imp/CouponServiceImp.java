@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -78,27 +80,44 @@ public class CouponServiceImp implements CouponService {
     }
 
     @Override
-    public List<Coupon> getCouponsOfUser(Long userId, List<Long> productIds, boolean onlyUse) {
+    public List<Coupon> getCouponsOfUser(Long userId, List<Long> productIds) {
         List<Coupon> coupons;
-        if (onlyUse) {
-            coupons = couponMapper.selectCouponsOfUser(userId, new Date(), CouponUseStatus.UN_USED);
-            if (productIds != null) {
-                for (Coupon coupon : coupons) {
-                    coupon.setCanUse(true);
-                    if (coupon.getMode() == Mode.PRODUCT) {
-                        coupon.getProducts().retainAll(productIds);
-                        if(coupon.getProducts().size() > 0){
-                            coupon.setCanUse(true);
-                        }else{
-                            coupon.setCanUse(false);
-                        }
-                    }
-                }
-            }
-        } else {
-            coupons = couponMapper.selectCouponsOfUser(userId, null, null);
+        coupons = couponMapper.selectCouponsOfUser(userId, null, null);
+        for (Coupon coupon : coupons) {
+            coupon.setStatus(getCouponUseStatus(coupon,productIds));
         }
         return coupons;
+    }
+
+    private CouponUseStatus getCouponUseStatus(Coupon coupon,List<Long> productIds){
+        if(coupon.getUsers().size() == 0){
+            return CouponUseStatus.UN_FIT;
+        }
+        if(coupon.getUsers().get(0).getStatus() == CouponUseStatus.USED){
+            return CouponUseStatus.USED;
+        }else{
+            Date now = new Date();
+            if(now.getTime() < coupon.getStartTime().getTime()){
+                return CouponUseStatus.UN_START;
+            }
+            if(now.getTime() > coupon.getEndTime().getTime()){
+                return CouponUseStatus.EXPIRED;
+            }
+            if(coupon.getMode() == Mode.ALL){
+                return CouponUseStatus.UN_USED;
+            }else if(coupon.getMode() == Mode.PRODUCT){ //指定商品模式，则判断是否包含商品
+                List<Long> destList = new ArrayList<>();
+                destList.addAll(coupon.getProducts());
+                destList.retainAll(productIds);
+                if(destList.size() > 0){
+                    return CouponUseStatus.UN_USED;
+                }else{
+                    return CouponUseStatus.UN_FIT;
+                }
+            }
+        }
+        return CouponUseStatus.UN_FIT;
+
     }
 
     @Override

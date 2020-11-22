@@ -37,9 +37,9 @@ public class AppCouponController extends BaseController {
      * @return
      */
     @GetMapping
-    public ResponseResult getCoupons(@RequestParam boolean onlyUse, @RequestParam(required = false) List<Long> productIds ) {
+    public ResponseResult getCoupons(@RequestParam(required = false) List<Long> productIds) {
         Long userId = SessionUtils.getUserId();
-        List<Coupon> coupons = couponService.getCouponsOfUser(userId,productIds,onlyUse);
+        List<Coupon> coupons = couponService.getCouponsOfUser(userId,productIds);
         HashMap<String,  List<Coupon>> res = new HashMap<>();
         res.put("coupons", coupons);
         return ResponseResult.success(res);
