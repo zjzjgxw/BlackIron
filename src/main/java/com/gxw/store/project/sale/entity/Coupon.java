@@ -1,5 +1,7 @@
 package com.gxw.store.project.sale.entity;
 
+import org.springframework.format.annotation.NumberFormat;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;

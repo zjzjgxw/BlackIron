@@ -43,12 +43,9 @@ public class ProductDetail {
     @NotNull(message = "封面图不能为空")
     private String coverUrl; //封面图片
 
-    @JsonSerialize(using = Decimal2Serializer.class)
-    private BigDecimal price;//展示价格
-    @JsonSerialize(using = Decimal2Serializer.class)
-    private BigDecimal originalPrice; //商品原价
-    @JsonSerialize(using = Decimal2Serializer.class)
-    private BigDecimal expressPrice;//快递费
+    private Long price;//展示价格
+    private Long originalPrice; //商品原价
+    private Long expressPrice;//快递费
 
     private Long saleNum;//销量
 
@@ -178,19 +175,19 @@ public class ProductDetail {
     }
 
 
-    public BigDecimal getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 
-    public BigDecimal getOriginalPrice() {
+    public Long getOriginalPrice() {
         return originalPrice;
     }
 
-    public void setOriginalPrice(BigDecimal originalPrice) {
+    public void setOriginalPrice(Long originalPrice) {
         this.originalPrice = originalPrice;
     }
 
@@ -210,11 +207,11 @@ public class ProductDetail {
         this.lastNum = lastNum;
     }
 
-    public BigDecimal getExpressPrice() {
+    public Long getExpressPrice() {
         return expressPrice;
     }
 
-    public void setExpressPrice(BigDecimal expressPrice) {
+    public void setExpressPrice(Long expressPrice) {
         this.expressPrice = expressPrice;
     }
 }

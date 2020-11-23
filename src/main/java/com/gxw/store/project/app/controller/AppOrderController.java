@@ -25,6 +25,7 @@ public class AppOrderController {
     public ResponseResult create(@Valid @RequestBody Order order) {
         Long userId = SessionUtils.getUserId();
         order.setUserId(userId);
+        order.setBusinessId(SessionUtils.getBusinessId());
         Long id = orderService.create(order);
         HashMap<String, Long> res = new HashMap<>();
         res.put("id", id);

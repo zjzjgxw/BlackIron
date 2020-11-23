@@ -12,7 +12,6 @@ public class Order {
 
     private Long id;
 
-    @NotNull
     private Long businessId;//商户id
 
     private String businessName; //商户名称

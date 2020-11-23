@@ -104,19 +104,17 @@ public class ProductServiceImp implements ProductService {
         //依靠库存服务获取价格库存信息
         Map<Long, StockInfo> res = stockService.getProductPrice(id);
         StockInfo info = res.get(id);
-        BigDecimal originalPrice = BigDecimal.valueOf(info.getPrice().doubleValue() / 100);
-        BigDecimal price = BigDecimal.valueOf(info.getPrice().doubleValue() / 100);//库存中价格存储单位为分，转为元除100
-        BigDecimal expressPrice = BigDecimal.valueOf(info.getExpressPrice().doubleValue() / 100);
+        Long price = info.getPrice();
         Map<Long, Long> discountMap = discountService.getDiscountOfProducts(detail.getBusinessId(), new Long[]{id});
         if (discountMap.get(detail.getId()) != null) {
-            price = BigDecimal.valueOf(info.getPrice().doubleValue() * discountMap.get(detail.getId()) / 10000); //优惠折扣需要再除100
+            price = info.getPrice() * discountMap.get(detail.getId()) /100; //优惠折扣
         }
         if (info != null) {
             detail.setPrice(price);
-            detail.setOriginalPrice(originalPrice);
+            detail.setOriginalPrice(info.getPrice());
             detail.setSaleNum(info.getSaleNum());
             detail.setLastNum(info.getLastNum());
-            detail.setExpressPrice(expressPrice);
+            detail.setExpressPrice(info.getExpressPrice());
         }
         return detail;
     }
@@ -132,14 +130,13 @@ public class ProductServiceImp implements ProductService {
         Map<Long, Long> discountMap = discountService.getDiscountOfProducts(businessId, productIds.toArray(new Long[0]));
         for (ProductDetail detail : details) {
             StockInfo info = stockInfoMap.get(detail.getId());
-            BigDecimal originalPrice = BigDecimal.valueOf(info.getPrice().doubleValue() / 100);
-            BigDecimal price = BigDecimal.valueOf(info.getPrice().doubleValue() / 100);//库存中价格存储单位为分，转为元除100
+            Long price = info.getPrice();
             if (discountMap.get(detail.getId()) != null) {
-                price = BigDecimal.valueOf(info.getPrice().doubleValue() * discountMap.get(detail.getId()) / 10000); //优惠折扣需要再除100
+                price = info.getPrice() * discountMap.get(detail.getId())/100;
             }
             if (info != null) {
                 detail.setPrice(price);
-                detail.setOriginalPrice(originalPrice);
+                detail.setOriginalPrice(info.getPrice());
                 detail.setSaleNum(info.getSaleNum());
                 detail.setLastNum(info.getLastNum());
             }
