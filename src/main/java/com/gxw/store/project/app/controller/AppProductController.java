@@ -13,6 +13,7 @@ import com.gxw.store.project.product.entity.StockInfo;
 import com.gxw.store.project.product.service.CategoryService;
 import com.gxw.store.project.product.service.ProductService;
 import com.gxw.store.project.product.service.StockService;
+import com.gxw.store.project.sale.service.DiscountService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -32,9 +33,11 @@ public class AppProductController extends BaseController {
     @Resource
     private StockService stockService;
 
+    @Resource
+    private DiscountService discountService;
+
     @GetMapping("/recommend")
-    public ResponseResult getRecommend(@RequestParam Long businessId)
-    {
+    public ResponseResult getRecommend(@RequestParam Long businessId) {
         startPage();
         List<ProductDetail> details = productService.getRecommendProducts(businessId);
         return ResponseResult.success(getDataTable(details));
@@ -65,10 +68,12 @@ public class AppProductController extends BaseController {
     }
 
     @GetMapping("/stock")
-    public ResponseResult getStockInfo(@RequestParam Long productId) {
+    public ResponseResult getStockInfo(@RequestParam Long businessId, @RequestParam Long productId) {
         StockInfo info = stockService.getStockInfoByProductId(productId);
-        HashMap<String, StockInfo> res = new HashMap<>();
+        Long discount = discountService.getDiscountOfProduct(businessId, productId);
+        HashMap<String, Object> res = new HashMap<>();
         res.put("info", info);
+        res.put("discount", discount);
         return ResponseResult.success(res);
     }
 

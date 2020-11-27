@@ -7,7 +7,9 @@ import java.util.List;
 
 
 public interface CommentService {
-    Long create(Comment comment);
+    boolean create(Comment comment);
+
+    boolean create(List<Comment> comments);
 
     List<Comment> getComments(Long businessId, Long productId, Long orderId);
 
@@ -17,4 +19,12 @@ public interface CommentService {
      * @return
      */
     Boolean delete(Long id);
+
+    /**
+     * 获取评论
+     * @param businessId
+     * @param productId
+     * @return
+     */
+    List<Comment> getComments(Long businessId, Long productId);
 }

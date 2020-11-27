@@ -28,4 +28,12 @@ public interface DiscountService {
      * @return
      */
     Map<Long, Long> getDiscountOfProducts(Long businessId, Long[] productIds);
+
+    /**
+     * 获取产品的折扣
+     * @param businessId
+     * @param productId
+     * @return
+     */
+    Long getDiscountOfProduct(Long businessId, Long productId);
 }

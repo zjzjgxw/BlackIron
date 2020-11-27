@@ -36,6 +36,10 @@ public class Order {
     @NotBlank(message = "收件人联系电话不能为空")
     private String telphone; //联系电话
 
+    private String province; //省
+    private String city; //市
+    private String county; //县
+
     @NotBlank(message = "收件地址不能为空")
     private String address; //收货地址
 
@@ -222,5 +226,30 @@ public class Order {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
     }
 }

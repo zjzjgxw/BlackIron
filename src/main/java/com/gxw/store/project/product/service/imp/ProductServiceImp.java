@@ -119,6 +119,7 @@ public class ProductServiceImp implements ProductService {
         return detail;
     }
 
+
     private List<ProductDetail> handelProductDetails(Long businessId, List<ProductDetail> details) {
         List<Long> productIds = new ArrayList<>();
         for (ProductDetail detail : details) {

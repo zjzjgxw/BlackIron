@@ -1,6 +1,7 @@
 package com.gxw.store.project.app.controller;
 
 
+import com.gxw.store.project.common.controller.BaseController;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.order.dto.OrderSearchParam;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("app/orders")
-public class AppOrderController {
+public class AppOrderController extends BaseController {
 
     @Resource
     private OrderService orderService;
@@ -33,24 +34,21 @@ public class AppOrderController {
     }
 
     @GetMapping
-    public ResponseResult getOrders(@RequestParam Long userId,
-                                    @RequestParam(required = false) Long id,
+    public ResponseResult getOrders(@RequestParam(required = false) Long id,
                                     @RequestParam(required = false) String code,
-                                    @RequestParam(required = false) Long businessId,
                                     @RequestParam(required = false) String telphone,
                                     @RequestParam(required = false) List<Integer> statuses) {
+        startPage();
         OrderSearchParam searchParam = new OrderSearchParam();
-        searchParam.setUserId(userId);
+        searchParam.setUserId(SessionUtils.getUserId());
         searchParam.setId(id);
         searchParam.setCode(code);
-        searchParam.setBusinessId(businessId);
+        searchParam.setBusinessId(SessionUtils.getBusinessId());
         searchParam.setTelphone(telphone);
         searchParam.setStatuses(statuses);
 
         List<Order> orders = orderService.selectOrders(searchParam);
-        HashMap<String, List<Order>> res = new HashMap<>();
-        res.put("orders", orders);
-        return ResponseResult.success(res);
+        return ResponseResult.success(getDataTable(orders));
     }
 
     @GetMapping("/payCallback")

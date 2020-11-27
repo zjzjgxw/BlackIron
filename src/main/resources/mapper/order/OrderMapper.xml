@@ -18,6 +18,9 @@
         <result property="receiver" column="receiver"/>
         <result property="telphone" column="telphone"/>
         <result property="address" column="address"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="county" column="county"/>
         <result property="status" column="status"/>
         <result property="deleteFlag" column="delete_flag"/>
         <result property="createTime" column="created_at"/>
@@ -45,8 +48,8 @@
     </resultMap>
 
     <insert id="create" parameterType="Order" useGeneratedKeys="true" keyProperty="id">
-        insert `gxw_order`  (business_id,business_name,user_id,order_code,price,original_price,express_price,receiver,telphone,address,status)
-        value (#{businessId},#{businessName},#{userId},#{code},#{price},#{originalPrice},#{expressPrice},#{receiver},#{telphone},#{address},#{status})
+        insert `gxw_order`  (business_id,business_name,user_id,order_code,price,original_price,express_price,receiver,telphone,province,city,county,address,status,remark)
+        value (#{businessId},#{businessName},#{userId},#{code},#{price},#{originalPrice},#{expressPrice},#{receiver},#{telphone},#{province},#{city},#{county},#{address},#{status},#{remark})
     </insert>
 
     <insert id="createItem" parameterType="OrderItem" useGeneratedKeys="true" keyProperty="id">
@@ -94,6 +97,9 @@
         a.receiver,
         a.telphone,
         a.address,
+        a.province,
+        a.city,
+        a.county,
         a.status,
         a.delete_flag,
         a.created_at,
@@ -138,7 +144,7 @@
 
     <select id="getOrder" resultMap="OrderResult">
         <include refid="sqlOrder"/>
-        where a.id = #{id}  <if test="businessId != null"> and a.business_id = #{businessId} </if> and a.delete_flag = 0
+        where a.id = #{id}  <if test="businessId != null">and a.business_id = #{businessId}</if> and a.delete_flag = 0
     </select>
 
     <update id="update" parameterType="Order">
@@ -150,6 +156,9 @@
             <if test="receiver != null and receiver !='' ">receiver= #{receiver},</if>
             <if test="telphone != null and telphone !='' ">telphone= #{telphone},</if>
             <if test="address != null and address !='' ">address= #{address},</if>
+            <if test="province != null and province !='' ">province= #{province},</if>
+            <if test="city != null and city !='' ">city= #{city},</if>
+            <if test="county != null and county !='' ">county= #{county},</if>
             <if test="status != null ">status= #{status},</if>
             <if test="payTime != null ">pay_at= #{payTime},</if>
             <if test="sendTime != null ">send_at= #{sendTime},</if>

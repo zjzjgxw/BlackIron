@@ -27,6 +27,10 @@ public class Comment {
 
     private String coverUrl;
 
+    @NotNull
+    private int type; //1为好评，2为中评，3为差评
+
+    private String imgUrl; //图片地址
 
     @NotBlank(message = "评论内容不能为空")
     private String content;
@@ -126,5 +130,21 @@ public class Comment {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }

@@ -83,4 +83,25 @@ public class DiscountServiceImp implements DiscountService {
         }
         return result;
     }
+
+    @Override
+    public Long getDiscountOfProduct(Long businessId, Long productId) {
+        Date date = new Date();
+        List<Discount> discounts = discountMapper.getDiscountOfStore(businessId, date);
+        Long currentDiscount = 100L;
+        for (Discount discount : discounts) {
+            if (discount.getMode() == Mode.ALL) {
+                if (currentDiscount >= discount.getDiscount()){
+                    currentDiscount = discount.getDiscount();
+                }
+            } else if (discount.getMode() == Mode.PRODUCT) {
+                if (discount.getProducts().contains(productId)) {
+                    if (currentDiscount >= discount.getDiscount()) {
+                        currentDiscount = discount.getDiscount();
+                    }
+                }
+            }
+        }
+        return currentDiscount;
+    }
 }

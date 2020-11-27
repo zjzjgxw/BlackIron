@@ -18,4 +18,13 @@ public class FileUtils {
         }
         return url;
     }
+
+    /**
+     * 判断是否已经是全路径
+     * @param url
+     * @return
+     */
+    public static boolean isFullPath(String url){
+        return url.startsWith("http://");
+    }
 }
