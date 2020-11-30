@@ -70,6 +70,7 @@ public class StaffServiceImp implements StaffService {
 
     @Override
     public int addRoles(Set<StaffRoleRel> staffRoleRelSet) {
+        staffMapper.clearRoleRelations(staffRoleRelSet.iterator().next().getRoleId());
         return staffMapper.addRoles(staffRoleRelSet);
     }
 

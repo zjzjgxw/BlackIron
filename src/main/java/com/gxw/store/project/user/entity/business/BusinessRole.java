@@ -16,7 +16,6 @@ public class BusinessRole {
 
     @JsonView(ViewUtils.Simple.class)
     private Long id;
-    @NotNull(message = "商户id不能为空")
     @JsonView(ViewUtils.Simple.class)
     private Long businessId;
     @NotBlank(message = "角色名称不能为空")

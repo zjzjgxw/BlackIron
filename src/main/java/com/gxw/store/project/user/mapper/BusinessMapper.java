@@ -1,6 +1,7 @@
 package com.gxw.store.project.user.mapper;
 
 
+import com.gxw.store.project.user.dto.GroupPermissionRel;
 import com.gxw.store.project.user.entity.business.Banner;
 import com.gxw.store.project.user.entity.business.Business;
 import com.gxw.store.project.user.entity.business.BusinessDepartment;
@@ -32,17 +33,28 @@ public interface BusinessMapper {
      //获取商户下所有角色
      List<BusinessRole> getRoles(Long businessId);
 
+
+     int updateRole(BusinessRole role);
+
      //获取角色详情
      BusinessRole getRoleInfo(@Param("roleId") Long roleId, @Param("businessId") Long businessId);
 
      //删除角色
-     int deleteRoleById(Long roleId);
+     int deleteRoleById(Long roleId, Long businessId);
 
      //为角色添加权限
      void addRolePermission(@Param("roleId") Long roleId, @Param("permissionIds") Long[] permissionIds);
 
      //删除某个角色下的所有权限
      int deleteRolePermissions(Long roleId);
+
+     /**
+      * 获取角色下的所有权限
+      * @param roleId
+      * @param businessId
+      * @return
+      */
+     List<GroupPermissionRel>  getPermissionsOfRole(Long roleId, Long businessId);
 
      /**
       * 添加banner

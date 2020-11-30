@@ -28,5 +28,12 @@ public interface StaffMapper {
 
      int addRoles(@Param("set") Set<StaffRoleRel> staffRoleRelSet);
 
+     /**
+      * 清除角色下的员工
+      * @param roleId
+      * @return
+      */
+     int clearRoleRelations(Long roleId);
+
      int deleteRoles(@Param("set") Set<StaffRoleRel> staffRoleRelSet);
 }

@@ -45,6 +45,11 @@
     </resultMap>
 
 
+    <resultMap type="GroupPermissionRel" id="GroupPermissionRelResult">
+        <result property="groupId" column="group_id"/>
+        <collection property="permissions" javaType="java.util.List"  ofType="Long"  column="id"/>
+    </resultMap>
+
     <insert id="create" parameterType="Business" useGeneratedKeys="true" keyProperty="id">
         insert `gxw_business`  (name,address,logo_img, scale, info) value (#{name},#{address},#{logoImg},#{scale},#{describe})
     </insert>
@@ -70,12 +75,40 @@
         insert `gxw_business_role` (business_id,name) value (#{businessId},#{name})
     </insert>
 
-    <select id="getRoles" parameterType="Long" resultMap="RoleResult">
-         select id,business_id,name,delete_flag from `gxw_business_role` where business_id = #{businessId} and delete_flag = 0
+    <sql id="getRolesSql">
+        SELECT
+	a.id,
+	a.business_id,
+	a.NAME,
+	a.delete_flag,
+	c.id as staff_id,
+	c.name as staff_name
+    FROM
+	`gxw_business_role` a
+	 left join gxw_business_staff_role_relation b on a.id = b.business_role_id
+	 left join gxw_business_staff c on b.business_staff_id = c.id
+    </sql>
+
+    <select id="getRoleInfo" resultMap="RoleResult">
+        <include refid="getRolesSql" />
+        where a.id = #{roleId} and a.business_id = #{businessId}
     </select>
 
+    <select id="getRoles" parameterType="Long" resultMap="RoleResult">
+         <include refid="getRolesSql" />
+         where a.business_id = #{businessId} and a.delete_flag = 0
+    </select>
+
+    <update id="updateRole" parameterType="BusinessRole">
+        update `gxw_business_role`
+        <set>
+            name = #{name}
+        </set>
+        where id = #{id} and business_id= #{businessId}
+    </update>
+
     <update id="deleteRoleById" parameterType="Long">
-        update  `gxw_business_role` set delete_flag = 1 where id =#{roleId}
+        update  `gxw_business_role` set delete_flag = 1 where id =#{roleId} and business_id= #{businessId}
     </update>
 
     <select id="getDepartmentInfo" resultMap="DepartmentResult">
@@ -92,19 +125,7 @@
         where a.id = #{departmentId} and a.business_id = #{businessId}
     </select>
 
-    <select id="getRoleInfo" resultMap="RoleResult">
-        select
-        a.id,
-        a.`name`,
-        a.business_id,
-        c.id as staff_id,
-        c.`name` as staff_name
-        from
-        gxw_business_role a
-        left join gxw_business_staff_role_relation b on a.id = b.business_role_id
-        left join gxw_business_staff c on c.id = b.business_staff_id
-        where a.id = #{roleId} and a.business_id = #{businessId}
-    </select>
+
 
     <insert id="addRolePermission">
         insert gxw_business_role_permission_relation (role_id,permission_id) values
@@ -116,6 +137,17 @@
     <delete id="deleteRolePermissions">
         delete from gxw_business_role_permission_relation where role_id =#{roleId}
     </delete>
+
+    <select id="getPermissionsOfRole" resultMap="GroupPermissionRelResult">
+        SELECT
+        a.id,
+        a.group_id
+        from
+        gxw_permission a
+        left join gxw_business_role_permission_relation b on a.id = b.permission_id
+        left join gxw_business_role c on b.role_id = c.id
+        where c.business_id = #{businessId} and c.delete_flag = 0 and c.id = #{roleId}
+    </select>
 
     <insert id="addBanner" parameterType="Banner" useGeneratedKeys="true" keyProperty="id">
         insert gxw_business_banner (business_id,img_url,url,index_no) values

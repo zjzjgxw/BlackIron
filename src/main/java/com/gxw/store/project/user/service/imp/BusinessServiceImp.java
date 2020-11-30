@@ -2,6 +2,7 @@ package com.gxw.store.project.user.service.imp;
 
 
 import com.gxw.store.project.common.utils.FileUtils;
+import com.gxw.store.project.user.dto.GroupPermissionRel;
 import com.gxw.store.project.user.entity.business.Banner;
 import com.gxw.store.project.user.entity.business.Business;
 import com.gxw.store.project.user.entity.business.BusinessDepartment;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -34,7 +36,7 @@ public class BusinessServiceImp implements BusinessService {
     @Override
     public Long createDepartment(BusinessDepartment department) {
         businessMapper.createDepartment(department);
-        return department.getId() ;
+        return department.getId();
     }
 
     @Override
@@ -44,7 +46,7 @@ public class BusinessServiceImp implements BusinessService {
 
     @Override
     public BusinessDepartment getDepartmentInfo(Long departmentId, Long businessId) {
-        return businessMapper.getDepartmentInfo(departmentId,businessId);
+        return businessMapper.getDepartmentInfo(departmentId, businessId);
     }
 
     @Override
@@ -64,13 +66,20 @@ public class BusinessServiceImp implements BusinessService {
     }
 
     @Override
-    public BusinessRole getRoleInfo(Long roleId, Long businessId) {
-        return businessMapper.getRoleInfo(roleId,businessId);
+    public boolean updateRole(BusinessRole businessRole) {
+        int row = businessMapper.updateRole(businessRole);
+        return row > 0;
     }
 
     @Override
-    public int deleteRoleById(Long roleId) {
-        return businessMapper.deleteRoleById(roleId);
+    public BusinessRole getRoleInfo(Long roleId, Long businessId) {
+        return businessMapper.getRoleInfo(roleId, businessId);
+    }
+
+    @Override
+    public boolean deleteRoleById(Long roleId, Long businessId) {
+        int row = businessMapper.deleteRoleById(roleId, businessId);
+        return  row > 0;
     }
 
     @Override
@@ -78,8 +87,13 @@ public class BusinessServiceImp implements BusinessService {
     public boolean saveRolePermissions(Long roleId, Long[] permissions) {
         //先删除角色下所有的权限
         businessMapper.deleteRolePermissions(roleId);
-        businessMapper.addRolePermission(roleId,permissions);
+        businessMapper.addRolePermission(roleId, permissions);
         return true;
+    }
+
+    @Override
+    public List<GroupPermissionRel>  getPermissionsOfRole(Long roleId, Long businessId) {
+        return businessMapper.getPermissionsOfRole(roleId,businessId);
     }
 
     @Override
@@ -91,7 +105,7 @@ public class BusinessServiceImp implements BusinessService {
     @Override
     public List<Banner> getBanners(Long businessId) {
         List<Banner> banners = businessMapper.getBanners(businessId);
-        for (Banner banner : banners){
+        for (Banner banner : banners) {
             banner.setImgUrl(FileUtils.getPath(banner.getImgUrl()));
         }
         return banners;
@@ -105,7 +119,7 @@ public class BusinessServiceImp implements BusinessService {
 
     @Override
     public Boolean deleteBanner(Long id, Long businessId) {
-        int row  = businessMapper.deleteBanner(id,businessId);
+        int row = businessMapper.deleteBanner(id, businessId);
         return row != 0;
     }
 

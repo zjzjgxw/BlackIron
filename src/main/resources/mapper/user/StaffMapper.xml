@@ -114,6 +114,11 @@
         </foreach>
     </insert>
 
+    <delete id="clearRoleRelations">
+        delete from gxw_business_staff_role_relation where
+        business_role_id = #{roleId}
+    </delete>
+
     <delete id="deleteDepartments">
         delete from gxw_business_staff_department_relation where
         <foreach collection="set" item="item" separator=" or " index="index">

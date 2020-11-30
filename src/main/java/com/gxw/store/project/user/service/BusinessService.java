@@ -1,11 +1,13 @@
 package com.gxw.store.project.user.service;
 
 
+import com.gxw.store.project.user.dto.GroupPermissionRel;
 import com.gxw.store.project.user.entity.business.Banner;
 import com.gxw.store.project.user.entity.business.Business;
 import com.gxw.store.project.user.entity.business.BusinessDepartment;
 import com.gxw.store.project.user.entity.business.BusinessRole;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface BusinessService {
@@ -69,6 +71,13 @@ public interface BusinessService {
     List<BusinessRole> getRoles(Long businessId);
 
     /**
+     * 修改商户角色
+     * @param businessRole
+     * @return
+     */
+    boolean updateRole(BusinessRole businessRole);
+
+    /**
      * 获取角色详情
      * @param roleId
      * @param businessId
@@ -81,7 +90,7 @@ public interface BusinessService {
      * @param roleId
      * @return
      */
-    int deleteRoleById(Long roleId);
+    boolean deleteRoleById(Long roleId,Long businessId);
 
     /**
      * 保存角色权限关系
@@ -91,6 +100,14 @@ public interface BusinessService {
      */
     boolean saveRolePermissions(Long roleId, Long[] permissions);
 
+
+    /**
+     * 获取某个角色下的权限
+     * @param roleId
+     * @param businessId
+     * @return
+     */
+    List<GroupPermissionRel>  getPermissionsOfRole(Long roleId, Long businessId);
 
     /**
      * 添加banner
