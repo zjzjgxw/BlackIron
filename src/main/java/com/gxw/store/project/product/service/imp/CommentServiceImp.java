@@ -67,7 +67,9 @@ public class CommentServiceImp implements CommentService {
             if(!FileUtils.isFullPath(comment.getCoverUrl())){
                 comment.setCoverUrl(FileUtils.getPath(comment.getCoverUrl()));
             }
-            comment.setImgUrl(FileUtils.getPath(comment.getImgUrl()));
+            if(!comment.getImgUrl().isEmpty()){
+                comment.setImgUrl(FileUtils.getPath(comment.getImgUrl()));
+            }
         }
         return  comments;
     }

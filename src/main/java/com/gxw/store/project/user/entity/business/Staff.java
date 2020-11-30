@@ -14,7 +14,6 @@ public class Staff {
 
     @JsonView(ViewUtils.Simple.class)
     private Long id;
-    @NotNull(message = "商户id不能为空")
     private Long businessId;
     @NotBlank(message = "账号不能为空")
     @Length(min = 5, max = 25, message = "账号长度在5-25")
@@ -26,7 +25,7 @@ public class Staff {
     @JsonView(ViewUtils.Simple.class)
     private String name;
     @NotNull
-    private boolean isAdmin;
+    private boolean admin;
     @Email(message = "邮箱格式错误")
     private String email;
 
@@ -80,12 +79,13 @@ public class Staff {
         this.name = name;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
+
+    public boolean getAdmin() {
+        return admin;
     }
 
     public void setAdmin(boolean admin) {
-        isAdmin = admin;
+        this.admin = admin;
     }
 
     public String getEmail() {

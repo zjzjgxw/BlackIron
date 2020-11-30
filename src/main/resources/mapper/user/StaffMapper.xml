@@ -9,7 +9,7 @@
         <result property="account" column="account"/>
         <result property="password" column="password"/>
         <result property="name" column="name"/>
-        <result property="isAdmin" column="is_admin"/>
+        <result property="admin" column="is_admin"/>
         <result property="email" column="email"/>
         <result property="logoImg" column="logo_img"/>
         <result property="status" column="status"/>
@@ -25,6 +25,7 @@
 	a.id,
 	a.business_id,
 	a.account,
+	a.is_admin,
 	a.`password`,
 	a.`name`,
 	a.email,
@@ -45,8 +46,24 @@
 	left join gxw_business_role e on d.business_role_id = e.id
     </sql>
 
+    <sql id="selectStaffSimple">
+        SELECT
+	a.id,
+	a.business_id,
+	a.account,
+	a.is_admin,
+	a.`password`,
+	a.`name`,
+	a.email,
+	a.logo_img,
+	a.`status`,
+	a.delete_flag
+    FROM
+	gxw_business_staff a
+    </sql>
+
     <insert id="create" parameterType="Staff" useGeneratedKeys="true" keyProperty="id">
-        insert `gxw_business_staff`  (business_id,account,password, name, is_admin,email,logo_img,status) value (#{businessId},#{account},#{password},#{name},#{isAdmin},#{email},#{logoImg},#{status})
+        insert `gxw_business_staff`  (business_id,account,password, name, is_admin,email,logo_img,status) value (#{businessId},#{account},#{password},#{name},#{admin},#{email},#{logoImg},#{status})
     </insert>
 
     <select id="getStaff" parameterType="Long" resultMap="StaffResult">
@@ -54,10 +71,34 @@
         where a.id = #{id} and a.delete_flag = 0
     </select>
 
+    <select id="getStaffs" resultMap="StaffResult">
+        <include refid="selectStaffSimple" />
+        where a.delete_flag = 0 and a.business_id = #{businessId} order by a.create_time desc
+    </select>
+
     <select id="getStaffByAccount" parameterType="String" resultMap="StaffResult">
         <include refid="selectStaff" />
         where a.account = #{account} and a.delete_flag = 0
     </select>
+
+    <update id="update" parameterType="StaffUpdate">
+        update gxw_business_staff
+        <set>
+            <if test="name != null and name !=''">name = #{name},</if>
+            <if test="admin != null ">is_admin = #{admin},</if>
+            <if test="email != null and email !=''">email = #{email},</if>
+            <if test="status != null ">status = #{status}</if>
+        </set>
+        where id = #{id} and business_id = #{businessId}
+    </update>
+
+    <update id="delete">
+        update gxw_business_staff
+        <set>
+            delete_flag = 1
+        </set>
+        where id = #{id} and business_id = #{businessId}
+    </update>
 
     <insert id="addDepartments">
         insert into gxw_business_staff_department_relation(business_staff_id,business_department_id) values

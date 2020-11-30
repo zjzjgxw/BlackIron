@@ -4,12 +4,14 @@ import com.gxw.store.project.common.utils.Md5Utils;
 import com.gxw.store.project.common.utils.exception.HasExistException;
 import com.gxw.store.project.user.dto.StaffDepartmentRel;
 import com.gxw.store.project.user.dto.StaffRoleRel;
+import com.gxw.store.project.user.dto.StaffUpdate;
 import com.gxw.store.project.user.entity.business.Staff;
 import com.gxw.store.project.user.mapper.StaffMapper;
 import com.gxw.store.project.user.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -35,8 +37,25 @@ public class StaffServiceImp implements StaffService {
     }
 
     @Override
+    public List<Staff> getStaffs(Long businessId) {
+        return staffMapper.getStaffs(businessId);
+    }
+
+    @Override
+    public boolean update(StaffUpdate staffUpdate) {
+        int row = staffMapper.update(staffUpdate);
+        return row > 0;
+    }
+
+    @Override
     public Staff getStaffByAccount(String account) {
         return staffMapper.getStaffByAccount(account);
+    }
+
+    @Override
+    public boolean delete(Long id, Long businessId) {
+        int row = staffMapper.delete(id, businessId);
+        return row > 0;
     }
 
     @Override

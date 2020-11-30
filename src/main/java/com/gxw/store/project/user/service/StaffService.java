@@ -3,8 +3,11 @@ package com.gxw.store.project.user.service;
 
 import com.gxw.store.project.user.dto.StaffDepartmentRel;
 import com.gxw.store.project.user.dto.StaffRoleRel;
+import com.gxw.store.project.user.dto.StaffUpdate;
 import com.gxw.store.project.user.entity.business.Staff;
 
+import javax.validation.constraints.Max;
+import java.util.List;
 import java.util.Set;
 
 public interface StaffService {
@@ -12,7 +15,13 @@ public interface StaffService {
 
     Staff getStaff(Long id);
 
+    List<Staff> getStaffs(Long businessId);
+
+    boolean update(StaffUpdate staffUpdate);
+
     Staff getStaffByAccount(String account);
+
+    boolean delete(Long id, Long businessId);
 
     /**
      * 新增用户所属部门

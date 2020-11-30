@@ -25,6 +25,6 @@ public class FileUtils {
      * @return
      */
     public static boolean isFullPath(String url){
-        return url.startsWith("http://");
+        return url.startsWith("http://") || url.startsWith("https://");
     }
 }
