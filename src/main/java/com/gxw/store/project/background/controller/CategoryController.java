@@ -6,6 +6,9 @@ import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.product.entity.*;
 import com.gxw.store.project.product.service.CategoryService;
+import com.gxw.store.project.product.service.ProductService;
+import com.gxw.store.project.user.dto.NameParam;
+import jdk.management.resource.ResourceRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -18,6 +21,10 @@ import java.util.List;
 public class CategoryController extends BaseController {
     @Resource
     private CategoryService categoryService;
+
+
+    @Resource
+    private ProductService productService;
 
     @PostMapping()
     public ResponseResult create(@Valid @RequestBody Category category) {
@@ -46,8 +53,8 @@ public class CategoryController extends BaseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseResult updateCategory(@PathVariable Long id, @RequestParam String name) {
-        if (categoryService.updateCategory(name, id, SessionUtils.getBusinessId())) {
+    public ResponseResult updateCategory(@PathVariable Long id, @RequestBody NameParam param) {
+        if (categoryService.updateCategory(param.getName(), id, SessionUtils.getBusinessId())) {
             return ResponseResult.success();
         } else {
             return ResponseResult.error();
@@ -73,8 +80,8 @@ public class CategoryController extends BaseController {
     }
 
     @PutMapping("/attributes/{id}")
-    public ResponseResult updateAttributes(@PathVariable Long id, @RequestParam String name) {
-        if(categoryService.updateAttribute(id,name)){
+    public ResponseResult updateAttributes(@PathVariable Long id, @RequestBody NameParam attributeName) {
+        if(categoryService.updateAttribute(id,attributeName.getName())){
             return ResponseResult.success();
         }else{
             return ResponseResult.error();
@@ -150,7 +157,14 @@ public class CategoryController extends BaseController {
     }
 
     @GetMapping("/specifications")
-    public ResponseResult getCategorySpecifications(@RequestParam Long categoryId) {
+    public ResponseResult getCategorySpecifications(@RequestParam(required = false) Long categoryId, @RequestParam(required = false) Long productId) {
+        if(productId != null){
+            ProductDetail detail = productService.getDetailById(productId);
+            categoryId = detail.getCategoryId();
+        }
+        if(categoryId == null){
+            return ResponseResult.error();
+        }
         List<CategorySpecification> specifications = categoryService.selectCategorySpecifications(categoryId);
         HashMap<String, List<CategorySpecification>> res = new HashMap<>();
         res.put("list", specifications);
@@ -158,8 +172,8 @@ public class CategoryController extends BaseController {
     }
 
     @PutMapping("/specifications/{id}")
-    public ResponseResult updateSpecifications(@PathVariable Long id, @RequestParam String name) {
-        if(categoryService.updateSpecification(id,name)){
+    public ResponseResult updateSpecifications(@PathVariable Long id, @RequestBody NameParam param) {
+        if(categoryService.updateSpecification(id,param.getName())){
             return ResponseResult.success();
         }else{
             return ResponseResult.error();

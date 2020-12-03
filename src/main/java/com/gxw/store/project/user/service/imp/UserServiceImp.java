@@ -57,8 +57,31 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public boolean changeUserStatus(Long id) {
+        User user = userMapper.selectUserById(id);
+        if(user == null){
+            return false;
+        }
+        int status = user.getStatus();
+        if(status == 1){
+            status = 0;
+        }else{
+            status = 1;
+        }
+        user.setStatus(status);
+        int row =  userMapper.updateUser(user);
+        return row > 0;
+    }
+
+    @Override
     public List<User> getUsers(UserSearchParams searchParams) {
-        return userMapper.getUsers(searchParams);
+        List<User> users = userMapper.getUsers(searchParams);
+        List<VipInfo> vipInfos = vipService.getVips(searchParams.getBusinessId());
+        for(User user: users){
+            VipInfo vipInfo = vipService.getCurrentVipInfo(user.getConsumePrice(), vipInfos);
+            user.setVip(vipInfo);
+        }
+        return users;
     }
 
     @Override

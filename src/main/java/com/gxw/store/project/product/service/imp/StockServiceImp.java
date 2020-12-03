@@ -60,14 +60,24 @@ public class StockServiceImp implements StockService {
     @Transactional
     public Boolean updateStockInfo(StockUpdateInfo info) {
         stockMapper.updateStockInfo(info);
-        for (StockSpecification specification : info.getSpecifications()) {
-            stockMapper.updateStockSpecificationDetail(specification.getDetail());
+        if(info.getSpecifications() != null){
+            for (StockSpecification specification : info.getSpecifications()) {
+                stockMapper.updateStockSpecificationDetail(specification.getDetail());
+            }
         }
-        for (StockSpecification specification : info.getNewSpecifications()) {
-            specification.setStockInfoId(info.getId());
-            stockMapper.createStockSpecification(specification);
-            specification.getDetail().setStockSpecificationId(specification.getId());
-            stockMapper.createStockSpecificationDetail(specification.getDetail());
+        if(info.getDeleteSpecifications() != null){
+            for(StockSpecification specification : info.getDeleteSpecifications()){
+                stockMapper.deleteStockSpecification(specification.getId());
+            }
+        }
+
+        if(info.getNewSpecifications() != null){
+            for (StockSpecification specification : info.getNewSpecifications()) {
+                specification.setStockInfoId(info.getId());
+                stockMapper.createStockSpecification(specification);
+                specification.getDetail().setStockSpecificationId(specification.getId());
+                stockMapper.createStockSpecificationDetail(specification.getDetail());
+            }
         }
         return true;
     }

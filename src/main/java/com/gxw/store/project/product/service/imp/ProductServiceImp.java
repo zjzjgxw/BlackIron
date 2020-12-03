@@ -34,7 +34,9 @@ public class ProductServiceImp implements ProductService {
     @Transactional
     public Long createProductDetail(ProductDetail detail) {
         productMapper.createDetail(detail);
-        productMapper.createAttributes(detail.getId(), detail.getAttributes());
+        if (detail.getAttributes() != null && !detail.getAttributes().isEmpty()) {
+            productMapper.createAttributes(detail.getId(), detail.getAttributes());
+        }
         return detail.getId();
     }
 
@@ -42,9 +44,11 @@ public class ProductServiceImp implements ProductService {
     @Transactional
     public Long createProductImages(Long detailId, ProductImages productImages) {
         if (productImages.getMainImages() != null && productImages.getMainImages().size() > 0) {
+            productMapper.deleteMainImages(detailId);
             productMapper.createMainImages(detailId, productImages.getMainImages());
         }
         if (productImages.getDetailImages() != null && productImages.getMainImages().size() > 0) {
+            productMapper.deleteDetailImages(detailId);
             productMapper.createDetailImages(detailId, productImages.getDetailImages());
         }
         return detailId;
@@ -75,12 +79,21 @@ public class ProductServiceImp implements ProductService {
 
         ProductDetail detail = productMapper.getDetailById(id);
 
+        Iterator<ProductDetailAttribute> attributesIterable = detail.getAttributes().iterator();
+        while (attributesIterable.hasNext()) {
+            ProductDetailAttribute attribute = attributesIterable.next();
+            if (attribute.getId() == null) {
+                attributesIterable.remove();
+            }
+        }
+
         detail.setCoverUrl(FileUtils.getPath((detail.getCoverUrl())));
         List<ProductDetailImg> images = detail.getDetailImages();
         Iterator<ProductDetailImg> iterator = images.iterator();
         while (iterator.hasNext()) {
             ProductDetailImg image = iterator.next();
             if (StringUtils.isNotEmpty(image.getImgUrl())) {
+                image.setImgPath(image.getImgUrl());
                 image.setImgUrl(FileUtils.getPath(image.getImgUrl()));
             }
             if (image.getId() == null) {
@@ -94,6 +107,7 @@ public class ProductServiceImp implements ProductService {
         while (mainImgIterator.hasNext()) {
             ProductDetailMainImg image = mainImgIterator.next();
             if (StringUtils.isNotEmpty(image.getImgUrl())) {
+                image.setImgPath(image.getImgUrl());
                 image.setImgUrl(FileUtils.getPath(image.getImgUrl()));
             }
             if (image.getId() == null) {
@@ -104,12 +118,12 @@ public class ProductServiceImp implements ProductService {
         //依靠库存服务获取价格库存信息
         Map<Long, StockInfo> res = stockService.getProductPrice(id);
         StockInfo info = res.get(id);
-        Long price = info.getPrice();
-        Map<Long, Long> discountMap = discountService.getDiscountOfProducts(detail.getBusinessId(), new Long[]{id});
-        if (discountMap.get(detail.getId()) != null) {
-            price = info.getPrice() * discountMap.get(detail.getId()) /100; //优惠折扣
-        }
         if (info != null) {
+            Long price = info.getPrice();
+            Map<Long, Long> discountMap = discountService.getDiscountOfProducts(detail.getBusinessId(), new Long[]{id});
+            if (discountMap.get(detail.getId()) != null) {
+                price = info.getPrice() * discountMap.get(detail.getId()) / 100; //优惠折扣
+            }
             detail.setPrice(price);
             detail.setOriginalPrice(info.getPrice());
             detail.setSaleNum(info.getSaleNum());
@@ -131,11 +145,11 @@ public class ProductServiceImp implements ProductService {
         Map<Long, Long> discountMap = discountService.getDiscountOfProducts(businessId, productIds.toArray(new Long[0]));
         for (ProductDetail detail : details) {
             StockInfo info = stockInfoMap.get(detail.getId());
-            Long price = info.getPrice();
-            if (discountMap.get(detail.getId()) != null) {
-                price = info.getPrice() * discountMap.get(detail.getId())/100;
-            }
             if (info != null) {
+                Long price = info.getPrice();
+                if (discountMap.get(detail.getId()) != null) {
+                    price = info.getPrice() * discountMap.get(detail.getId()) / 100;
+                }
                 detail.setPrice(price);
                 detail.setOriginalPrice(info.getPrice());
                 detail.setSaleNum(info.getSaleNum());

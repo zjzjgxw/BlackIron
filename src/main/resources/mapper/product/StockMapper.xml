@@ -109,6 +109,7 @@
     <update id="deleteStockSpecification">
         update gxw_stock_specification
         <set>
+            first_value = concat(first_value,id),
             delete_flag = 1
         </set>
         where id = #{id}
@@ -118,7 +119,7 @@
         update gxw_stock_info
         <set>
             price = #{price},
-            express_price = #{expressPrice}
+            express_price = #{expressPrice},
             last_num = #{lastNum}
         </set>
         where product_id = #{productId}

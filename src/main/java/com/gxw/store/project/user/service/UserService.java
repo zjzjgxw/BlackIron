@@ -16,6 +16,13 @@ public interface UserService {
 
     boolean updateUser(User user);
 
+    /**
+     * 修改用户状态
+     * @param id
+     * @return
+     */
+    boolean changeUserStatus(Long id);
+
     List<User> getUsers(UserSearchParams searchParams);
 
     /**

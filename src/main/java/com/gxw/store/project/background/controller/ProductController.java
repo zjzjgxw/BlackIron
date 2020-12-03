@@ -99,9 +99,9 @@ public class ProductController extends BaseController {
 
 
     @GetMapping()
-    public ResponseResult selectProduct(@RequestParam Long businessId, @RequestParam(required = false) Long categoryId) {
+    public ResponseResult selectProduct( @RequestParam(required = false) Long categoryId) {
         startPage();
-        List<ProductDetail> details = productService.selectProducts(businessId, categoryId);
+        List<ProductDetail> details = productService.selectProducts(SessionUtils.getBusinessId(), categoryId);
         return ResponseResult.success(getDataTable(details));
     }
 

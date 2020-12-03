@@ -37,6 +37,15 @@ public class UserController extends BaseController {
         return ResponseResult.success();
     }
 
+    @PatchMapping("/{id}")
+    public ResponseResult changeStatus(@PathVariable Long id){
+        if(userService.changeUserStatus(id)){
+            return ResponseResult.success();
+        }else{
+            return ResponseResult.error();
+        }
+    }
+
     @GetMapping()
     public ResponseResult getUsers(@RequestParam(required = false) Long id,
                                    @RequestParam(required = false) String account,

@@ -14,6 +14,8 @@ public class ProductDetailImg {
 
     private int indexNo;
 
+    private String imgPath;
+
     public Long getId() {
         return id;
     }
@@ -44,5 +46,13 @@ public class ProductDetailImg {
 
     public void setIndexNo(int indexNo) {
         this.indexNo = indexNo;
+    }
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
     }
 }

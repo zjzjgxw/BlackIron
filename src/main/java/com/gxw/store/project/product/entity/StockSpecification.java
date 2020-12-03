@@ -1,7 +1,5 @@
 package com.gxw.store.project.product.entity;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * 库存规格
  */
