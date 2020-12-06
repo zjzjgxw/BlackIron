@@ -15,6 +15,7 @@
         <result property="tel" column="tel"/>
         <result property="openId" column="open_id"/>
         <result property="idolNum" column="idol_num"/>
+        <result property="birthday" column="birthday"/>
         <result property="fansNum" column="fans_num"/>
         <result property="consumePrice" column="consume_price"/>
         <result property="deleteFlag" column="delete_flag"/>
@@ -22,13 +23,15 @@
 
     <insert id="create" parameterType="User" useGeneratedKeys="true" keyProperty="id">
         insert `gxw_user` (business_id,account,password,name,tel,email,profile_url,status
+        <if test="birthday != null ">,birthday</if>
         <if test="openId != null and openId != ''">,open_id</if>) value
         (#{businessId}, #{account},#{password},#{name},#{tel},#{email},#{profileUrl},#{status}
+        <if test="birthday != null ">,birthday</if>
         <if test="openId != null and openId != ''">,#{openId}</if>)
     </insert>
 
     <sql id="selectUser">
-        select a.id,a.business_id,a.account,a.password,a.name,a.open_id,a.union_id,a.tel,a.email,a.status,a.profile_url,a.idol_num,a.fans_num,a.consume_price,a.delete_flag from `gxw_user` a
+        select a.id,a.business_id,a.account,a.password,a.name,a.open_id,a.birthday, a.union_id,a.tel,a.email,a.status,a.profile_url,a.idol_num,a.fans_num,a.consume_price,a.delete_flag from `gxw_user` a
     </sql>
 
     <select id="selectUserByAccount" parameterType="String" resultMap="UserResult">
@@ -82,6 +85,7 @@
             <if test="status != null ">status = #{status},</if>
             <if test="openId != null and openId != ''">open_id = #{openId},</if>
             <if test="unionId != null and unionId != ''">union_id = #{unionId},</if>
+            <if test="birthday != null ">birthday = #{birthday},</if>
             <if test="profileUrl != null and profileUrl != ''">profile_url = #{profileUrl},</if>
             <if test="deleteFlag != null and deleteFlag != ''">delete_flag = #{deleteFlag},</if>
             update_time = sysdate()

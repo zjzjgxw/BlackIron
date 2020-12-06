@@ -12,7 +12,7 @@ public interface CategoryMapper {
 
     int deleteCategory(Long id, Long businessId);
 
-    int updateCategory(String name, Long id, Long businessId);
+    int updateCategory(Category category);
 
     void createAttribute(CategoryAttribute categoryAttribute);
 

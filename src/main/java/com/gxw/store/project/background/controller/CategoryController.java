@@ -8,7 +8,7 @@ import com.gxw.store.project.product.entity.*;
 import com.gxw.store.project.product.service.CategoryService;
 import com.gxw.store.project.product.service.ProductService;
 import com.gxw.store.project.user.dto.NameParam;
-import jdk.management.resource.ResourceRequest;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -53,8 +53,10 @@ public class CategoryController extends BaseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseResult updateCategory(@PathVariable Long id, @RequestBody NameParam param) {
-        if (categoryService.updateCategory(param.getName(), id, SessionUtils.getBusinessId())) {
+    public ResponseResult updateCategory(@PathVariable Long id, @RequestBody Category category) {
+        category.setId(id);
+        category.setBusinessId(SessionUtils.getBusinessId());
+        if (categoryService.updateCategory(category)) {
             return ResponseResult.success();
         } else {
             return ResponseResult.error();
@@ -81,18 +83,18 @@ public class CategoryController extends BaseController {
 
     @PutMapping("/attributes/{id}")
     public ResponseResult updateAttributes(@PathVariable Long id, @RequestBody NameParam attributeName) {
-        if(categoryService.updateAttribute(id,attributeName.getName())){
+        if (categoryService.updateAttribute(id, attributeName.getName())) {
             return ResponseResult.success();
-        }else{
+        } else {
             return ResponseResult.error();
         }
     }
 
     @DeleteMapping("/attributes/{id}")
-    public ResponseResult deleteAttribute(@PathVariable Long id){
-        if(categoryService.deleteAttribute(id)){
+    public ResponseResult deleteAttribute(@PathVariable Long id) {
+        if (categoryService.deleteAttribute(id)) {
             return ResponseResult.success();
-        }else{
+        } else {
             return ResponseResult.error();
         }
     }
@@ -158,11 +160,11 @@ public class CategoryController extends BaseController {
 
     @GetMapping("/specifications")
     public ResponseResult getCategorySpecifications(@RequestParam(required = false) Long categoryId, @RequestParam(required = false) Long productId) {
-        if(productId != null){
+        if (productId != null) {
             ProductDetail detail = productService.getDetailById(productId);
             categoryId = detail.getCategoryId();
         }
-        if(categoryId == null){
+        if (categoryId == null) {
             return ResponseResult.error();
         }
         List<CategorySpecification> specifications = categoryService.selectCategorySpecifications(categoryId);
@@ -173,18 +175,18 @@ public class CategoryController extends BaseController {
 
     @PutMapping("/specifications/{id}")
     public ResponseResult updateSpecifications(@PathVariable Long id, @RequestBody NameParam param) {
-        if(categoryService.updateSpecification(id,param.getName())){
+        if (categoryService.updateSpecification(id, param.getName())) {
             return ResponseResult.success();
-        }else{
+        } else {
             return ResponseResult.error();
         }
     }
 
     @DeleteMapping("/specifications/{id}")
-    public ResponseResult deleteSpecification(@PathVariable Long id){
-        if(categoryService.deleteSpecification(id)){
+    public ResponseResult deleteSpecification(@PathVariable Long id) {
+        if (categoryService.deleteSpecification(id)) {
             return ResponseResult.success();
-        }else{
+        } else {
             return ResponseResult.error();
         }
     }

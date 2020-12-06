@@ -13,6 +13,8 @@ public interface OrderService {
 
     List<Order> selectOrders(OrderSearchParam param);
 
+    Order getOrder(Long id, Long businessId);
+
     /**
      * 支付成功
      *

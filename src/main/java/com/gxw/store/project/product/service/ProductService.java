@@ -1,6 +1,7 @@
 package com.gxw.store.project.product.service;
 
 import com.gxw.store.project.product.dto.ProductImages;
+import com.gxw.store.project.product.dto.ProductSearchParams;
 import com.gxw.store.project.product.entity.ProductDetail;
 import com.gxw.store.project.product.entity.ProductDetailAttribute;
 import com.gxw.store.project.product.entity.ProductRecommend;
@@ -41,7 +42,15 @@ public interface ProductService {
      *
      * @return
      */
-    List<ProductDetail> selectProducts(Long businessId, Long categoryId);
+    List<ProductDetail> selectProducts(ProductSearchParams params);
+
+    /**
+     * 删除商品
+     *
+     * @param id
+     * @return
+     */
+    Boolean deleteDetail(Long id, Long businessId);
 
     /**
      * 更新商品信息
@@ -53,7 +62,8 @@ public interface ProductService {
 
     /**
      * 删除某个属性
-     * @param id 属性id
+     *
+     * @param id       属性id
      * @param detailId 商品id
      * @return
      */
@@ -70,6 +80,7 @@ public interface ProductService {
 
     /**
      * 修个商品图片信息
+     *
      * @param detailId
      * @param productImages
      * @return
@@ -79,6 +90,7 @@ public interface ProductService {
 
     /**
      * 添加推荐商品
+     *
      * @param recommends
      * @return
      */
@@ -87,6 +99,7 @@ public interface ProductService {
 
     /**
      * 删除推荐
+     *
      * @param businessId
      * @param productIds
      * @return
@@ -95,6 +108,7 @@ public interface ProductService {
 
     /**
      * 更新
+     *
      * @param recommend
      * @return
      */
@@ -102,6 +116,7 @@ public interface ProductService {
 
     /**
      * 获取推荐商品
+     *
      * @param businessId
      * @return
      */

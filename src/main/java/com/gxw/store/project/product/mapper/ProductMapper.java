@@ -1,6 +1,7 @@
 package com.gxw.store.project.product.mapper;
 
 
+import com.gxw.store.project.product.dto.ProductSearchParams;
 import com.gxw.store.project.product.entity.*;
 
 import java.util.List;
@@ -10,12 +11,14 @@ public interface ProductMapper {
 
     int updateDetail(ProductDetail detail);
 
+    int deleteDetail(Long id, Long businessId);
+
     void createAttributes(Long detailId, List<ProductDetailAttribute> attributes);
 
     /**
      * 删除某个属性
      *
-     * @param id  属性id
+     * @param id       属性id
      * @param detailId 商品id
      * @return
      */
@@ -45,6 +48,7 @@ public interface ProductMapper {
 
     /**
      * 删除主图
+     *
      * @param detailId
      * @return
      */
@@ -59,11 +63,12 @@ public interface ProductMapper {
     ProductDetail getDetailById(Long id);
 
 
-    List<ProductDetail> selectProducts(Long businessId, Long categoryId);
+    List<ProductDetail> selectProducts(ProductSearchParams params);
 
 
     /**
      * 新增推荐
+     *
      * @param recommends
      */
     void addRecommend(List<ProductRecommend> recommends);
@@ -71,6 +76,7 @@ public interface ProductMapper {
 
     /**
      * 删除推荐
+     *
      * @param businessId
      * @param productIds
      * @return
@@ -79,6 +85,7 @@ public interface ProductMapper {
 
     /**
      * 更新推荐
+     *
      * @param recommend
      * @return
      */
@@ -86,6 +93,7 @@ public interface ProductMapper {
 
     /**
      * 获取推荐的商品列表
+     *
      * @param businessId
      * @return
      */

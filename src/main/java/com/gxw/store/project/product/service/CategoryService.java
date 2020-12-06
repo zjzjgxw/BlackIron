@@ -23,14 +23,8 @@ public interface CategoryService {
      */
     Boolean deleteCategory(Long id, Long businessId);
 
-    /**
-     * 修改类目
-     * @param name
-     * @param id
-     * @param businessId
-     * @return
-     */
-    Boolean updateCategory(String name, Long id, Long businessId);
+
+    Boolean updateCategory(Category category);
 
     /**
      * 创建类的属性

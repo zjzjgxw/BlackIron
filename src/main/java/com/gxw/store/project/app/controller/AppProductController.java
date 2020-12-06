@@ -6,6 +6,7 @@ import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.product.dto.AddProductAttributes;
 import com.gxw.store.project.product.dto.ProductImages;
+import com.gxw.store.project.product.dto.ProductSearchParams;
 import com.gxw.store.project.product.entity.Category;
 import com.gxw.store.project.product.entity.ProductDetail;
 import com.gxw.store.project.product.entity.ProductRecommend;
@@ -55,7 +56,10 @@ public class AppProductController extends BaseController {
     @GetMapping()
     public ResponseResult selectProduct(@RequestParam Long businessId, @RequestParam(required = false) Long categoryId) {
         startPage();
-        List<ProductDetail> details = productService.selectProducts(businessId, categoryId);
+        ProductSearchParams params = new ProductSearchParams();
+        params.setBusinessId(businessId);
+        params.setCategoryId(categoryId);
+        List<ProductDetail> details = productService.selectProducts(params);
         return ResponseResult.success(getDataTable(details));
     }
 

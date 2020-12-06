@@ -7,11 +7,23 @@ import javax.validation.constraints.NotNull;
 
 public class Category {
     private Long id;
-    @NotNull(message = "bussinessId不能为空")
     private Long businessId;
     @NotBlank(message = "类目名不能为空")
     @Length(min = 1, max = 5, message = "类目名长度在1-5")
     private String name;
+
+    /**
+     * 是否显示在首页
+     */
+    private int showFlag;
+
+    /**
+     * 图片路径
+     */
+    private String imgUrl;
+
+    private String imgPath;
+
     private Long parentId = 0L;
     private int deleteFlag;
 
@@ -21,6 +33,30 @@ public class Category {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public int getShowFlag() {
+        return showFlag;
+    }
+
+    public void setShowFlag(int showFlag) {
+        this.showFlag = showFlag;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
     }
 
     public Long getBusinessId() {

@@ -1,5 +1,6 @@
 package com.gxw.store.project.product.service.imp;
 
+import com.gxw.store.project.common.utils.FileUtils;
 import com.gxw.store.project.common.utils.exception.HasExistException;
 import com.gxw.store.project.product.entity.*;
 import com.gxw.store.project.product.mapper.CategoryMapper;
@@ -24,7 +25,12 @@ public class CategoryServiceImp implements CategoryService {
 
     @Override
     public List<Category> getCategories(Long businessId) {
-        return categoryMapper.getCategories(businessId);
+        List<Category> categories = categoryMapper.getCategories(businessId);
+        for (Category category : categories) {
+            category.setImgPath(category.getImgUrl());
+            category.setImgUrl(FileUtils.getPath(category.getImgUrl()));
+        }
+        return categories;
     }
 
     @Override
@@ -34,8 +40,8 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
-    public Boolean updateCategory(String name, Long id, Long businessId) {
-        int row = categoryMapper.updateCategory(name, id, businessId);
+    public Boolean updateCategory(Category category) {
+        int row = categoryMapper.updateCategory(category);
         return row != 0;
     }
     //  ----------  属性   ------------//

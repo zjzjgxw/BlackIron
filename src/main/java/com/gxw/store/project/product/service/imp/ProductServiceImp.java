@@ -3,6 +3,7 @@ package com.gxw.store.project.product.service.imp;
 import com.gxw.store.project.common.utils.FileUtils;
 import com.gxw.store.project.common.utils.StringUtils;
 import com.gxw.store.project.product.dto.ProductImages;
+import com.gxw.store.project.product.dto.ProductSearchParams;
 import com.gxw.store.project.product.entity.*;
 import com.gxw.store.project.product.mapper.ProductMapper;
 import com.gxw.store.project.product.service.ProductService;
@@ -86,8 +87,9 @@ public class ProductServiceImp implements ProductService {
                 attributesIterable.remove();
             }
         }
-
+        detail.setCoverPath(detail.getCoverUrl());
         detail.setCoverUrl(FileUtils.getPath((detail.getCoverUrl())));
+
         List<ProductDetailImg> images = detail.getDetailImages();
         Iterator<ProductDetailImg> iterator = images.iterator();
         while (iterator.hasNext()) {
@@ -136,6 +138,9 @@ public class ProductServiceImp implements ProductService {
 
     private List<ProductDetail> handelProductDetails(Long businessId, List<ProductDetail> details) {
         List<Long> productIds = new ArrayList<>();
+        if (details.size() == 0) {
+            return details;
+        }
         for (ProductDetail detail : details) {
             detail.setCoverUrl(FileUtils.getPath(detail.getCoverUrl()));
             productIds.add(detail.getId());
@@ -160,9 +165,16 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public List<ProductDetail> selectProducts(Long businessId, Long categoryId) {
-        List<ProductDetail> details = productMapper.selectProducts(businessId, categoryId);
-        return handelProductDetails(businessId, details);
+    public List<ProductDetail> selectProducts(ProductSearchParams params) {
+        List<ProductDetail> details = productMapper.selectProducts(params);
+        return handelProductDetails(params.getBusinessId(), details);
+    }
+
+
+    @Override
+    public Boolean deleteDetail(Long id, Long businessId) {
+        int row = productMapper.deleteDetail(id, businessId);
+        return row > 0;
     }
 
     @Override

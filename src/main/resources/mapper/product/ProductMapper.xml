@@ -83,6 +83,15 @@
         </foreach>
     </insert>
 
+    <update id="deleteDetail">
+        update gxw_product_detail
+        <set>
+            delete_flag = 1
+        </set>
+        where id = #{id} and business_id = #{businessId}
+    </update>
+
+
     <delete id="deleteAttribute">
         delete from gxw_product_detail_attribute where id = #{id} and detail_id = #{detailId}
     </delete>
@@ -159,9 +168,12 @@
 
     <select id="selectProducts" resultMap="ProductListResult">
         <include refid="sqlSelectProducts"/>
-        where a.business_id = #{businessId}   <if test="categoryId != null and categoryId != 0">and a.category_id=
-        #{categoryId}
-        </if>   and a.delete_flag = 0 order by a.created_at desc
+        where a.business_id = #{businessId}
+         <if test="categoryId != null and categoryId != 0">and a.category_id= #{categoryId} </if>
+        <if test="name != null and name != ''">and a.name like CONCAT('%',#{name},'%') </if>
+        <if test="mode != null and mode != 0">and a.`mode`= #{mode} </if>
+        <if test="statusType != null and statusType != 0">and a.status_type= #{statusType} </if>
+        and a.delete_flag = 0 order by a.created_at desc
     </select>
 
     <insert id="addRecommend">

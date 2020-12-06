@@ -10,7 +10,6 @@ import com.gxw.store.project.order.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 
@@ -65,5 +64,15 @@ public class OrderController extends BaseController {
 
         List<Order> orders = orderService.selectOrders(searchParam);
         return ResponseResult.success(getDataTable(orders));
+    }
+
+    @GetMapping("/detail/{id}")
+    public ResponseResult getOrder(@PathVariable Long id)
+    {
+        Order order = orderService.getOrder(id,SessionUtils.getBusinessId());
+        HashMap<String, Order> res = new HashMap<>();
+        res.put("info", order);
+        return ResponseResult.success(res);
+
     }
 }

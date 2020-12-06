@@ -43,6 +43,9 @@ public class ProductDetail {
     @NotNull(message = "封面图不能为空")
     private String coverUrl; //封面图片
 
+
+    private String coverPath; //封面路径
+
     private Long price;//展示价格
     private Long originalPrice; //商品原价
     private Long expressPrice;//快递费
@@ -213,5 +216,13 @@ public class ProductDetail {
 
     public void setExpressPrice(Long expressPrice) {
         this.expressPrice = expressPrice;
+    }
+
+    public String getCoverPath() {
+        return coverPath;
+    }
+
+    public void setCoverPath(String coverPath) {
+        this.coverPath = coverPath;
     }
 }

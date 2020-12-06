@@ -6,6 +6,7 @@ import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.product.dto.AddProductAttributes;
 import com.gxw.store.project.product.dto.ProductImages;
+import com.gxw.store.project.product.dto.ProductSearchParams;
 import com.gxw.store.project.product.entity.*;
 import com.gxw.store.project.product.service.ProductService;
 import org.springframework.web.bind.annotation.*;
@@ -99,10 +100,28 @@ public class ProductController extends BaseController {
 
 
     @GetMapping()
-    public ResponseResult selectProduct( @RequestParam(required = false) Long categoryId) {
+    public ResponseResult selectProduct(@RequestParam(required = false) Long categoryId,
+                                        @RequestParam(required = false) String name,
+                                        @RequestParam(required = false) Long statusType,
+                                        @RequestParam(required = false) Long mode) {
         startPage();
-        List<ProductDetail> details = productService.selectProducts(SessionUtils.getBusinessId(), categoryId);
+        ProductSearchParams params = new ProductSearchParams();
+        params.setBusinessId(SessionUtils.getBusinessId());
+        params.setCategoryId(categoryId);
+        params.setName(name);
+        params.setStatusType(statusType);
+        params.setMode(mode);
+        List<ProductDetail> details = productService.selectProducts(params);
         return ResponseResult.success(getDataTable(details));
+    }
+
+    @DeleteMapping("/detail/{id}")
+    public ResponseResult deleteDetail(@PathVariable Long id) {
+        if (productService.deleteDetail(id, SessionUtils.getBusinessId())) {
+            return ResponseResult.success();
+        } else {
+            return ResponseResult.error();
+        }
     }
 
     /**
@@ -124,26 +143,25 @@ public class ProductController extends BaseController {
 
     @DeleteMapping("/recommend")
     public ResponseResult deleteRecommend(@RequestBody List<Long> productIds) {
-        if( productService.deleteRecommend(SessionUtils.getBusinessId(), productIds)){
+        if (productService.deleteRecommend(SessionUtils.getBusinessId(), productIds)) {
             return ResponseResult.success();
-        }else{
+        } else {
             return ResponseResult.error();
         }
     }
 
     @PutMapping("/recommend")
-    public ResponseResult updateRecommend(@RequestBody ProductRecommend recommend){
+    public ResponseResult updateRecommend(@RequestBody ProductRecommend recommend) {
         recommend.setBusinessId(SessionUtils.getBusinessId());
-        if(productService.updateRecommend(recommend)){
+        if (productService.updateRecommend(recommend)) {
             return ResponseResult.success();
-        }else{
+        } else {
             return ResponseResult.error();
         }
     }
 
     @GetMapping("/recommend")
-    public ResponseResult getRecommend()
-    {
+    public ResponseResult getRecommend() {
         startPage();
         List<ProductDetail> details = productService.getRecommendProducts(SessionUtils.getBusinessId());
         return ResponseResult.success(getDataTable(details));

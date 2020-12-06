@@ -33,6 +33,7 @@ public class UserController extends BaseController {
 
     @PutMapping()
     public ResponseResult update(@Valid @RequestBody User user) {
+        user.setBusinessId(SessionUtils.getBusinessId());
         userService.updateUser(user);
         return ResponseResult.success();
     }

@@ -224,6 +224,11 @@ public class OrderServiceImp implements OrderService {
     }
 
     @Override
+    public Order getOrder(Long id, Long businessId) {
+        return orderMapper.getOrder(id, businessId);
+    }
+
+    @Override
     @Transactional
     public Boolean paid(Long orderId) {
         Order order = orderMapper.getOrder(orderId, null);

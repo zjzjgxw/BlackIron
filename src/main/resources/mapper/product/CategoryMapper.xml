@@ -8,6 +8,8 @@
         <result property="businessId" column="business_id"/>
         <result property="name" column="name"/>
         <result property="parentId" column="parent_id"/>
+        <result property="showFlag" column="show_flag"/>
+        <result property="imgUrl" column="img_url"/>
         <result property="deleteFlag" column="delete_flag"/>
     </resultMap>
 
@@ -40,12 +42,13 @@
 
 
     <insert id="create" parameterType="Category" useGeneratedKeys="true" keyProperty="id">
-        insert `gxw_product_category`  (business_id,name,parent_id)
-        value (#{businessId},#{name},#{parentId})
+        insert `gxw_product_category` (business_id,name,parent_id<if test="showFlag != null ">,show_flag</if><if test="imgUrl != null  ">,img_url</if>)
+        value (#{businessId},#{name},#{parentId}<if test="showFlag != null ">,#{showFlag}</if>
+        <if test="imgUrl != null  ">,#{imgUrl}</if>)
     </insert>
 
     <select id="getCategories" resultMap="CategoryResult">
-        select a.id,a.business_id,a.name,a.parent_id,a.delete_flag from gxw_product_category a where a.business_id = #{businessId}
+        select a.id,a.business_id,a.name,a.show_flag,a.img_url,a.parent_id,a.delete_flag from gxw_product_category a where a.business_id = #{businessId}
     </select>
 
     <update id="deleteCategory">
@@ -59,6 +62,8 @@
     <update id="updateCategory">
         update gxw_product_category
         <set>
+            <if test="showFlag != null ">show_flag = #{showFlag},</if>
+            <if test="imgUrl != null  ">img_url = #{imgUrl},</if>
             name = #{name}
         </set>
         where id = #{id} and business_id = #{businessId}
