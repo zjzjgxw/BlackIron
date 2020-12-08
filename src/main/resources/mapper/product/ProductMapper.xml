@@ -11,6 +11,7 @@
         <result property="mode" column="mode"/>
         <result property="description" column="description"/>
         <result property="coverUrl" column="cover_url"/>
+        <result property="videoUrl" column="video_url"/>
         <result property="stockType" column="stock_type"/>
         <result property="statusType" column="status_type"/>
         <result property="deleteFlag" column="delete_flag"/>
@@ -57,8 +58,12 @@
 
 
     <insert id="createDetail" parameterType="ProductDetail" useGeneratedKeys="true" keyProperty="id">
-        insert `gxw_product_detail`  (business_id,category_id,name,mode,description,cover_url,stock_type,status_type)
-        value (#{businessId},#{categoryId},#{name},#{mode},#{description},#{coverUrl},#{stockType},#{statusType})
+        insert `gxw_product_detail`  (business_id,category_id,name,mode,description,cover_url,
+        <if test="videoUrl != null ">video_url,</if>
+        stock_type,status_type)
+        value (#{businessId},#{categoryId},#{name},#{mode},#{description},#{coverUrl},
+        <if test="videoUrl != null ">#{videoUrl},</if>
+        #{stockType},#{statusType})
     </insert>
 
     <update id="updateDetail" parameterType="ProductDetail">
@@ -69,6 +74,7 @@
             <if test="mode != null and mode != 0">mode= #{mode},</if>
             <if test="description != null and description != ''">description= #{description},</if>
             <if test="coverUrl != null and coverUrl != ''">cover_url= #{coverUrl},</if>
+            <if test="videoUrl != null ">video_url= #{videoUrl},</if>
             <if test="stockType != null and stockType != 0">stock_type= #{stockType},</if>
             <if test="statusType != null and statusType != 0">status_type= #{statusType},</if>
             delete_flag = #{deleteFlag}
@@ -131,6 +137,7 @@
             a.created_at,
             a.description,
             a.cover_url,
+            a.video_url,
             b.id as attribute_id,
             b.detail_id,
             b.`name` as attribute_name,
@@ -161,7 +168,8 @@
         a.delete_flag,
         a.created_at,
         a.description,
-        a.cover_url
+        a.cover_url,
+        a.video_url
         FROM
         gxw_product_detail a
     </sql>

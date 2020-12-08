@@ -8,7 +8,6 @@ import com.gxw.store.project.product.entity.*;
 import com.gxw.store.project.product.service.CategoryService;
 import com.gxw.store.project.product.service.ProductService;
 import com.gxw.store.project.user.dto.NameParam;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

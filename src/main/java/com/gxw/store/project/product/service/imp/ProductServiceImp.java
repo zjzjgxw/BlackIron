@@ -87,8 +87,14 @@ public class ProductServiceImp implements ProductService {
                 attributesIterable.remove();
             }
         }
-        detail.setCoverPath(detail.getCoverUrl());
-        detail.setCoverUrl(FileUtils.getPath((detail.getCoverUrl())));
+        if(!detail.getCoverUrl().isEmpty()){
+            detail.setCoverPath(detail.getCoverUrl());
+            detail.setCoverUrl(FileUtils.getPath((detail.getCoverUrl())));
+        }
+        if(!detail.getVideoUrl().isEmpty()){
+            detail.setVideoPath(detail.getVideoUrl());
+            detail.setVideoUrl(FileUtils.getPath((detail.getVideoUrl())));
+        }
 
         List<ProductDetailImg> images = detail.getDetailImages();
         Iterator<ProductDetailImg> iterator = images.iterator();

@@ -48,7 +48,10 @@
     </insert>
 
     <select id="getCategories" resultMap="CategoryResult">
-        select a.id,a.business_id,a.name,a.show_flag,a.img_url,a.parent_id,a.delete_flag from gxw_product_category a where a.business_id = #{businessId}
+        select a.id,a.business_id,a.name,a.show_flag,a.img_url,a.parent_id,a.delete_flag
+         from gxw_product_category a
+         where
+         a.business_id = #{businessId} and a.delete_flag = 0
     </select>
 
     <update id="deleteCategory">

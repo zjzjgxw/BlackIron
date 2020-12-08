@@ -46,6 +46,10 @@ public class ProductDetail {
 
     private String coverPath; //封面路径
 
+    private String videoUrl; //视频地址
+
+    private String videoPath; //视频路径
+
     private Long price;//展示价格
     private Long originalPrice; //商品原价
     private Long expressPrice;//快递费
@@ -224,5 +228,21 @@ public class ProductDetail {
 
     public void setCoverPath(String coverPath) {
         this.coverPath = coverPath;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public String getVideoPath() {
+        return videoPath;
+    }
+
+    public void setVideoPath(String videoPath) {
+        this.videoPath = videoPath;
     }
 }
