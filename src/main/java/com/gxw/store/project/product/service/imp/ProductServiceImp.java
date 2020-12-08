@@ -79,7 +79,9 @@ public class ProductServiceImp implements ProductService {
         //TODO 访问计数更新
 
         ProductDetail detail = productMapper.getDetailById(id);
-
+        if (detail == null) {
+            return null;
+        }
         Iterator<ProductDetailAttribute> attributesIterable = detail.getAttributes().iterator();
         while (attributesIterable.hasNext()) {
             ProductDetailAttribute attribute = attributesIterable.next();
@@ -87,11 +89,11 @@ public class ProductServiceImp implements ProductService {
                 attributesIterable.remove();
             }
         }
-        if(!detail.getCoverUrl().isEmpty()){
+        if (!detail.getCoverUrl().isEmpty()) {
             detail.setCoverPath(detail.getCoverUrl());
             detail.setCoverUrl(FileUtils.getPath((detail.getCoverUrl())));
         }
-        if(!detail.getVideoUrl().isEmpty()){
+        if (!detail.getVideoUrl().isEmpty()) {
             detail.setVideoPath(detail.getVideoUrl());
             detail.setVideoUrl(FileUtils.getPath((detail.getVideoUrl())));
         }
