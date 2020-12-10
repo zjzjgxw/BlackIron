@@ -3,10 +3,7 @@ package com.gxw.store.project.user.service.imp;
 
 import com.gxw.store.project.common.utils.FileUtils;
 import com.gxw.store.project.user.dto.GroupPermissionRel;
-import com.gxw.store.project.user.entity.business.Banner;
-import com.gxw.store.project.user.entity.business.Business;
-import com.gxw.store.project.user.entity.business.BusinessDepartment;
-import com.gxw.store.project.user.entity.business.BusinessRole;
+import com.gxw.store.project.user.entity.business.*;
 import com.gxw.store.project.user.mapper.BusinessMapper;
 import com.gxw.store.project.user.service.BusinessService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,6 +94,34 @@ public class BusinessServiceImp implements BusinessService {
     }
 
     @Override
+    public Long addAdvertisement(Advertisement banner) {
+        businessMapper.addAdvertisement(banner);
+        return banner.getId();
+    }
+
+    @Override
+    public List<Advertisement> getAdvertisements(Long businessId) {
+        List<Advertisement> advertisements = businessMapper.getAdvertisements(businessId);
+        for(Advertisement advertisement: advertisements){
+            advertisement.setImgPath(advertisement.getImgUrl());
+            advertisement.setImgUrl(FileUtils.getPath(advertisement.getImgUrl()));
+        }
+        return advertisements;
+    }
+
+    @Override
+    public Boolean updateAdvertisement(Advertisement advertisement) {
+        int row = businessMapper.updateAdvertisement(advertisement);
+        return row != 0;
+    }
+
+    @Override
+    public Boolean deleteAdvertisement(Long id, Long businessId) {
+        int row = businessMapper.deleteAdvertisement(id, businessId);
+        return row != 0;
+    }
+
+    @Override
     public Long addBanner(Banner banner) {
         businessMapper.addBanner(banner);
         return banner.getId();
@@ -106,6 +131,7 @@ public class BusinessServiceImp implements BusinessService {
     public List<Banner> getBanners(Long businessId) {
         List<Banner> banners = businessMapper.getBanners(businessId);
         for (Banner banner : banners) {
+            banner.setImgPath(banner.getImgUrl());
             banner.setImgUrl(FileUtils.getPath(banner.getImgUrl()));
         }
         return banners;

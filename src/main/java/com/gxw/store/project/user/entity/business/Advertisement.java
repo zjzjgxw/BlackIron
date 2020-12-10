@@ -2,13 +2,12 @@ package com.gxw.store.project.user.entity.business;
 
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
- * 商户Banner
+ * 商户广告
  */
-public class Banner {
+public class Advertisement {
     private Long id;
     private Long businessId;
     @NotBlank(message = "imgUrl 不能为空")

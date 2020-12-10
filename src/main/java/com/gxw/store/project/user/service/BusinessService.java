@@ -2,10 +2,7 @@ package com.gxw.store.project.user.service;
 
 
 import com.gxw.store.project.user.dto.GroupPermissionRel;
-import com.gxw.store.project.user.entity.business.Banner;
-import com.gxw.store.project.user.entity.business.Business;
-import com.gxw.store.project.user.entity.business.BusinessDepartment;
-import com.gxw.store.project.user.entity.business.BusinessRole;
+import com.gxw.store.project.user.entity.business.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -108,6 +105,37 @@ public interface BusinessService {
      * @return
      */
     List<GroupPermissionRel>  getPermissionsOfRole(Long roleId, Long businessId);
+
+    /**
+     * 添加广告
+     * @param banner
+     * @return
+     */
+    Long addAdvertisement(Advertisement banner);
+
+    /**
+     * 获取所有广告
+     * @param businessId
+     * @return
+     */
+    List<Advertisement> getAdvertisements(Long businessId);
+
+
+    /**
+     * 修改广告
+     * @param banner
+     * @return
+     */
+    Boolean updateAdvertisement(Advertisement banner);
+
+    /**
+     * 删除广告
+     * @param id
+     * @param businessId
+     * @return
+     */
+    Boolean deleteAdvertisement(Long id, Long businessId);
+
 
     /**
      * 添加banner

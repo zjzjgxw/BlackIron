@@ -2,10 +2,7 @@ package com.gxw.store.project.user.mapper;
 
 
 import com.gxw.store.project.user.dto.GroupPermissionRel;
-import com.gxw.store.project.user.entity.business.Banner;
-import com.gxw.store.project.user.entity.business.Business;
-import com.gxw.store.project.user.entity.business.BusinessDepartment;
-import com.gxw.store.project.user.entity.business.BusinessRole;
+import com.gxw.store.project.user.entity.business.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -80,4 +77,29 @@ public interface BusinessMapper {
       * @return
       */
      int deleteBanner(Long id, Long businessId);
+
+
+     /**
+      * 添加Advertisement
+      * @param banner
+      * @return
+      */
+     void addAdvertisement(Advertisement banner);
+
+     List<Advertisement> getAdvertisements(Long businessId);
+
+     /**
+      * 修改Advertisement
+      * @param banner
+      * @return
+      */
+     int updateAdvertisement(Advertisement banner);
+
+     /**
+      * 删除Advertisement
+      * @param id
+      * @param businessId
+      * @return
+      */
+     int deleteAdvertisement(Long id, Long businessId);
 }
