@@ -6,17 +6,16 @@ import com.gxw.store.project.user.dto.GroupPermissionRel;
 import com.gxw.store.project.user.entity.business.*;
 import com.gxw.store.project.user.mapper.BusinessMapper;
 import com.gxw.store.project.user.service.BusinessService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
 public class BusinessServiceImp implements BusinessService {
 
-    @Autowired
+    @Resource
     protected BusinessMapper businessMapper;
 
     @Override
@@ -28,6 +27,12 @@ public class BusinessServiceImp implements BusinessService {
     @Override
     public Business getBusiness(Long id) {
         return businessMapper.getBusiness(id);
+    }
+
+    @Override
+    public boolean updateBusiness(Business business) {
+        int row = businessMapper.updateBusiness(business);
+        return row > 0;
     }
 
     @Override
@@ -76,7 +81,7 @@ public class BusinessServiceImp implements BusinessService {
     @Override
     public boolean deleteRoleById(Long roleId, Long businessId) {
         int row = businessMapper.deleteRoleById(roleId, businessId);
-        return  row > 0;
+        return row > 0;
     }
 
     @Override
@@ -89,8 +94,8 @@ public class BusinessServiceImp implements BusinessService {
     }
 
     @Override
-    public List<GroupPermissionRel>  getPermissionsOfRole(Long roleId, Long businessId) {
-        return businessMapper.getPermissionsOfRole(roleId,businessId);
+    public List<GroupPermissionRel> getPermissionsOfRole(Long roleId, Long businessId) {
+        return businessMapper.getPermissionsOfRole(roleId, businessId);
     }
 
     @Override
@@ -102,7 +107,7 @@ public class BusinessServiceImp implements BusinessService {
     @Override
     public List<Advertisement> getAdvertisements(Long businessId) {
         List<Advertisement> advertisements = businessMapper.getAdvertisements(businessId);
-        for(Advertisement advertisement: advertisements){
+        for (Advertisement advertisement : advertisements) {
             advertisement.setImgPath(advertisement.getImgUrl());
             advertisement.setImgUrl(FileUtils.getPath(advertisement.getImgUrl()));
         }

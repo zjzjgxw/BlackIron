@@ -10,6 +10,9 @@
         <result property="logoImg" column="logo_img"/>
         <result property="scale" column="scale"/>
         <result property="describe" column="info"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="county" column="county"/>
         <result property="status" column="status"/>
         <result property="deleteFlag" column="delete_flag"/>
     </resultMap>
@@ -39,7 +42,6 @@
         <id property="name" column="staff_name"/>
     </resultMap>
 
-
     <resultMap type="BusinessDepartment" id="DepartmentResult">
         <id property="id" column="id"/>
         <result property="businessId" column="business_id"/>
@@ -54,10 +56,9 @@
         <collection property="staffs" javaType="java.util.List" resultMap="StaffSimpleResult"/>
     </resultMap>
 
-
     <resultMap type="GroupPermissionRel" id="GroupPermissionRelResult">
         <result property="groupId" column="group_id"/>
-        <collection property="permissions" javaType="java.util.List"  ofType="Long"  column="id"/>
+        <collection property="permissions" javaType="java.util.List" ofType="Long" column="id"/>
     </resultMap>
 
     <insert id="create" parameterType="Business" useGeneratedKeys="true" keyProperty="id">
@@ -65,9 +66,24 @@
     </insert>
 
     <select id="getBusiness" parameterType="Long" resultMap="BusinessResult">
-        select id,name,address,logo_img,scale,info,status,delete_flag from `gxw_business` where id = #{id} and delete_flag = 0
+        select id,name,address,logo_img,scale,info,province,city,county,status,delete_flag from `gxw_business` where id = #{id} and delete_flag = 0
     </select>
 
+    <update id="updateBusiness" parameterType="Business">
+        update gxw_business
+        <set>
+            <if test="name != null and name != ''">name= #{name},</if>
+            <if test="address != null ">address= #{address},</if>
+            <if test="logoImg != null and logoImg != ''">logo_img= #{logoImg},</if>
+            <if test="describe != null and describe != ''">`info`= #{describe},</if>
+            <if test="scale != null ">`scale`= #{scale},</if>
+            <if test="province != null ">province= #{province},</if>
+            <if test="city != null ">city= #{city},</if>
+            <if test="county != null ">county= #{county},</if>
+            update_time = current_time()
+        </set>
+        where id=#{id}
+    </update>
 
     <insert id="createDepartment" parameterType="BusinessDepartment" useGeneratedKeys="true" keyProperty="id">
         insert `gxw_business_department`  (business_id,name) value (#{businessId},#{name})
@@ -100,13 +116,13 @@
     </sql>
 
     <select id="getRoleInfo" resultMap="RoleResult">
-        <include refid="getRolesSql" />
+        <include refid="getRolesSql"/>
         where a.id = #{roleId} and a.business_id = #{businessId}
     </select>
 
     <select id="getRoles" parameterType="Long" resultMap="RoleResult">
-         <include refid="getRolesSql" />
-         where a.business_id = #{businessId} and a.delete_flag = 0
+        <include refid="getRolesSql"/>
+        where a.business_id = #{businessId} and a.delete_flag = 0
     </select>
 
     <update id="updateRole" parameterType="BusinessRole">
@@ -134,7 +150,6 @@
         left join gxw_business_staff c on c.id = b.business_staff_id
         where a.id = #{departmentId} and a.business_id = #{businessId}
     </select>
-
 
 
     <insert id="addRolePermission">

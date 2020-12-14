@@ -28,7 +28,9 @@ public class CategoryServiceImp implements CategoryService {
         List<Category> categories = categoryMapper.getCategories(businessId);
         for (Category category : categories) {
             category.setImgPath(category.getImgUrl());
-            category.setImgUrl(FileUtils.getPath(category.getImgUrl()));
+            if(!category.getImgUrl().isEmpty()){
+                category.setImgUrl(FileUtils.getPath(category.getImgUrl()));
+            }
         }
         return categories;
     }

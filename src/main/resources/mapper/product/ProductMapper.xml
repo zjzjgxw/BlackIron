@@ -14,6 +14,7 @@
         <result property="videoUrl" column="video_url"/>
         <result property="stockType" column="stock_type"/>
         <result property="statusType" column="status_type"/>
+        <result property="saleTime" column="sale_time"/>
         <result property="deleteFlag" column="delete_flag"/>
         <result property="createTime" column="created_at"/>
         <collection property="attributes" javaType="java.util.List" resultMap="AttributeResult"/>
@@ -60,9 +61,11 @@
     <insert id="createDetail" parameterType="ProductDetail" useGeneratedKeys="true" keyProperty="id">
         insert `gxw_product_detail`  (business_id,category_id,name,mode,description,cover_url,
         <if test="videoUrl != null ">video_url,</if>
+        <if test="saleTime != null ">sale_time,</if>
         stock_type,status_type)
         value (#{businessId},#{categoryId},#{name},#{mode},#{description},#{coverUrl},
         <if test="videoUrl != null ">#{videoUrl},</if>
+        <if test="saleTime != null ">#{saleTime},</if>
         #{stockType},#{statusType})
     </insert>
 
@@ -75,6 +78,7 @@
             <if test="description != null and description != ''">description= #{description},</if>
             <if test="coverUrl != null and coverUrl != ''">cover_url= #{coverUrl},</if>
             <if test="videoUrl != null ">video_url= #{videoUrl},</if>
+            <if test="saleTime != null ">sale_time= #{saleTime},</if>
             <if test="stockType != null and stockType != 0">stock_type= #{stockType},</if>
             <if test="statusType != null and statusType != 0">status_type= #{statusType},</if>
             delete_flag = #{deleteFlag}
@@ -138,6 +142,7 @@
             a.description,
             a.cover_url,
             a.video_url,
+            a.sale_time,
             b.id as attribute_id,
             b.detail_id,
             b.`name` as attribute_name,
@@ -169,7 +174,8 @@
         a.created_at,
         a.description,
         a.cover_url,
-        a.video_url
+        a.video_url,
+        a.sale_time
         FROM
         gxw_product_detail a
     </sql>

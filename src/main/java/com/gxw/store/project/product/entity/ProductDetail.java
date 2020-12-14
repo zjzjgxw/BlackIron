@@ -61,6 +61,9 @@ public class ProductDetail {
     private int deleteFlag;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date saleTime; //预售时间
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     private List<ProductDetailAttribute> attributes;
@@ -244,5 +247,13 @@ public class ProductDetail {
 
     public void setVideoPath(String videoPath) {
         this.videoPath = videoPath;
+    }
+
+    public Date getSaleTime() {
+        return saleTime;
+    }
+
+    public void setSaleTime(Date saleTime) {
+        this.saleTime = saleTime;
     }
 }

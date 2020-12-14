@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxw.store.project.common.mapper.AreaMapper">
+
+    <resultMap id="ProvinceResult" type="Province">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <resultMap id="CityResult" type="City">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="pid" column="pid"/>
+    </resultMap>
+
+    <resultMap id="CountyResult" type="County">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="pid" column="pid"/>
+    </resultMap>
+
+    <select id="getProvinces" resultMap="ProvinceResult">
+        select id,name from gxw_province
+    </select>
+
+    <select id="getCities" resultMap="CityResult">
+        select id,name,pid from gxw_city where pid = #{provinceId}
+    </select>
+
+    <select id="getCounties" resultMap="CountyResult">
+        select id,name,pid from gxw_county where pid = #{cityId}
+    </select>
+
+</mapper>

@@ -14,9 +14,14 @@ public class Business {
     private String name;
     @NotBlank(message = "地址不能为空")
     private String address;
-    @URL(message = "图片url格式错误")
     @NotNull
     private String logoImg;
+
+    private String province;
+
+    private String city;
+
+    private String county;
 
     @NotNull(message = "公司规模必填")
     private BusinessScale scale;
@@ -87,5 +92,29 @@ public class Business {
 
     public void setDeleteFlag(int deleteFlag) {
         this.deleteFlag = deleteFlag;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
     }
 }

@@ -22,6 +22,9 @@ public interface BusinessService {
      */
     Business getBusiness(Long id);
 
+
+    boolean updateBusiness(Business business);
+
     /**
      * 创建部门
      * @param department
