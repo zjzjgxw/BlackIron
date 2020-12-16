@@ -26,7 +26,12 @@ public class BusinessServiceImp implements BusinessService {
 
     @Override
     public Business getBusiness(Long id) {
-        return businessMapper.getBusiness(id);
+        Business business = businessMapper.getBusiness(id);
+        business.setLogoPath(business.getLogoImg());
+        if(!business.getLogoImg().isEmpty()){
+            business.setLogoImg(FileUtils.getPath(business.getLogoImg()));
+        }
+        return business;
     }
 
     @Override

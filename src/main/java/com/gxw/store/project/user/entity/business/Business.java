@@ -12,10 +12,11 @@ public class Business {
     private Long id;
     @NotBlank(message = "商户名称不能为空")
     private String name;
-    @NotBlank(message = "地址不能为空")
     private String address;
     @NotNull
     private String logoImg;
+
+    private String logoPath;
 
     private String province;
 
@@ -44,6 +45,14 @@ public class Business {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLogoPath() {
+        return logoPath;
+    }
+
+    public void setLogoPath(String logoPath) {
+        this.logoPath = logoPath;
     }
 
     public String getAddress() {
