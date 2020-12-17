@@ -28,7 +28,7 @@ public class BusinessServiceImp implements BusinessService {
     public Business getBusiness(Long id) {
         Business business = businessMapper.getBusiness(id);
         business.setLogoPath(business.getLogoImg());
-        if(!business.getLogoImg().isEmpty()){
+        if (!business.getLogoImg().isEmpty()) {
             business.setLogoImg(FileUtils.getPath(business.getLogoImg()));
         }
         return business;
@@ -128,6 +128,34 @@ public class BusinessServiceImp implements BusinessService {
     @Override
     public Boolean deleteAdvertisement(Long id, Long businessId) {
         int row = businessMapper.deleteAdvertisement(id, businessId);
+        return row != 0;
+    }
+
+    @Override
+    public Long addNavigation(Navigation navigation) {
+        businessMapper.addNavigation(navigation);
+        return navigation.getId();
+    }
+
+    @Override
+    public List<Navigation> getNavigations(Long businessId) {
+        List<Navigation> navigations = businessMapper.getNavigations(businessId);
+        for (Navigation navigation : navigations) {
+            navigation.setImgPath(navigation.getImgUrl());
+            navigation.setImgUrl(FileUtils.getPath(navigation.getImgUrl()));
+        }
+        return navigations;
+    }
+
+    @Override
+    public Boolean updateNavigation(Navigation navigation) {
+        int row = businessMapper.updateNavigation(navigation);
+        return row != 0;
+    }
+
+    @Override
+    public Boolean deleteNavigation(Long id, Long businessId) {
+        int row = businessMapper.deleteNavigation(id, businessId);
         return row != 0;
     }
 

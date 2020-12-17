@@ -29,7 +29,15 @@
 
     <resultMap type="Advertisement" id="AdvertisementResult">
         <id property="id" column="id"/>
-        <result property="name" column="name"/>
+        <result property="businessId" column="business_id"/>
+        <result property="imgUrl" column="img_url"/>
+        <result property="url" column="url"/>
+        <result property="indexNo" column="index_no"/>
+        <result property="createTime" column="created_at"/>
+    </resultMap>
+
+    <resultMap type="Navigation" id="NavigationResult">
+        <id property="id" column="id"/>
         <result property="businessId" column="business_id"/>
         <result property="imgUrl" column="img_url"/>
         <result property="url" column="url"/>
@@ -219,6 +227,30 @@
 
     <delete id="deleteAdvertisement">
         delete from gxw_business_advertisement where id = #{id} and business_id = #{businessId}
+    </delete>
+
+
+    <insert id="addNavigation" parameterType="Navigation" useGeneratedKeys="true" keyProperty="id">
+        insert gxw_business_navigation (business_id,img_url,url,index_no) values
+        (#{businessId},#{imgUrl},#{url},#{indexNo})
+    </insert>
+
+    <select id="getNavigations" resultMap="NavigationResult">
+        select a.id,a.business_id,a.img_url,a.url,a.index_no,a.created_at from gxw_business_navigation a where business_id=#{businessId} order by index_no
+    </select>
+
+    <update id="updateNavigation">
+        update gxw_business_navigation
+        <set>
+            img_url = #{imgUrl},
+            url = #{url},
+            index_no = #{indexNo}
+        </set>
+        where id =#{id} and business_id = #{businessId}
+    </update>
+
+    <delete id="deleteNavigation">
+        delete from gxw_business_navigation where id = #{id} and business_id = #{businessId}
     </delete>
 
 </mapper> 

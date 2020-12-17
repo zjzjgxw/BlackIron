@@ -10,6 +10,7 @@ import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.user.entity.business.Advertisement;
 import com.gxw.store.project.user.entity.business.Banner;
 import com.gxw.store.project.user.entity.business.Business;
+import com.gxw.store.project.user.entity.business.Navigation;
 import com.gxw.store.project.user.service.BusinessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -78,7 +79,6 @@ public class BusinessController {
         if (businessService.updateBanner(banner)) {
             return ResponseResult.success();
         }
-        ;
         return ResponseResult.error();
     }
 
@@ -87,7 +87,6 @@ public class BusinessController {
         if (businessService.deleteBanner(id, SessionUtils.getBusinessId())) {
             return ResponseResult.success();
         }
-        ;
         return ResponseResult.error();
     }
 
@@ -114,7 +113,6 @@ public class BusinessController {
         if (businessService.updateAdvertisement(banner)) {
             return ResponseResult.success();
         }
-        ;
         return ResponseResult.error();
     }
 
@@ -150,5 +148,40 @@ public class BusinessController {
         HashMap<String, List<County>> res = new HashMap<>();
         res.put("counties", counties);
         return ResponseResult.success(res);
+    }
+
+
+    @PostMapping("/navigations")
+    public ResponseResult addNavigation(@RequestBody Navigation navigation) {
+        navigation.setBusinessId(SessionUtils.getBusinessId());
+        Long id = businessService.addNavigation(navigation);
+        HashMap<String, Long> res = new HashMap<>();
+        res.put("id", id);
+        return ResponseResult.success(res);
+    }
+
+    @GetMapping("/navigations")
+    public ResponseResult getNavigations() {
+        List<Navigation> navigations = businessService.getNavigations(SessionUtils.getBusinessId());
+        HashMap<String, List<Navigation>> res = new HashMap<>();
+        res.put("navigations", navigations);
+        return ResponseResult.success(res);
+    }
+
+    @PutMapping("/navigations")
+    public ResponseResult updateNavigation(@RequestBody Navigation navigation) {
+        navigation.setBusinessId(SessionUtils.getBusinessId());
+        if (businessService.updateNavigation(navigation)) {
+            return ResponseResult.success();
+        }
+        return ResponseResult.error();
+    }
+
+    @DeleteMapping("/navigations/{id}")
+    public ResponseResult deleteNavigation(@PathVariable Long id) {
+        if (businessService.deleteNavigation(id, SessionUtils.getBusinessId())) {
+            return ResponseResult.success();
+        }
+        return ResponseResult.error();
     }
 }

@@ -141,6 +141,38 @@ public interface BusinessService {
 
 
     /**
+     * 添加导航项
+     * @param navigation
+     * @return
+     */
+    Long addNavigation(Navigation navigation);
+
+    /**
+     * 获取导航项
+     * @param businessId
+     * @return
+     */
+    List<Navigation> getNavigations(Long businessId);
+
+
+    /**
+     * 修改导航项
+     * @param navigation
+     * @return
+     */
+    Boolean updateNavigation(Navigation navigation);
+
+    /**
+     * 删除导航项
+     * @param id
+     * @param businessId
+     * @return
+     */
+    Boolean deleteNavigation(Long id, Long businessId);
+
+
+
+    /**
      * 添加banner
      * @param banner
      * @return

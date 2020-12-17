@@ -111,4 +111,32 @@ public interface BusinessMapper {
      * @return
      */
     int deleteAdvertisement(Long id, Long businessId);
+
+
+    /**
+     * 添加导航项目
+     *
+     * @param navigation
+     * @return
+     */
+    void addNavigation(Navigation navigation);
+
+    List<Navigation> getNavigations(Long businessId);
+
+    /**
+     * 修改导航项
+     *
+     * @param navigation
+     * @return
+     */
+    int updateNavigation(Navigation navigation);
+
+    /**
+     * 删除Navigation
+     *
+     * @param id
+     * @param businessId
+     * @return
+     */
+    int deleteNavigation(Long id, Long businessId);
 }
