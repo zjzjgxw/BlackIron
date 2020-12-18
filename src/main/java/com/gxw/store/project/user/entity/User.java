@@ -56,6 +56,8 @@ public class User {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
+    private Long vipFlag;
+    private Long point;
 
     private Long consumePrice; //总消费金额
 
@@ -199,5 +201,21 @@ public class User {
 
     public void setBusinessId(Long businessId) {
         this.businessId = businessId;
+    }
+
+    public Long getVipFlag() {
+        return vipFlag;
+    }
+
+    public void setVipFlag(Long vipFlag) {
+        this.vipFlag = vipFlag;
+    }
+
+    public Long getPoint() {
+        return point;
+    }
+
+    public void setPoint(Long point) {
+        this.point = point;
     }
 }

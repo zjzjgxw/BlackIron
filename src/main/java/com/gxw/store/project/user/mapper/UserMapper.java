@@ -110,4 +110,12 @@ public interface UserMapper {
       * @return
       */
      int addConsumePrice(Long id, Long price);
+
+     /**
+      * 为用户增加积分
+      * @param id
+      * @param point
+      * @return
+      */
+     int addPoint(Long id, Long point);
 }

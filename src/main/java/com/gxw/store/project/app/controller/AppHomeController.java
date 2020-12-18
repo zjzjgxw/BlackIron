@@ -3,6 +3,7 @@ package com.gxw.store.project.app.controller;
 import com.gxw.store.project.common.controller.BaseController;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.user.entity.business.Advertisement;
+import com.gxw.store.project.user.entity.business.Navigation;
 import com.gxw.store.project.user.service.BusinessService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,5 +29,13 @@ public class AppHomeController extends BaseController {
         return ResponseResult.success(res);
     }
 
+
+    @GetMapping("/navigations")
+    public ResponseResult getNavigations(@RequestParam Long businessId) {
+        List<Navigation> navigations = businessService.getNavigations(businessId);
+        HashMap<String, List<Navigation>> res = new HashMap<>();
+        res.put("navigations", navigations);
+        return ResponseResult.success(res);
+    }
 
 }

@@ -86,7 +86,7 @@ public class StockServiceImp implements StockService {
     @Transactional
     public Boolean book(Long productId, Long orderId, Long specificationId, Long num) {
         //减去库存
-        if (specificationId == 0) {
+        if (specificationId == null || specificationId == 0) {
             stockMapper.updateStockNum(productId, -num);
         } else {
             stockMapper.updateSpecificationDetailNum(specificationId, -num);

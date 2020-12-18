@@ -162,4 +162,10 @@ public class UserServiceImp implements UserService {
         return row != 0;
     }
 
+    @Override
+    public Boolean addPoint(Long id, Long point) {
+        int row = userMapper.addPoint(id,point);
+        return row != 0;
+    }
+
 }

@@ -56,7 +56,6 @@ public class AppOrderController extends BaseController {
     {
         orderService.paid(orderId);
         return ResponseResult.success();
-
     }
 
 }

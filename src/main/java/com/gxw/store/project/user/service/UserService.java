@@ -77,4 +77,12 @@ public interface UserService {
      * @return
      */
     Boolean addConsumePrice(Long id, Long price);
+
+    /**
+     * 增加消费金额
+     * @param id 用户id
+     * @param point
+     * @return
+     */
+    Boolean addPoint(Long id, Long point);
 }

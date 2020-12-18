@@ -84,20 +84,22 @@ public class OrderServiceImp implements OrderService {
             item.setStockType(detail.getStockType());
             //获取库存信息
             StockInfo stockInfo = stockService.getStockInfoByProductId(item.getProductId());
+            if(stockInfo == null){
+                throw new MissSpecificationException(); //缺少规格信息
+            }
             if (expressPrice < stockInfo.getExpressPrice()) {
                 expressPrice = stockInfo.getExpressPrice();
             }
-            if (item.getSpecificationId() == 0 && stockInfo.getSpecifications().size() != 0) {
+            if (item.getSpecificationId() != null && stockInfo.getSpecifications().size() == 0) {
                 throw new MissSpecificationException(); //缺少规格信息
             }
-            if (item.getSpecificationId() == 0 && stockInfo.getSpecifications().size() == 0) { //不存在规格的情况
+            if (item.getSpecificationId() == null && stockInfo.getSpecifications().size() == 0) { //不存在规格的情况
                 if (item.getNum() > stockInfo.getLastNum()) {  //商品没有规格时，缺少库存
                     throw new UnEnoughStockException();
                 }
                 item.setOriginalPrice(stockInfo.getPrice() * item.getNum());
-
             }
-            if (item.getSpecificationId() != 0) { //存在规格的情况
+            if (item.getSpecificationId() != null) { //存在规格的情况
                 //查找到对应的规格
                 for (StockSpecification specification : stockInfo.getSpecifications()) {
                     if (item.getSpecificationId().equals(specification.getId())) {
@@ -246,8 +248,9 @@ public class OrderServiceImp implements OrderService {
         order.setPayTime(new Date());
         orderMapper.update(order);
 
-        //增加用户消费金额
+        //增加用户消费金额,和积分。
         userService.addConsumePrice(order.getUserId(),order.getPrice());
+        userService.addPoint(order.getUserId(),order.getPrice());
         return true;
     }
 

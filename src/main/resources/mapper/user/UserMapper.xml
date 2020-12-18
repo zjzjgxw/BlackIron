@@ -16,6 +16,8 @@
         <result property="openId" column="open_id"/>
         <result property="idolNum" column="idol_num"/>
         <result property="birthday" column="birthday"/>
+        <result property="vipFlag" column="vip_flag"/>
+        <result property="point" column="point"/>
         <result property="fansNum" column="fans_num"/>
         <result property="consumePrice" column="consume_price"/>
         <result property="deleteFlag" column="delete_flag"/>
@@ -31,7 +33,24 @@
     </insert>
 
     <sql id="selectUser">
-        select a.id,a.business_id,a.account,a.password,a.name,a.open_id,a.birthday, a.union_id,a.tel,a.email,a.status,a.profile_url,a.idol_num,a.fans_num,a.consume_price,a.delete_flag from `gxw_user` a
+        select a.id,
+        a.business_id,
+        a.account,
+        a.password,
+        a.name,
+        a.open_id,
+        a.birthday,
+        a.union_id,
+        a.tel,
+        a.email,
+        a.status,
+        a.profile_url,
+        a.idol_num,
+        a.fans_num,
+        a.consume_price,
+        a.point,
+        a.vip_flag,
+        a.delete_flag from `gxw_user` a
     </sql>
 
     <select id="selectUserByAccount" parameterType="String" resultMap="UserResult">
@@ -163,4 +182,7 @@
          update gxw_user set consume_price = consume_price + #{price} where id=#{id}
     </update>
 
+    <update id="addPoint">
+         update gxw_user set point = point + #{point} where id=#{id}
+    </update>
 </mapper> 

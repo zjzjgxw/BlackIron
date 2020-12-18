@@ -58,8 +58,9 @@
 
     <insert id="createStockSpecificationDetail" parameterType="StockSpecificationDetail" useGeneratedKeys="true"
             keyProperty="id">
-        insert  gxw_stock_specification_detail (stock_specification_id,price,last_num,sku)
-        value (#{stockSpecificationId},#{price},#{lastNum},#{sku})
+        insert  gxw_stock_specification_detail (stock_specification_id,price,last_num
+        <if test="sku != null ">,sku</if>)
+        value (#{stockSpecificationId},#{price},#{lastNum}<if test="sku != null ">,#{sku}</if>)
     </insert>
 
     <select id="getStockInfoByProductId" resultMap="StockInfoResult">

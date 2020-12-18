@@ -15,7 +15,7 @@ public class Category {
     /**
      * 是否显示在首页
      */
-    private int showFlag;
+    private Long showFlag;
 
     /**
      * 图片路径
@@ -35,11 +35,11 @@ public class Category {
         this.id = id;
     }
 
-    public int getShowFlag() {
+    public Long getShowFlag() {
         return showFlag;
     }
 
-    public void setShowFlag(int showFlag) {
+    public void setShowFlag(Long showFlag) {
         this.showFlag = showFlag;
     }
 
