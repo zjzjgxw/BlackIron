@@ -18,4 +18,10 @@ public class ExpressServiceImp implements ExpressService {
     public List<Express> select() {
         return expressMapper.select();
     }
+
+    @Override
+    public String getExpressName(Long id) {
+        return expressMapper.getExpressName(id);
+    }
+
 }

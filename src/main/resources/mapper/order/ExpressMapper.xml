@@ -14,4 +14,9 @@
         select id,name,word from gxw_express
     </select>
 
+
+    <select id="getExpressName" resultType="String">
+        select `name` from gxw_express where id=#{id}
+    </select>
+
 </mapper>

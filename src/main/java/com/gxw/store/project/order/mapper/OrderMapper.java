@@ -13,7 +13,9 @@ public interface OrderMapper {
 
     void createItem(OrderItem item);
 
-    List<Order> selectOrders(OrderSearchParam searchParam);
+    List<Long> getOrderIds(OrderSearchParam searchParam);
+
+    List<Order> selectOrders(List<Long> ids);
 
     Order getOrder(Long id, Long businessId);
 

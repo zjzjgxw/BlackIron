@@ -28,6 +28,8 @@ public class Order {
 
     private Long expressId; //快递类型
 
+    private String expressName; //快递公司名称
+
     private String expressCode; //快递单号
 
     @NotBlank(message = "收件人不能为空")
@@ -251,5 +253,13 @@ public class Order {
 
     public void setCounty(String county) {
         this.county = county;
+    }
+
+    public String getExpressName() {
+        return expressName;
+    }
+
+    public void setExpressName(String expressName) {
+        this.expressName = expressName;
     }
 }

@@ -11,7 +11,9 @@ public interface OrderService {
 
     Long doCreate(Order order);
 
-    List<Order> selectOrders(OrderSearchParam param);
+    List<Long> getOrderIds(OrderSearchParam param);
+
+    List<Order> getDetailOfOrders(List<Long> ids);
 
     Order getOrder(Long id, Long businessId);
 

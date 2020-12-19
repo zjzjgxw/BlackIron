@@ -45,10 +45,13 @@ public class AppOrderController extends BaseController {
         searchParam.setCode(code);
         searchParam.setBusinessId(SessionUtils.getBusinessId());
         searchParam.setTelphone(telphone);
-        searchParam.setStatuses(statuses);
+        if (statuses != null && !statuses.isEmpty()) {
+            searchParam.setStatuses(statuses);
+        }
 
-        List<Order> orders = orderService.selectOrders(searchParam);
-        return ResponseResult.success(getDataTable(orders));
+        List<Long> ids = orderService.getOrderIds(searchParam);
+        List<Order> orders = orderService.getDetailOfOrders(ids);
+        return ResponseResult.success(getDataTable(orders,ids));
     }
 
     @GetMapping("/payCallback")

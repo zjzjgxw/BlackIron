@@ -41,7 +41,7 @@
         <result property="firstSpecificationValue" column="first_specification_value"/>
         <result property="secondSpecificationName" column="second_specification_name"/>
         <result property="secondSpecificationValue" column="second_specification_value"/>
-        <result property="price" column="price"/>
+        <result property="price" column="item_price"/>
         <result property="stockType" column="stock_type"/>
         <result property="originalPrice" column="original_price"/>
         <result property="num" column="num"/>
@@ -116,7 +116,7 @@
         b.first_specification_value,
         b.second_specification_name,
         b.second_specification_value,
-        b.price,
+        b.price as item_price,
         b.stock_type,
         b.original_price,
         b.num
@@ -127,11 +127,21 @@
     <select id="selectOrders" resultMap="OrderResult">
         <include refid="sqlOrder"/>
         where a.delete_flag = 0
+        and a.id in
+        <foreach collection="ids" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by a.created_at desc
+    </select>
+
+    <select id="getOrderIds" resultType="Long">
+        select id from gxw_order a
+        where a.delete_flag = 0
         <if test="id != null and id != 0">and a.id= #{id}</if>
         <if test="code != null and code != ''">and a.order_code= #{code}</if>
         <if test="businessId != null and businessId != 0">and a.business_id= #{businessId}</if>
         <if test="userId != null and userId != 0">and a.user_id= #{userId}</if>
-        <if test="telphone != null and telphone != 0">and a.telphone= #{telphone}</if>
+        <if test="telphone != null and telphone != ''">and a.telphone= #{telphone}</if>
         <if test="statuses != null ">
             and a.status in
             <foreach collection="statuses" item="item" open="(" separator="," close=")">
@@ -140,7 +150,6 @@
         </if>
         order by a.created_at desc
     </select>
-
 
     <select id="getOrder" resultMap="OrderResult">
         <include refid="sqlOrder"/>

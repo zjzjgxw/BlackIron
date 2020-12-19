@@ -8,4 +8,5 @@ import java.util.List;
 public interface ExpressService {
     List<Express> select();
 
+    String getExpressName(Long id);
 }

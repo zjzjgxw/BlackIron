@@ -6,10 +6,12 @@ import com.gxw.store.project.common.utils.exception.NotExistException;
 import com.gxw.store.project.common.utils.exception.UnEnoughStockException;
 import com.gxw.store.project.common.utils.exception.UnableServiceException;
 import com.gxw.store.project.order.dto.OrderSearchParam;
+import com.gxw.store.project.order.entity.Express;
 import com.gxw.store.project.order.entity.Order;
 import com.gxw.store.project.order.entity.OrderItem;
 import com.gxw.store.project.order.entity.OrderStatus;
 import com.gxw.store.project.order.mapper.OrderMapper;
+import com.gxw.store.project.order.service.ExpressService;
 import com.gxw.store.project.order.service.OrderService;
 import com.gxw.store.project.product.entity.ProductDetail;
 import com.gxw.store.project.product.entity.StockInfo;
@@ -29,10 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class OrderServiceImp implements OrderService {
@@ -61,6 +60,9 @@ public class OrderServiceImp implements OrderService {
     @Resource
     private OrderMapper orderMapper;
 
+    @Resource
+    private ExpressService expressService;
+
     @Override
     public Long create(Order order) {
         //查找商户信息
@@ -72,7 +74,7 @@ public class OrderServiceImp implements OrderService {
         List<OrderItem> items = order.getItems();
         Long totalPrice = 0L;
         Long actualPrice = 0L;
-        Long expressPrice = 0L;
+        Long expressPrice = 9999999L;
         LinkedList<Long> productIds = new LinkedList<>();
         for (OrderItem item : items) {
             //获取产品信息
@@ -87,7 +89,7 @@ public class OrderServiceImp implements OrderService {
             if(stockInfo == null){
                 throw new MissSpecificationException(); //缺少规格信息
             }
-            if (expressPrice < stockInfo.getExpressPrice()) {
+            if (expressPrice > stockInfo.getExpressPrice()) {
                 expressPrice = stockInfo.getExpressPrice();
             }
             if (item.getSpecificationId() != null && stockInfo.getSpecifications().size() == 0) {
@@ -97,7 +99,7 @@ public class OrderServiceImp implements OrderService {
                 if (item.getNum() > stockInfo.getLastNum()) {  //商品没有规格时，缺少库存
                     throw new UnEnoughStockException();
                 }
-                item.setOriginalPrice(stockInfo.getPrice() * item.getNum());
+                item.setOriginalPrice(stockInfo.getPrice());
             }
             if (item.getSpecificationId() != null) { //存在规格的情况
                 //查找到对应的规格
@@ -110,7 +112,7 @@ public class OrderServiceImp implements OrderService {
                         item.setFirstSpecificationValue(specification.getFirstValue());
                         item.setSecondSpecificationName(specification.getSecondName());
                         item.setSecondSpecificationValue(specification.getSecondValue());
-                        item.setOriginalPrice(specification.getDetail().getPrice() * item.getNum()); //设置原价
+                        item.setOriginalPrice(specification.getDetail().getPrice()); //设置原价
                     }
                 }
                 if (item.getOriginalPrice() == null) {
@@ -119,8 +121,8 @@ public class OrderServiceImp implements OrderService {
             }
             //根据促销活动那个获得实际价格
             item.setPrice(getDiscountPrice(detail, item.getOriginalPrice()));
-            totalPrice += item.getOriginalPrice();
-            actualPrice += item.getPrice();
+            totalPrice += item.getOriginalPrice() * item.getNum();
+            actualPrice += item.getPrice() * item.getNum();
         }
 
         order.setOriginalPrice(totalPrice);
@@ -221,13 +223,32 @@ public class OrderServiceImp implements OrderService {
     }
 
     @Override
-    public List<Order> selectOrders(OrderSearchParam param) {
-        return orderMapper.selectOrders(param);
+    public List<Long> getOrderIds(OrderSearchParam param) {
+        return orderMapper.getOrderIds(param);
+    }
+
+    @Override
+    public List<Order> getDetailOfOrders(List<Long> ids) {
+        if(ids.isEmpty()){
+            return Collections.emptyList();
+        }
+        List<Order> orders = orderMapper.selectOrders(ids);
+        List<Express> expresses = expressService.select();
+        for(Order order : orders){
+            for(Express express : expresses){
+                if(order.getExpressId().equals(express.getId())){
+                    order.setExpressName(express.getName());
+                }
+            }
+        }
+        return orders;
     }
 
     @Override
     public Order getOrder(Long id, Long businessId) {
-        return orderMapper.getOrder(id, businessId);
+        Order order = orderMapper.getOrder(id, businessId);
+        order.setExpressName(expressService.getExpressName(order.getExpressId()));
+        return order;
     }
 
     @Override

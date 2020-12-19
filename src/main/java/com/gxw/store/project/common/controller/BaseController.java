@@ -38,12 +38,19 @@ public class BaseController {
         return rspData;
     }
 
+    protected PageDataInfo getDataTable(List<?> list, List<?> totalList) {
+        PageDataInfo rspData = new PageDataInfo();
+        rspData.setRows(list);
+        rspData.setTotal(new PageInfo(totalList).getTotal());
+        return rspData;
+    }
+
     protected PageDataInfo getDataTable(List<?> list, Class<?> view) {
         PageDataInfo rspData = null;
-        if(view == ViewUtils.Simple.class){
-             rspData = new SimplePageDataInfo();
-        }else{
-             rspData = new PageDataInfo();
+        if (view == ViewUtils.Simple.class) {
+            rspData = new SimplePageDataInfo();
+        } else {
+            rspData = new PageDataInfo();
         }
         rspData.setRows(list);
         rspData.setTotal(new PageInfo(list).getTotal());

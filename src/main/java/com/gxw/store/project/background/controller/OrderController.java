@@ -5,6 +5,7 @@ import com.gxw.store.project.common.controller.BaseController;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.order.dto.OrderSearchParam;
+import com.gxw.store.project.order.dto.OrderSendParam;
 import com.gxw.store.project.order.entity.Order;
 import com.gxw.store.project.order.service.OrderService;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +25,12 @@ public class OrderController extends BaseController {
     /**
      * 发货
      *
-     * @param orderId
      * @return
      */
     @PostMapping("/send")
-    public ResponseResult send(@RequestParam Long orderId, @RequestParam Long expressId, @RequestParam String expressCode) {
+    public ResponseResult send(@RequestBody OrderSendParam param) {
         Long businessId = SessionUtils.getBusinessId();
-        orderService.send(businessId, orderId, expressId, expressCode);
+        orderService.send(businessId, param.getOrderId(), param.getExpressId(), param.getExpressCode());
         return ResponseResult.success();
     }
 
@@ -52,24 +52,26 @@ public class OrderController extends BaseController {
     @GetMapping
     public ResponseResult getOrders(@RequestParam(required = false) Long id,
                                     @RequestParam(required = false) String code,
-                                    @RequestParam(required = false) String telphone,
+                                    @RequestParam(required = false) String telephone,
                                     @RequestParam(required = false) List<Integer> statuses) {
         OrderSearchParam searchParam = new OrderSearchParam();
         searchParam.setId(id);
         searchParam.setCode(code);
         searchParam.setBusinessId(SessionUtils.getBusinessId());
-        searchParam.setTelphone(telphone);
-        searchParam.setStatuses(statuses);
+        searchParam.setTelphone(telephone);
+        if (statuses != null && !statuses.isEmpty()) {
+            searchParam.setStatuses(statuses);
+        }
         startPage();
 
-        List<Order> orders = orderService.selectOrders(searchParam);
-        return ResponseResult.success(getDataTable(orders));
+        List<Long> ids = orderService.getOrderIds(searchParam);
+        List<Order> orders = orderService.getDetailOfOrders(ids);
+        return ResponseResult.success(getDataTable(orders, ids));
     }
 
     @GetMapping("/detail/{id}")
-    public ResponseResult getOrder(@PathVariable Long id)
-    {
-        Order order = orderService.getOrder(id,SessionUtils.getBusinessId());
+    public ResponseResult getOrder(@PathVariable Long id) {
+        Order order = orderService.getOrder(id, SessionUtils.getBusinessId());
         HashMap<String, Order> res = new HashMap<>();
         res.put("info", order);
         return ResponseResult.success(res);

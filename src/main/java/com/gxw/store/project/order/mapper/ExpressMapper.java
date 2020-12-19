@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ExpressMapper {
     List<Express> select();
+
+    String getExpressName(Long id);
 }
