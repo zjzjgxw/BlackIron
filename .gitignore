@@ -6,6 +6,7 @@ target/
 
 src/main/resources/static/
 src/main/resources/application.properties
+src/main/resources/application.properties.copy
 
 ### STS ###
 .apt_generated
