@@ -10,8 +10,29 @@
 
 
 ```shell script
+mkdir ~/BlackIron
+cd ~/BlackIron
 git clone  https://github.com/zjzjgxw/BlackIron.git
 ```
+
+修改配置文件
+```shell script
+### 在~/BlackIron 项目目录下
+cp src/main/resources/application.properties.tmpl src/main/resources/application.properties
+```
+
+修改相应的数据库配置信息
+```md
+#数据库配置
+spring.datasource.url=jdbc:mysql://{localhost:3306}/{database_name}?useSSL=false&serverTimezone=GMT%2B8&useAffectedRows=true
+spring.datasource.username=root
+spring.datasource.password=
+spring.datasource.tomcat.max-idle=5
+```
+
+使用black_iron_mysql.sql 初始化数据库结构。
+
+
 
 
 
