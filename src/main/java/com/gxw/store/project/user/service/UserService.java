@@ -37,7 +37,7 @@ public interface UserService {
      * @param openId
      * @return
      */
-    User selectUserByOpenId(String openId, boolean canCreate);
+    User selectUserByOpenId(String openId, boolean canCreate, Long businessId);
 
     /**
      * 关注 某些人

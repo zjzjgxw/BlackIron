@@ -262,4 +262,17 @@ public class Order {
     public void setExpressName(String expressName) {
         this.expressName = expressName;
     }
+
+
+    public String getTitle(){
+        StringBuilder title = new StringBuilder();
+        for(OrderItem item: this.items){
+            title.append(item.getName()).append("&");
+        }
+        if(title.length() >= 127){
+            return title.substring(0,127);
+        }else{
+            return title.toString();
+        }
+    }
 }

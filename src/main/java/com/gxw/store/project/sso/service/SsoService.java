@@ -34,7 +34,7 @@ public interface SsoService {
      * @param code
      * @return
      */
-    default ResponseResult loginByWeiXin(String code){
+    default ResponseResult loginByWeiXin(String code, Long businessId){
         return null;
     }
 

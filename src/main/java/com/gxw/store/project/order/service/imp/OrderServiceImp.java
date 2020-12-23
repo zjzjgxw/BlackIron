@@ -79,6 +79,9 @@ public class OrderServiceImp implements OrderService {
         for (OrderItem item : items) {
             //获取产品信息
             ProductDetail detail = productService.getDetailById(item.getProductId());
+            if(detail == null){
+                throw new MissSpecificationException(); //缺少规格信息
+            }
             productIds.add(item.getProductId());
             item.setName(detail.getName());
             item.setCoverUrl(detail.getCoverUrl());

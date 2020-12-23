@@ -2,6 +2,7 @@ package com.gxw.store.project.background.controller;
 
 
 import com.gxw.store.project.common.controller.BaseController;
+import com.gxw.store.project.common.utils.Md5Utils;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.user.dto.FollowRel;
@@ -86,7 +87,7 @@ public class UserController extends BaseController {
     @GetMapping("/openId")
     public ResponseResult selectUserByOpenId(@RequestParam("openId") String openId, @RequestParam("canCreate") Boolean canCreate) {
         HashMap<String, User> res = new HashMap<>();
-        res.put("user", userService.selectUserByOpenId(openId, canCreate));
+        res.put("user", userService.selectUserByOpenId(openId, canCreate,SessionUtils.getBusinessId()));
         return ResponseResult.success(res);
     }
 
@@ -138,4 +139,5 @@ public class UserController extends BaseController {
         List<User> users = userService.getFans(userId);
         return ResponseResult.success(getDataTable(users));
     }
+
 }

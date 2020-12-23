@@ -115,7 +115,11 @@ spring.datasource.tomcat.max-idle=5
 
 - 微信支付
 
+- 首页搜索
 
+- 微信分享
+
+- 微信客服
 
 ### 管理员后台 （后台界面化还未开始）
 

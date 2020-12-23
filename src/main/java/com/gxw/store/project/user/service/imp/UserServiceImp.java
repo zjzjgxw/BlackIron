@@ -94,18 +94,20 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public User selectUserByOpenId(String openId, boolean canCreate) {
+    public User selectUserByOpenId(String openId, boolean canCreate, Long businessId) {
         if (canCreate) { //运行不存在就创建一个新用户
             User user = userMapper.selectUserByOpenId(openId);
             if (user == null) {
                 user = new User();
                 user.setName("WX_USER");
+                user.setBusinessId(businessId);
                 user.setPassword("123456");
                 user.setAccount(openId);
                 user.setTel(RandomStringUtils.randomNumeric(20));
                 user.setOpenId(openId);
                 user.setEmail("");
                 user.setProfileUrl("");
+                user.setVipFlag(0L);
                 userMapper.create(user);
             }
             return user;

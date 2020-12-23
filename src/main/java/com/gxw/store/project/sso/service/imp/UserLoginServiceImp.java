@@ -87,13 +87,13 @@ public class UserLoginServiceImp implements SsoService {
     }
 
     @Override
-    public ResponseResult loginByWeiXin(String code) {
+    public ResponseResult loginByWeiXin(String code, Long businessId) {
 
         HashMap<String, String> wxSession = weiXinUtils.codeToSession(code);
         String openId = wxSession.get("openid");
 
         // 根据openId查找用户信息，不存在则新建一个用户
-        User user = userService.selectUserByOpenId(openId, true);
+        User user = userService.selectUserByOpenId(openId, true,businessId);
         if (user == null) {  //请求成功，但是没有找到对应的用户信息
             throw new NotExistException("用户未找到");
         }

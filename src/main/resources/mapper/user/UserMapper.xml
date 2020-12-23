@@ -24,10 +24,10 @@
     </resultMap>
 
     <insert id="create" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-        insert `gxw_user` (business_id,account,password,name,tel,email,profile_url,status
+        insert `gxw_user` (business_id,account,password,name,tel,email,profile_url,status,vip_flag
         <if test="birthday != null ">,birthday</if>
         <if test="openId != null and openId != ''">,open_id</if>) value
-        (#{businessId}, #{account},#{password},#{name},#{tel},#{email},#{profileUrl},#{status}
+        (#{businessId}, #{account},#{password},#{name},#{tel},#{email},#{profileUrl},#{status},#{vipFlag}
         <if test="birthday != null ">,birthday</if>
         <if test="openId != null and openId != ''">,#{openId}</if>)
     </insert>
