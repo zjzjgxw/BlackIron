@@ -11,7 +11,6 @@ import com.wechat.pay.contrib.apache.httpclient.auth.PrivateKeySigner;
 import com.wechat.pay.contrib.apache.httpclient.auth.WechatPay2Credentials;
 import com.wechat.pay.contrib.apache.httpclient.auth.WechatPay2Validator;
 import com.wechat.pay.contrib.apache.httpclient.util.PemUtil;
-import com.wechat.pay.contrib.apache.httpclient.util.RsaCryptoUtil;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -23,7 +22,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.GCMParameterSpec;
@@ -63,6 +61,9 @@ public class WeixinPayServiceImp implements WeixinPayService {
 
     private static final String PREPAY_URL = "https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi";
 
+    private static final String CALLBACK_URL = "https://b0e99e3ee0db.ngrok.io/app/pay/callback";
+
+
     private static final SecureRandom RANDOM = new SecureRandom();
 
     @Override
@@ -74,7 +75,7 @@ public class WeixinPayServiceImp implements WeixinPayService {
         Assert.notNull(this.apiV3Key, "apiV3Key must not null");
 
         WeChatPayParams payParams = new WeChatPayParams(this.appId, this.mchId, order.getTitle(), order.getCode(), "", 1L, "CNY", openId);
-        payParams.setNotify_url("https://b0e99e3ee0db.ngrok.io/app/pay/callback");
+        payParams.setNotify_url(CALLBACK_URL);
         String jsonString = JSONObject.toJSONString(payParams);
 
 
