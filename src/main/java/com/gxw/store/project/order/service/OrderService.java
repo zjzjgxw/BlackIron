@@ -20,10 +20,10 @@ public interface OrderService {
     /**
      * 支付成功
      *
-     * @param orderId
+     * @param code
      * @return
      */
-    Boolean paid(Long orderId);
+    Boolean paid(String code);
 
 
     /**

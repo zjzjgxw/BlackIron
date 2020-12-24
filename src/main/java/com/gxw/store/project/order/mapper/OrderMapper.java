@@ -19,6 +19,8 @@ public interface OrderMapper {
 
     Order getOrder(Long id, Long businessId);
 
+    Order getOrderByCode(String code);
+
     int update(Order order);
 
     /**

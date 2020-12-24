@@ -54,11 +54,4 @@ public class AppOrderController extends BaseController {
         return ResponseResult.success(getDataTable(orders,ids));
     }
 
-    @GetMapping("/payCallback")
-    public ResponseResult payCallBack(@RequestParam Long orderId)
-    {
-        orderService.paid(orderId);
-        return ResponseResult.success();
-    }
-
 }

@@ -256,10 +256,10 @@ public class OrderServiceImp implements OrderService {
 
     @Override
     @Transactional
-    public Boolean paid(Long orderId) {
-        Order order = orderMapper.getOrder(orderId, null);
+    public Boolean paid(String code) {
+        Order order = orderMapper.getOrderByCode(code);
         if (order == null || order.getStatus() != OrderStatus.UNPAID) {
-            throw new NotExistException("查找不到对应的待支付订单");
+            return false;
         }
 
         order.setStatus(OrderStatus.WAIT_SEND);
