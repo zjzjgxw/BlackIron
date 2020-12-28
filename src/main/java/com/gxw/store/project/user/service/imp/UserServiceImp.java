@@ -1,9 +1,12 @@
 package com.gxw.store.project.user.service.imp;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gxw.store.project.common.utils.Md5Utils;
+import com.gxw.store.project.common.utils.WeiXinUtils;
 import com.gxw.store.project.common.utils.exception.HasExistException;
 import com.gxw.store.project.common.utils.exception.InvalidUserException;
 import com.gxw.store.project.user.dto.UserSearchParams;
+import com.gxw.store.project.user.dto.WxEncryptedData;
 import com.gxw.store.project.user.entity.User;
 import com.gxw.store.project.user.entity.VipInfo;
 import com.gxw.store.project.user.mapper.UserMapper;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -26,6 +30,9 @@ public class UserServiceImp implements UserService {
 
     @Resource
     private VipService vipService;
+
+    @Resource
+    private WeiXinUtils weiXinUtils;
 
     @Override
     public Long create(User user) {
@@ -59,17 +66,17 @@ public class UserServiceImp implements UserService {
     @Override
     public boolean changeUserStatus(Long id) {
         User user = userMapper.selectUserById(id);
-        if(user == null){
+        if (user == null) {
             return false;
         }
         int status = user.getStatus();
-        if(status == 1){
+        if (status == 1) {
             status = 0;
-        }else{
+        } else {
             status = 1;
         }
         user.setStatus(status);
-        int row =  userMapper.updateUser(user);
+        int row = userMapper.updateUser(user);
         return row > 0;
     }
 
@@ -77,11 +84,24 @@ public class UserServiceImp implements UserService {
     public List<User> getUsers(UserSearchParams searchParams) {
         List<User> users = userMapper.getUsers(searchParams);
         List<VipInfo> vipInfos = vipService.getVips(searchParams.getBusinessId());
-        for(User user: users){
+        for (User user : users) {
             VipInfo vipInfo = vipService.getCurrentVipInfo(user.getConsumePrice(), vipInfos);
             user.setVip(vipInfo);
         }
         return users;
+    }
+
+    @Override
+    public boolean updateWxUser(Long userId, String sessionKey, WxEncryptedData wxEncryptedData) {
+        JSONObject object = weiXinUtils.getUserInfo(wxEncryptedData.getEncryptedData(), sessionKey, wxEncryptedData.getIv());
+        User user = userMapper.selectUserById(userId);
+        user.setName((String) object.get("nickName"));
+        user.setProfileUrl((String) object.get("avatarUrl"));
+        if (object.containsKey("unionId")) {
+            user.setUnionId((String) object.get("unionId"));
+        }
+        this.updateUser(user);
+        return true;
     }
 
     @Override
@@ -166,7 +186,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public Boolean addPoint(Long id, Long point) {
-        int row = userMapper.addPoint(id,point);
+        int row = userMapper.addPoint(id, point);
         return row != 0;
     }
 

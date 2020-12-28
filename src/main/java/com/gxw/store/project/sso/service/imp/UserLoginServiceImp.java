@@ -104,13 +104,11 @@ public class UserLoginServiceImp implements SsoService {
         return ResponseResult.success(token);
     }
 
+
     @Override
-    public ResponseResult getWxSession(Long userId) {
+    public String getWxSessionKey(Long userId) {
         HashMap<String, String> cacheObject = redisCache.getCacheObject(OPEN_ID_PREFIX + userId);
-        if (cacheObject == null) {
-            return ResponseResult.error("session key 失效请重新登陆");
-        }
-        return ResponseResult.success(cacheObject);
+        return cacheObject.get("session_key") ;
     }
 
     /**

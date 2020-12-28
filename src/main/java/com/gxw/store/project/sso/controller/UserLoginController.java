@@ -64,8 +64,4 @@ public class UserLoginController {
         return ssoService.loginByWeiXin(code, businessId);
     }
 
-    @GetMapping("/wxSession")
-    public ResponseResult wxSession(@RequestParam Long userId) {
-        return ssoService.getWxSession(userId);
-    }
 }

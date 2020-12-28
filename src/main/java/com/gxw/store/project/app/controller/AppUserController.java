@@ -4,11 +4,15 @@ package com.gxw.store.project.app.controller;
 import com.gxw.store.project.common.controller.BaseController;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
+import com.gxw.store.project.sso.service.SsoService;
+import com.gxw.store.project.user.dto.WxEncryptedData;
 import com.gxw.store.project.user.entity.User;
 import com.gxw.store.project.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.HashMap;
 
@@ -16,9 +20,13 @@ import java.util.HashMap;
 @RequestMapping("app/users")
 public class AppUserController extends BaseController {
 
-    @Autowired
+    @Resource
     private UserService userService;
 
+
+    @Resource
+    @Qualifier("userLoginServiceImp")
+    private SsoService ssoService;
 
     @PutMapping()
     public ResponseResult update(@Valid @RequestBody User user) {
@@ -35,5 +43,21 @@ public class AppUserController extends BaseController {
     }
 
 
+    /**
+     * 微信更新用户信息
+     *
+     * @param wxEncryptedData
+     * @return
+     */
+    @PutMapping("/wx")
+    public ResponseResult updateWeiXin(@Valid @RequestBody WxEncryptedData wxEncryptedData) {
+        Long userId = SessionUtils.getUserId();
+        String sessionKey = ssoService.getWxSessionKey(userId);
+        if(userService.updateWxUser(userId, sessionKey, wxEncryptedData)){
+            return ResponseResult.success();
+        }else{
+            return ResponseResult.error();
+        }
+    }
 
 }

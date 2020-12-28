@@ -62,7 +62,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EmptyTokenException.class)
     public Object handleEmptyTokenException(EmptyTokenException e) {
         log.info(e.getMessage(), e);
-        return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
+        return ResponseResult.error(HttpStatus.UNAUTHORIZED, e.getMessage());
     }
 
     @ExceptionHandler(ErrorTokenException.class)

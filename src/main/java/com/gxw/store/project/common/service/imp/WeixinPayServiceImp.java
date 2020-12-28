@@ -45,6 +45,7 @@ public class WeixinPayServiceImp implements WeixinPayService {
     @Value("${wx.config.appId}")
     private String appId;
 
+
     @Value("${wx.pay.mchId}")
     private String mchId;
 

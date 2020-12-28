@@ -2,6 +2,7 @@ package com.gxw.store.project.user.service;
 
 
 import com.gxw.store.project.user.dto.UserSearchParams;
+import com.gxw.store.project.user.dto.WxEncryptedData;
 import com.gxw.store.project.user.entity.User;
 
 import java.util.List;
@@ -24,6 +25,15 @@ public interface UserService {
     boolean changeUserStatus(Long id);
 
     List<User> getUsers(UserSearchParams searchParams);
+
+    /**
+     * 更新用户信息
+     * @param userId
+     * @param sessionKey
+     * @param wxEncryptedData
+     * @return
+     */
+    boolean updateWxUser(Long userId, String sessionKey, WxEncryptedData wxEncryptedData);
 
     /**
      * 根据id搜索用户

@@ -44,7 +44,7 @@ public interface SsoService {
      * @param userId
      * @return
      */
-    default ResponseResult getWxSession(Long userId){
+    default String getWxSessionKey(Long userId){
         return null;
     }
 
