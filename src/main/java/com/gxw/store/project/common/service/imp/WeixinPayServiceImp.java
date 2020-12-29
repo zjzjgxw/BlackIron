@@ -75,7 +75,7 @@ public class WeixinPayServiceImp implements WeixinPayService {
         Assert.notNull(this.mchSerialNo, "mchSerialNo must not null");
         Assert.notNull(this.apiV3Key, "apiV3Key must not null");
 
-        WeChatPayParams payParams = new WeChatPayParams(this.appId, this.mchId, order.getTitle(), order.getCode(), "", 1L, "CNY", openId);
+        WeChatPayParams payParams = new WeChatPayParams(this.appId, this.mchId, order.getTitle(), order.getCode(), "", order.getPrice(), "CNY", openId);
         payParams.setNotify_url(CALLBACK_URL);
         String jsonString = JSONObject.toJSONString(payParams);
 
