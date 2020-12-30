@@ -12,6 +12,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import java.io.File;
 import java.net.URL;
@@ -40,11 +41,18 @@ public class AliyunOss implements InitializingBean, DisposableBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
-        //判断bucketName 是否存在.
-        if (!ossClient.doesBucketExist(bucketName)) {
-            ossClient.shutdown();
-            throw new Exception("bucket does not exist");
+        Assert.notNull(endpoint,"endpoint不能为空");
+        Assert.notNull(accessKeyId,"accessKeyId不能为空");
+        Assert.notNull(accessKeySecret,"accessKeySecret不能为空");
+        try{
+            ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+            //判断bucketName 是否存在.
+            if (!ossClient.doesBucketExist(bucketName)) {
+                ossClient.shutdown();
+                throw new Exception("bucket does not exist");
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
         }
     }
 
