@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ErrorTokenException.class)
     public Object handleErrorTokenException(ErrorTokenException e) {
         log.info(e.getMessage(), e);
-        return ResponseResult.error(HttpStatus.ERROR, e.getMessage());
+        return ResponseResult.error(HttpStatus.UNAUTHORIZED, e.getMessage());
     }
 
     @ExceptionHandler(MissSpecificationException.class)

@@ -33,17 +33,27 @@ public class JwtTokenUtil {
 
     public static Long getUserId(String token) {
         Claims claims = parseToken(token);
+        checkExpireTime(claims);
         return claims.get("id", Long.class);
     }
 
     public static String getUserName(String token) {
         Claims claims = parseToken(token);
+        checkExpireTime(claims);
         return claims.get("name", String.class);
     }
 
     public static Long getBusinessId(String token){
         Claims claims = parseToken(token);
+        checkExpireTime(claims);
         return claims.get("businessId", Long.class);
+    }
+
+    public static void checkExpireTime(Claims claims){
+        long current = System.currentTimeMillis();
+        if(current > claims.get("expireTime",Long.class)){
+            throw new ErrorTokenException("无效token");
+        }
     }
 
     /**

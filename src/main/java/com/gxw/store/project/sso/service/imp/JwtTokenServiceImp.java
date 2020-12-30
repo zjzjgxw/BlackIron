@@ -88,9 +88,11 @@ public class JwtTokenServiceImp implements TokenService {
     @Override
     public HashMap<String, String> RefreshToken(String token) {
         Claims claims = JwtTokenUtil.parseToken(token);
+        JwtTokenUtil.checkExpireTime(claims);
         Long id = claims.get("id", Long.class);
         String name = claims.get("name", String.class);
-        return createToken(id, name);
+        Long businessId = claims.get("businessId", Long.class);
+        return createToken(id, name, businessId);
     }
 
     @Override

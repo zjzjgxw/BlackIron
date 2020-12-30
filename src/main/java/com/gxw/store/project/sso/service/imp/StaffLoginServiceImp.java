@@ -56,7 +56,6 @@ public class StaffLoginServiceImp implements SsoService {
         return null;
     }
 
-
     /**
      * 更新token
      *

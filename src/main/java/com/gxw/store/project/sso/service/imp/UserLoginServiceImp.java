@@ -56,7 +56,7 @@ public class UserLoginServiceImp implements SsoService {
         //验证账号密码
         if (checkPassword(loginUser, user.getPassword())) {
             //生成token
-            HashMap<String, String> token = tokenService.createToken(user.getId(), user.getName());
+            HashMap<String, String> token = tokenService.createToken(user.getId(), user.getName(), user.getBusinessId());
             return ResponseResult.success(token);
         } else { //记录失败次数
             loginTriedService.record(loginUser.getAccount());
@@ -78,7 +78,7 @@ public class UserLoginServiceImp implements SsoService {
         }
         if (phoneAccount.getCode().equals(cachedCode)) { //验证用户输入的code 和缓存中的code
             //生成token
-            HashMap<String, String> token = tokenService.createToken(user.getId(), user.getName());
+            HashMap<String, String> token = tokenService.createToken(user.getId(), user.getName(), user.getBusinessId());
             return ResponseResult.success(token);
         } else {
             loginTriedService.record(phoneAccount.getPhone());
@@ -93,7 +93,7 @@ public class UserLoginServiceImp implements SsoService {
         String openId = wxSession.get("openid");
 
         // 根据openId查找用户信息，不存在则新建一个用户
-        User user = userService.selectUserByOpenId(openId, true,businessId);
+        User user = userService.selectUserByOpenId(openId, true, businessId);
         if (user == null) {  //请求成功，但是没有找到对应的用户信息
             throw new NotExistException("用户未找到");
         }
@@ -108,7 +108,7 @@ public class UserLoginServiceImp implements SsoService {
     @Override
     public String getWxSessionKey(Long userId) {
         HashMap<String, String> cacheObject = redisCache.getCacheObject(OPEN_ID_PREFIX + userId);
-        return cacheObject.get("session_key") ;
+        return cacheObject.get("session_key");
     }
 
     /**
