@@ -22,34 +22,10 @@
 在博客 www.zjzjgxw.cn 中，我会尽量细致的讲解各个知识点包括java,spring boot,微信小程序等等。然后结合项目，使入门的小伙伴更加了解和掌握。
 
 
-## 快速开始
+## 搭建
 
+请参考 http://www.zjzjgxw.cn/archives/xiang-mu-da-jian
 
-```shell script
-mkdir ~/BlackIron
-cd ~/BlackIron
-git clone  https://github.com/zjzjgxw/BlackIron.git
-```
-
-修改配置文件
-```shell script
-### 在~/BlackIron 项目目录下
-cp src/main/resources/application.properties.tmpl src/main/resources/application.properties
-```
-
-修改相应的数据库配置信息
-```md
-#数据库配置
-spring.datasource.url=jdbc:mysql://{localhost:3306}/{database_name}?useSSL=false&serverTimezone=GMT%2B8&useAffectedRows=true
-spring.datasource.username=root
-spring.datasource.password=
-spring.datasource.tomcat.max-idle=5
-```
-
-使用black_iron_mysql.sql 初始化数据库结构。
-
-
-使用marven 安装依赖。
 
 
 
