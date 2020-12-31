@@ -4,6 +4,7 @@ package com.gxw.store.project.background.controller;
 import com.gxw.store.project.common.entity.City;
 import com.gxw.store.project.common.entity.County;
 import com.gxw.store.project.common.entity.Province;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.service.AreaService;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
@@ -30,6 +31,7 @@ public class BusinessController {
     @Resource
     private AreaService areaService;
 
+    @NeedToken
     @PostMapping("/")
     public ResponseResult create(@Valid @RequestBody Business business) {
         Long id = businessService.create(business);
@@ -38,6 +40,7 @@ public class BusinessController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping()
     public ResponseResult getBusiness() {
         Business business = businessService.getBusiness(SessionUtils.getBusinessId());
@@ -46,16 +49,18 @@ public class BusinessController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @PutMapping()
-    public ResponseResult updateBusiness(@Valid @RequestBody Business business){
+    public ResponseResult updateBusiness(@Valid @RequestBody Business business) {
         business.setId(SessionUtils.getBusinessId());
-        if(businessService.updateBusiness(business)){
+        if (businessService.updateBusiness(business)) {
             return ResponseResult.success();
-        }else{
+        } else {
             return ResponseResult.error();
         }
     }
 
+    @NeedToken
     @PostMapping("/banners")
     public ResponseResult addBanner(@RequestBody Banner banner) {
         banner.setBusinessId(SessionUtils.getBusinessId());
@@ -65,6 +70,7 @@ public class BusinessController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping("/banners")
     public ResponseResult getBanners() {
         List<Banner> banners = businessService.getBanners(SessionUtils.getBusinessId());
@@ -73,6 +79,7 @@ public class BusinessController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @PutMapping("/banners")
     public ResponseResult updateBanner(@RequestBody Banner banner) {
         banner.setBusinessId(SessionUtils.getBusinessId());
@@ -82,6 +89,7 @@ public class BusinessController {
         return ResponseResult.error();
     }
 
+    @NeedToken
     @DeleteMapping("/banners/{id}")
     public ResponseResult deleteBanner(@PathVariable Long id) {
         if (businessService.deleteBanner(id, SessionUtils.getBusinessId())) {
@@ -90,6 +98,7 @@ public class BusinessController {
         return ResponseResult.error();
     }
 
+    @NeedToken
     @PostMapping("/advertisements")
     public ResponseResult addAdvertisement(@RequestBody Advertisement advertisement) {
         advertisement.setBusinessId(SessionUtils.getBusinessId());
@@ -99,6 +108,7 @@ public class BusinessController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping("/advertisements")
     public ResponseResult getAdvertisements() {
         List<Advertisement> advertisements = businessService.getAdvertisements(SessionUtils.getBusinessId());
@@ -107,6 +117,7 @@ public class BusinessController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @PutMapping("/advertisements")
     public ResponseResult updateAdvertisement(@RequestBody Advertisement banner) {
         banner.setBusinessId(SessionUtils.getBusinessId());
@@ -116,6 +127,7 @@ public class BusinessController {
         return ResponseResult.error();
     }
 
+    @NeedToken
     @DeleteMapping("/advertisements/{id}")
     public ResponseResult deleteAdvertisement(@PathVariable Long id) {
         if (businessService.deleteAdvertisement(id, SessionUtils.getBusinessId())) {
@@ -125,7 +137,7 @@ public class BusinessController {
         return ResponseResult.error();
     }
 
-
+    @NeedToken
     @GetMapping("/provinces")
     public ResponseResult getProvinces() {
         List<Province> provinces = areaService.getProvinces();
@@ -134,6 +146,7 @@ public class BusinessController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping("/cities")
     public ResponseResult getCities(@RequestParam Long provinceId) {
         List<City> cities = areaService.getCities(provinceId);
@@ -142,6 +155,7 @@ public class BusinessController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping("/counties")
     public ResponseResult getCounties(@RequestParam Long cityId) {
         List<County> counties = areaService.getCounties(cityId);
@@ -151,6 +165,7 @@ public class BusinessController {
     }
 
 
+    @NeedToken
     @PostMapping("/navigations")
     public ResponseResult addNavigation(@RequestBody Navigation navigation) {
         navigation.setBusinessId(SessionUtils.getBusinessId());
@@ -160,6 +175,7 @@ public class BusinessController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping("/navigations")
     public ResponseResult getNavigations() {
         List<Navigation> navigations = businessService.getNavigations(SessionUtils.getBusinessId());
@@ -168,6 +184,7 @@ public class BusinessController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @PutMapping("/navigations")
     public ResponseResult updateNavigation(@RequestBody Navigation navigation) {
         navigation.setBusinessId(SessionUtils.getBusinessId());
@@ -177,6 +194,7 @@ public class BusinessController {
         return ResponseResult.error();
     }
 
+    @NeedToken
     @DeleteMapping("/navigations/{id}")
     public ResponseResult deleteNavigation(@PathVariable Long id) {
         if (businessService.deleteNavigation(id, SessionUtils.getBusinessId())) {

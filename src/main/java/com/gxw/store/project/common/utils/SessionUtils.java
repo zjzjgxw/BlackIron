@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 public class SessionUtils {
     private static final String AUTHORIZATION = "Authorization";
 
-    private static final String ACCESS_TOKEN = "AccessToken";
 
     public static Long getUserId() {
         String token = getToken();
@@ -65,19 +64,4 @@ public class SessionUtils {
     }
 
 
-    public static Long getAdminId() {
-        String token = getAccessToken();
-        if (StringUtils.isEmpty(token)) {
-            throw new EmptyTokenException("token 为空");
-        }
-        return JwtTokenUtil.getUserId(token);
-    }
-
-
-    public static String getAccessToken() {
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = servletRequestAttributes.getRequest();
-        String token = request.getHeader(ACCESS_TOKEN);
-        return token;
-    }
 }

@@ -2,6 +2,7 @@ package com.gxw.store.project.background.controller;
 
 
 import com.gxw.store.project.common.controller.BaseController;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.user.entity.VipInfo;
@@ -20,6 +21,7 @@ public class VipController extends BaseController {
     @Resource
     private VipService vipService;
 
+    @NeedToken
     @PostMapping
     public ResponseResult create(@Valid @RequestBody VipInfo info) {
         info.setBusinessId(SessionUtils.getBusinessId());
@@ -29,7 +31,7 @@ public class VipController extends BaseController {
         return ResponseResult.success(res);
     }
 
-
+    @NeedToken
     @GetMapping
     public ResponseResult getVips(){
         List<VipInfo> vipInfos = vipService.getVips(SessionUtils.getBusinessId());
@@ -38,6 +40,7 @@ public class VipController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping("/{id}")
     public ResponseResult getVipDetail(@PathVariable Long id){
         VipInfo vipInfo = vipService.getVipInfo(id,SessionUtils.getBusinessId());

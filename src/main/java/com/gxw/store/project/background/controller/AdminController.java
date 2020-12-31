@@ -2,6 +2,7 @@ package com.gxw.store.project.background.controller;
 
 
 import com.gxw.store.project.common.controller.BaseController;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.user.VO.AdminVO;
 import com.gxw.store.project.user.dto.AdminRoleRel;
@@ -22,6 +23,7 @@ public class AdminController extends BaseController {
     @Resource
     private AdminService adminService;
 
+    @NeedToken
     @PostMapping()
     public ResponseResult create(@Valid @RequestBody Admin admin) {
         Long id = adminService.create(admin);
@@ -30,7 +32,7 @@ public class AdminController extends BaseController {
         return ResponseResult.success(res);
     }
 
-
+    @NeedToken
     @GetMapping("/{id}")
     public ResponseResult getAdmin(@PathVariable Long id) {
         Admin admin = adminService.getAdmin(id);
@@ -39,6 +41,7 @@ public class AdminController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping()
     public ResponseResult getAdmins(@RequestParam(required = false) Long id,
                                     @RequestParam(required = false) String account,
@@ -51,6 +54,7 @@ public class AdminController extends BaseController {
         return ResponseResult.success(getDataTable(admins));
     }
 
+    @NeedToken
     @PutMapping()
     public ResponseResult updateAdmin(@Valid @RequestBody Admin admin) {
         if (adminService.updateAdmin(admin)) {
@@ -60,6 +64,7 @@ public class AdminController extends BaseController {
         }
     }
 
+    @NeedToken
     @DeleteMapping("/{id}")
     public ResponseResult deleteAdmin(@PathVariable Long id) {
         adminService.deleteAdmin(id);
@@ -72,6 +77,7 @@ public class AdminController extends BaseController {
      * @param roleRelSet
      * @return
      */
+    @NeedToken
     @PostMapping("/roleRel")
     public ResponseResult addAdminRoles(@RequestBody Set<AdminRoleRel> roleRelSet) {
         if (roleRelSet == null || roleRelSet.size() == 0) {
@@ -87,6 +93,7 @@ public class AdminController extends BaseController {
      * @param roleRelSet
      * @return
      */
+    @NeedToken
     @DeleteMapping("/roleRel")
     public ResponseResult deleteAdminRoles(@RequestBody Set<AdminRoleRel> roleRelSet) {
         if (roleRelSet == null || roleRelSet.size() == 0) {

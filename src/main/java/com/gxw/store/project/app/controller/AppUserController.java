@@ -2,6 +2,7 @@ package com.gxw.store.project.app.controller;
 
 
 import com.gxw.store.project.common.controller.BaseController;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.sso.service.SsoService;
@@ -28,12 +29,14 @@ public class AppUserController extends BaseController {
     @Qualifier("userLoginServiceImp")
     private SsoService ssoService;
 
+    @NeedToken
     @PutMapping()
     public ResponseResult update(@Valid @RequestBody User user) {
         userService.updateUser(user);
         return ResponseResult.success();
     }
 
+    @NeedToken
     @GetMapping("/current")
     public ResponseResult current(){
         User user = userService.selectUserById(SessionUtils.getUserId());
@@ -49,6 +52,7 @@ public class AppUserController extends BaseController {
      * @param wxEncryptedData
      * @return
      */
+    @NeedToken
     @PutMapping("/wx")
     public ResponseResult updateWeiXin(@Valid @RequestBody WxEncryptedData wxEncryptedData) {
         Long userId = SessionUtils.getUserId();

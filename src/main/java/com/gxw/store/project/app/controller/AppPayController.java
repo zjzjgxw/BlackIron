@@ -2,6 +2,7 @@ package com.gxw.store.project.app.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.service.WeixinPayService;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
@@ -24,6 +25,7 @@ public class AppPayController {
     @Resource
     private WeixinPayService weixinPayService;
 
+    @NeedToken
     @GetMapping
     public ResponseResult getPayInfo(@RequestParam Long orderId, @RequestParam String openId) throws IOException {
         Order order = orderService.getOrder(orderId, SessionUtils.getBusinessId());

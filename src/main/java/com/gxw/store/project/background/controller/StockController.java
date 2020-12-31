@@ -2,6 +2,7 @@ package com.gxw.store.project.background.controller;
 
 
 import com.gxw.store.project.common.controller.BaseController;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.product.dto.StockUpdateInfo;
 import com.gxw.store.project.product.entity.StockInfo;
@@ -20,6 +21,7 @@ public class StockController extends BaseController {
     private StockService stockService;
 
 
+    @NeedToken
     @PostMapping
     public ResponseResult create(@Valid @RequestBody StockInfo info) {
         Long id = stockService.create(info);
@@ -28,6 +30,7 @@ public class StockController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping
     public ResponseResult getStockInfo(@RequestParam Long productId) {
         StockInfo info = stockService.getStockInfoByProductId(productId);
@@ -42,13 +45,14 @@ public class StockController extends BaseController {
      * @param id
      * @return
      */
+    @NeedToken
     @DeleteMapping("/specification/{id}")
     public ResponseResult deleteStockSpecification(@PathVariable Long id){
         stockService.deleteStockSpecification(id);
         return ResponseResult.success();
     }
 
-
+    @NeedToken
     @PutMapping
     public ResponseResult update(@Valid @RequestBody StockUpdateInfo info){
         stockService.updateStockInfo(info);

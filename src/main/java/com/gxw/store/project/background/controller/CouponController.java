@@ -1,6 +1,7 @@
 package com.gxw.store.project.background.controller;
 
 import com.gxw.store.project.common.controller.BaseController;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.sale.entity.Coupon;
@@ -21,6 +22,7 @@ public class CouponController extends BaseController {
     @Resource
     private CouponService couponService;
 
+    @NeedToken
     @PostMapping()
     public ResponseResult create(@Valid @RequestBody Coupon coupon) {
         coupon.setStaffId(SessionUtils.getUserId());
@@ -31,6 +33,7 @@ public class CouponController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping()
     public ResponseResult getCoupons() {
         startPage();
@@ -38,7 +41,7 @@ public class CouponController extends BaseController {
         return ResponseResult.success(getDataTable(coupons));
     }
 
-
+    @NeedToken
     @PutMapping()
     public ResponseResult update(@Valid @RequestBody Coupon coupon) {
         coupon.setStaffId(SessionUtils.getUserId());
@@ -47,7 +50,7 @@ public class CouponController extends BaseController {
         return ResponseResult.success();
     }
 
-
+    @NeedToken
     @DeleteMapping("/{id}")
     public ResponseResult deleteDiscount(@PathVariable Long id) {
         couponService.delete(id, SessionUtils.getBusinessId());

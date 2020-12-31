@@ -23,4 +23,18 @@ public interface TokenService {
 
     HashMap<String, String> RefreshToken(String token, String keyPrefix);
 
+
+    /**
+     * 验证token是否效
+     * @param token
+     */
+    boolean checkToken(String token);
+
+
+    /**
+     * 设置缓存前缀
+     * @param prefix
+     */
+    void setCustomPrefix(String prefix);
+
 }

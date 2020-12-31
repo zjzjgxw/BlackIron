@@ -1,6 +1,7 @@
 package com.gxw.store.project.background.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.view.ViewUtils;
 import com.gxw.store.project.user.dto.RolePermissionRel;
@@ -19,6 +20,7 @@ public class AdminRoleController {
     @Resource
     private AdminService adminService;
 
+    @NeedToken
     @PostMapping()
     public ResponseResult create(@Valid @RequestBody AdminRole role) {
         Long id = adminService.createRole(role);
@@ -27,6 +29,7 @@ public class AdminRoleController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping("/{id}")
     @JsonView(ViewUtils.Simple.class)
     public ResponseResult getRole(@PathVariable Long id) {
@@ -36,6 +39,7 @@ public class AdminRoleController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping()
     @JsonView(ViewUtils.Simple.class)
     public ResponseResult getRoles() {
@@ -45,18 +49,21 @@ public class AdminRoleController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @PutMapping()
     public ResponseResult updateRole(@Valid @RequestBody AdminRole role) {
         adminService.updateRole(role);
         return ResponseResult.success();
     }
 
+    @NeedToken
     @DeleteMapping("/{id}")
     public ResponseResult deleteRole(@PathVariable Long id) {
         adminService.deleteRole(id);
         return ResponseResult.success();
     }
 
+    @NeedToken
     @PostMapping("/permissions")
     public ResponseResult saveRolePermissions(@Valid @RequestBody RolePermissionRel rolePermissionRel){
         adminService.saveRolePermissions(rolePermissionRel.getRoleId(),rolePermissionRel.getPermissions());

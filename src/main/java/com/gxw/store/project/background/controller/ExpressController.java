@@ -1,6 +1,7 @@
 package com.gxw.store.project.background.controller;
 
 
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.order.entity.Express;
@@ -25,6 +26,7 @@ public class ExpressController {
      *
      * @return
      */
+    @NeedToken
     @GetMapping
     public ResponseResult select() {
         List<Express> expressList = expressService.select();

@@ -1,5 +1,6 @@
 package com.gxw.store.project.background.controller;
 
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.file.config.Constants;
 import com.gxw.store.project.file.config.StorageType;
@@ -21,6 +22,7 @@ public class FileController {
     @Autowired
     private FileService fileService;
 
+    @NeedToken
     @PostMapping("/images/localUpload")
     public ResponseResult upload(@RequestParam("file") MultipartFile file) throws IOException {
         fileService.setCategory(Constants.IMAGES_CATEGORY);
@@ -28,6 +30,7 @@ public class FileController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @PostMapping("/images/aliYunUpload")
     public ResponseResult uploadAliOss(@RequestParam("file") MultipartFile file) throws IOException {
         fileService.setCategory(Constants.IMAGES_CATEGORY);
@@ -35,6 +38,7 @@ public class FileController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @PostMapping("/doc/localUpload")
     public ResponseResult uploadDoc(@RequestParam("file") MultipartFile file) throws IOException {
         fileService.setCategory(Constants.DOC_CATEGORY);
@@ -42,6 +46,7 @@ public class FileController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @PostMapping("/doc/aliYunUpload")
     public ResponseResult uploadDocAliOss(@RequestParam("file") MultipartFile file) throws IOException {
         fileService.setCategory(Constants.DOC_CATEGORY);
@@ -49,7 +54,7 @@ public class FileController {
         return ResponseResult.success(res);
     }
 
-
+    @NeedToken
     @PostMapping("/media/localUpload")
     public ResponseResult uploadMedia(@RequestParam("file") MultipartFile file) throws IOException {
         fileService.setCategory(Constants.MEDIA_CATEGORY);
@@ -57,6 +62,7 @@ public class FileController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @PostMapping("/media/aliYunUpload")
     public ResponseResult uploadMediaAliOss(@RequestParam("file") MultipartFile file) throws IOException {
         fileService.setCategory(Constants.MEDIA_CATEGORY);

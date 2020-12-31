@@ -2,6 +2,7 @@ package com.gxw.store.project.background.controller;
 
 
 import com.gxw.store.project.common.controller.BaseController;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.Md5Utils;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -21,9 +23,10 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController extends BaseController {
 
-    @Autowired
+    @Resource
     private UserService userService;
 
+    @NeedToken
     @PostMapping()
     public ResponseResult create(@Validated @RequestBody User user) {
         Long id = userService.create(user);
@@ -32,6 +35,7 @@ public class UserController extends BaseController {
         return ResponseResult.success("创建成功", res);
     }
 
+    @NeedToken
     @PutMapping()
     public ResponseResult update(@Valid @RequestBody User user) {
         user.setBusinessId(SessionUtils.getBusinessId());
@@ -39,6 +43,7 @@ public class UserController extends BaseController {
         return ResponseResult.success();
     }
 
+    @NeedToken
     @PatchMapping("/{id}")
     public ResponseResult changeStatus(@PathVariable Long id){
         if(userService.changeUserStatus(id)){
@@ -48,6 +53,7 @@ public class UserController extends BaseController {
         }
     }
 
+    @NeedToken
     @GetMapping()
     public ResponseResult getUsers(@RequestParam(required = false) Long id,
                                    @RequestParam(required = false) String account,
@@ -62,6 +68,7 @@ public class UserController extends BaseController {
         return ResponseResult.success(getDataTable(users));
     }
 
+    @NeedToken
     @GetMapping("/{id}")
     public ResponseResult selectUserById(@PathVariable Long id) {
         HashMap<String, User> res = new HashMap<>();
@@ -70,6 +77,7 @@ public class UserController extends BaseController {
     }
 
 
+    @NeedToken
     @GetMapping("/account")
     public ResponseResult getUserByAccount(@RequestParam String account) {
         HashMap<String, User> res = new HashMap<>();
@@ -77,6 +85,7 @@ public class UserController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping("/phone")
     public ResponseResult getUserByPhone(@RequestParam String phone) {
         HashMap<String, User> res = new HashMap<>();
@@ -84,6 +93,7 @@ public class UserController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping("/openId")
     public ResponseResult selectUserByOpenId(@RequestParam("openId") String openId, @RequestParam("canCreate") Boolean canCreate) {
         HashMap<String, User> res = new HashMap<>();
@@ -97,6 +107,7 @@ public class UserController extends BaseController {
      * @param followRel
      * @return
      */
+    @NeedToken
     @PutMapping("/follows")
     public ResponseResult follow(@Valid @RequestBody FollowRel followRel) {
         for (Long id : followRel.getIdolIds()) {
@@ -118,6 +129,7 @@ public class UserController extends BaseController {
      * @param idolId
      * @return
      */
+    @NeedToken
     @DeleteMapping("/follows")
     public ResponseResult cancelFollow(@RequestParam Long userId, @RequestParam Long idolId) {
         Boolean success = userService.cancelFollow(userId, idolId);
@@ -126,6 +138,7 @@ public class UserController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping("/follows")
     public ResponseResult getIdols(@RequestParam Long userId) {
         startPage();
@@ -133,6 +146,7 @@ public class UserController extends BaseController {
         return ResponseResult.success(getDataTable(users));
     }
 
+    @NeedToken
     @GetMapping("/fans")
     public ResponseResult getFans(@RequestParam Long userId) {
         startPage();

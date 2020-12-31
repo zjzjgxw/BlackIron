@@ -1,6 +1,7 @@
 package com.gxw.store.project.background.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.common.utils.view.ViewUtils;
@@ -22,6 +23,7 @@ public class BusinessRoleController {
     @Autowired
     private BusinessService businessService;
 
+    @NeedToken
     @PostMapping()
     public ResponseResult create(@Valid @RequestBody BusinessRole role){
         role.setBusinessId(SessionUtils.getBusinessId());
@@ -31,6 +33,7 @@ public class BusinessRoleController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping()
     public ResponseResult getRoles(){
         List<BusinessRole> roles = businessService.getRoles(SessionUtils.getBusinessId());
@@ -39,6 +42,7 @@ public class BusinessRoleController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @PutMapping()
     public ResponseResult updateRole(@RequestBody BusinessRole role){
         role.setBusinessId(SessionUtils.getBusinessId());
@@ -50,6 +54,7 @@ public class BusinessRoleController {
     }
 
 
+    @NeedToken
     @GetMapping("/{roleId}")
     @JsonView(ViewUtils.Simple.class)
     public ResponseResult getRole(@PathVariable Long roleId, @RequestParam("business_id") Long businessId){
@@ -59,6 +64,7 @@ public class BusinessRoleController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @DeleteMapping("/{roleId}")
     public ResponseResult deleteRole(@PathVariable Long roleId){
        if( businessService.deleteRoleById(roleId,SessionUtils.getBusinessId())){
@@ -68,6 +74,7 @@ public class BusinessRoleController {
        }
     }
 
+    @NeedToken
     @GetMapping("/permissions")
     public ResponseResult getRolePermissions(@RequestParam Long roleId){
         Long businessId = SessionUtils.getBusinessId();
@@ -80,6 +87,7 @@ public class BusinessRoleController {
         return ResponseResult.success(res) ;
     }
 
+    @NeedToken
     @PostMapping("/permissions")
     public ResponseResult saveRolePermissions(@Valid @RequestBody RolePermissionRel rolePermissionRel){
         businessService.saveRolePermissions(rolePermissionRel.getRoleId(),rolePermissionRel.getPermissions());

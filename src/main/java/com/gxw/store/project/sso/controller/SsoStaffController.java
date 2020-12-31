@@ -1,6 +1,7 @@
 package com.gxw.store.project.sso.controller;
 
 
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.sso.dto.LoginUser;
@@ -28,6 +29,7 @@ public class SsoStaffController {
         return ssoService.refreshToken(token);
     }
 
+    @NeedToken
     @GetMapping("/logout")
     public ResponseResult logout(){
         String token  = SessionUtils.getToken();

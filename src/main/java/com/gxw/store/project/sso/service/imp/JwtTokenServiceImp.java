@@ -3,12 +3,14 @@ package com.gxw.store.project.sso.service.imp;
 
 import com.gxw.store.project.common.utils.JwtTokenUtil;
 import com.gxw.store.project.common.utils.cache.RedisCache;
+import com.gxw.store.project.common.utils.exception.ErrorTokenException;
 import com.gxw.store.project.sso.service.TokenService;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.swing.table.TableRowSorter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -99,6 +101,27 @@ public class JwtTokenServiceImp implements TokenService {
     public HashMap<String, String> RefreshToken(String token, String keyPrefix) {
         customPrefix.set(keyPrefix);
         return RefreshToken(token);
+    }
+
+
+    @Override
+    public boolean checkToken(String token) {
+        //验证时效性
+        if (JwtTokenUtil.checkExpireTime(token)) {
+            //解析token,获取用户id
+            Long userId = JwtTokenUtil.getUserId(token);
+            //判断缓存中是否有对应用户信息
+            Object object = redisCache.getCacheObject(getRedisKey(userId));
+            if(object == null){
+                throw new ErrorTokenException("无效 token");
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void setCustomPrefix(String prefix) {
+        customPrefix.set(prefix);
     }
 
 

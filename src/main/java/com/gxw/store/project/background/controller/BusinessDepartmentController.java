@@ -1,6 +1,7 @@
 package com.gxw.store.project.background.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.view.ViewUtils;
 import com.gxw.store.project.user.entity.business.BusinessDepartment;
@@ -19,6 +20,7 @@ public class BusinessDepartmentController {
     @Autowired
     private BusinessService businessService;
 
+    @NeedToken
     @PostMapping()
     public ResponseResult create(@Valid @RequestBody BusinessDepartment department){
         Long id = businessService.createDepartment(department);
@@ -27,6 +29,7 @@ public class BusinessDepartmentController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping()
     public ResponseResult getDepartments(@RequestParam("business_id") Long business_id){
         List<BusinessDepartment> departments = businessService.getDepartments(business_id);
@@ -35,6 +38,7 @@ public class BusinessDepartmentController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping("/{departmentId}")
     @JsonView(ViewUtils.Simple.class)
     public ResponseResult getDepartment(@PathVariable Long departmentId, @RequestParam("business_id") Long business_id ){
@@ -44,6 +48,7 @@ public class BusinessDepartmentController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @DeleteMapping("/{department_id}")
     public ResponseResult deleteDepartment(@PathVariable Long department_id){
         int id = businessService.deleteDepartmentById(department_id);

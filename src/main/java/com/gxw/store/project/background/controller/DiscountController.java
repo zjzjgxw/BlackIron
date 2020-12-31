@@ -1,6 +1,7 @@
 package com.gxw.store.project.background.controller;
 
 import com.gxw.store.project.common.controller.BaseController;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.sale.entity.Discount;
@@ -19,6 +20,7 @@ public class DiscountController extends BaseController {
     @Resource
     private DiscountService discountService;
 
+    @NeedToken
     @PostMapping()
     public ResponseResult create(@Valid @RequestBody Discount discount) {
         discount.setStaffId(SessionUtils.getUserId());
@@ -29,6 +31,7 @@ public class DiscountController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping()
     public ResponseResult getDiscounts() {
         startPage();
@@ -36,6 +39,7 @@ public class DiscountController extends BaseController {
         return ResponseResult.success(getDataTable(discounts));
     }
 
+    @NeedToken
     @PutMapping()
     public ResponseResult updateDiscount(@Valid @RequestBody Discount discount) {
         discount.setStaffId(SessionUtils.getUserId());
@@ -44,7 +48,7 @@ public class DiscountController extends BaseController {
         return ResponseResult.success();
     }
 
-
+    @NeedToken
     @DeleteMapping("/{id}")
     public ResponseResult deleteDiscount(@PathVariable Long id)
     {

@@ -1,6 +1,7 @@
 package com.gxw.store.project.background.controller;
 
 import com.gxw.store.project.common.controller.BaseController;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.user.dto.StaffDepartmentRel;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -21,9 +23,10 @@ import java.util.Set;
 @RequestMapping("/staffs")
 public class StaffController extends BaseController {
 
-    @Autowired
+    @Resource
     private StaffService staffService;
 
+    @NeedToken
     @PostMapping()
     public ResponseResult create(@Valid @RequestBody Staff staff) {
         staff.setBusinessId(SessionUtils.getBusinessId());
@@ -33,6 +36,7 @@ public class StaffController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping("/current")
     public ResponseResult currentStaff() {
         Staff staff = staffService.getStaff(SessionUtils.getUserId());
@@ -41,6 +45,7 @@ public class StaffController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping("/{id}")
     public ResponseResult getStaff(@PathVariable Long id) {
         Staff staff = staffService.getStaff(id);
@@ -49,6 +54,7 @@ public class StaffController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping("")
     public ResponseResult getStaffs() {
         startPage();
@@ -56,6 +62,7 @@ public class StaffController extends BaseController {
         return ResponseResult.success(getDataTable(staffs));
     }
 
+    @NeedToken
     @DeleteMapping("/{id}")
     public ResponseResult  deleteStaff(@PathVariable Long id){
         if(staffService.delete(id,SessionUtils.getBusinessId())){
@@ -65,6 +72,7 @@ public class StaffController extends BaseController {
         }
     }
 
+    @NeedToken
     @PutMapping()
     public ResponseResult updateStaff(@RequestBody StaffUpdate staffUpdate) {
         staffUpdate.setBusinessId(SessionUtils.getBusinessId());
@@ -75,6 +83,7 @@ public class StaffController extends BaseController {
         }
     }
 
+    @NeedToken
     @PostMapping("/departments")
     public ResponseResult addDepartment(@Validated @RequestBody Set<StaffDepartmentRel> staffDepartmentRelSet) {
         if (staffDepartmentRelSet == null || staffDepartmentRelSet.size() == 0) {
@@ -84,6 +93,7 @@ public class StaffController extends BaseController {
         return ResponseResult.success();
     }
 
+    @NeedToken
     @PostMapping("/roles")
     public ResponseResult addRoles(@RequestBody Set<StaffRoleRel> staffRoleRelSet) {
         if (staffRoleRelSet == null || staffRoleRelSet.size() == 0) {
@@ -93,6 +103,7 @@ public class StaffController extends BaseController {
         return ResponseResult.success();
     }
 
+    @NeedToken
     @DeleteMapping("/departments")
     public ResponseResult deleteDepartmentRel(@RequestBody Set<StaffDepartmentRel> staffDepartmentRelSet) {
         if (staffDepartmentRelSet == null || staffDepartmentRelSet.size() == 0) {
@@ -102,6 +113,7 @@ public class StaffController extends BaseController {
         return ResponseResult.success();
     }
 
+    @NeedToken
     @DeleteMapping("/roles")
     public ResponseResult deleteRoles(@RequestBody Set<StaffRoleRel> staffRoleRelSet) {
         if (staffRoleRelSet == null || staffRoleRelSet.size() == 0) {

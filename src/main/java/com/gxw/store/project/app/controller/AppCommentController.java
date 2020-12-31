@@ -2,6 +2,7 @@ package com.gxw.store.project.app.controller;
 
 
 import com.gxw.store.project.common.controller.BaseController;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.common.utils.exception.NotExistException;
@@ -30,6 +31,7 @@ public class AppCommentController extends BaseController {
     @Resource
     private OrderService orderService;
 
+    @NeedToken
     @PostMapping
     public ResponseResult create(@Valid @RequestBody Comment comment) {
         comment.setUserId(SessionUtils.getUserId());
@@ -53,6 +55,7 @@ public class AppCommentController extends BaseController {
         }
     }
 
+    @NeedToken
     @PostMapping("/multi")
     public ResponseResult createComments(@RequestBody List<Comment> comments) {
         //获取用户信息
@@ -78,7 +81,6 @@ public class AppCommentController extends BaseController {
             return ResponseResult.error();
         }
     }
-
 
     @GetMapping
     public ResponseResult getComments(@RequestParam Long businessId, @RequestParam(required = false) Long productId) {

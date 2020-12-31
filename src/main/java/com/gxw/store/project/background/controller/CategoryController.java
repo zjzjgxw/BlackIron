@@ -2,6 +2,7 @@ package com.gxw.store.project.background.controller;
 
 
 import com.gxw.store.project.common.controller.BaseController;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.product.entity.*;
@@ -25,6 +26,7 @@ public class CategoryController extends BaseController {
     @Resource
     private ProductService productService;
 
+    @NeedToken
     @PostMapping()
     public ResponseResult create(@Valid @RequestBody Category category) {
         category.setBusinessId(SessionUtils.getBusinessId());
@@ -34,6 +36,7 @@ public class CategoryController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping()
     public ResponseResult getCategories() {
         List<Category> categories = categoryService.getCategories(SessionUtils.getBusinessId());
@@ -42,6 +45,7 @@ public class CategoryController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @DeleteMapping("/{id}")
     public ResponseResult deleteCategory(@PathVariable Long id) {
         if (categoryService.deleteCategory(id, SessionUtils.getBusinessId())) {
@@ -51,6 +55,7 @@ public class CategoryController extends BaseController {
         }
     }
 
+    @NeedToken
     @PutMapping("/{id}")
     public ResponseResult updateCategory(@PathVariable Long id, @RequestBody Category category) {
         category.setId(id);
@@ -63,7 +68,7 @@ public class CategoryController extends BaseController {
     }
 
     //------- 类目属性
-
+    @NeedToken
     @PostMapping("/attributes")
     public ResponseResult createAttribute(@Valid @RequestBody CategoryAttribute categoryAttribute) {
         Long id = categoryService.createAttribute(categoryAttribute);
@@ -72,6 +77,7 @@ public class CategoryController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping("/attributes")
     public ResponseResult getAttributes(@RequestParam Long categoryId) {
         List<CategoryAttribute> attributes = categoryService.getAttributes(categoryId);
@@ -80,6 +86,7 @@ public class CategoryController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @PutMapping("/attributes/{id}")
     public ResponseResult updateAttributes(@PathVariable Long id, @RequestBody NameParam attributeName) {
         if (categoryService.updateAttribute(id, attributeName.getName())) {
@@ -89,6 +96,7 @@ public class CategoryController extends BaseController {
         }
     }
 
+    @NeedToken
     @DeleteMapping("/attributes/{id}")
     public ResponseResult deleteAttribute(@PathVariable Long id) {
         if (categoryService.deleteAttribute(id)) {
@@ -98,6 +106,7 @@ public class CategoryController extends BaseController {
         }
     }
 
+    @NeedToken
     @PostMapping("/attributes/options")
     public ResponseResult createAttributeOptions(@Valid @RequestBody AttributeOption attributeOption) {
         Long id = categoryService.createAttributeOption(attributeOption);
@@ -106,7 +115,7 @@ public class CategoryController extends BaseController {
         return ResponseResult.success(res);
     }
 
-
+    @NeedToken
     @GetMapping("/attributes/options")
     public ResponseResult getAttributeOptions(@RequestParam Long attributeId) {
         List<AttributeOption> attributeOptions = categoryService.selectAttributeOptions(attributeId);
@@ -115,12 +124,14 @@ public class CategoryController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @DeleteMapping("/attributes/options/{id}")
     public ResponseResult deleteAttributeOptions(@PathVariable Long id) {
         categoryService.deleteAttributeOption(id);
         return ResponseResult.success();
     }
 
+    @NeedToken
     @PutMapping("/attributes/options")
     public ResponseResult updateAttributeOptions(@RequestBody AttributeOption attributeOption) {
         categoryService.updateAttributeOption(attributeOption);
@@ -129,6 +140,7 @@ public class CategoryController extends BaseController {
 
 
     // ---- 类目规格
+    @NeedToken
     @PostMapping("/specifications")
     public ResponseResult createSpecification(@Valid @RequestBody CategorySpecification categorySpecification) {
         Long id = categoryService.createSpecification(categorySpecification);
@@ -137,6 +149,7 @@ public class CategoryController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @PostMapping("/specifications/options")
     public ResponseResult createSpecificationOptions(@Valid @RequestBody SpecificationOption option) {
         Long id = categoryService.createSpecificationOption(option);
@@ -145,18 +158,21 @@ public class CategoryController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @PutMapping("/specifications/options")
     public ResponseResult updateSpecificationOptions(@RequestBody SpecificationOption option) {
         categoryService.updateSpecificationOption(option);
         return ResponseResult.success();
     }
 
+    @NeedToken
     @DeleteMapping("/specifications/options/{id}")
     public ResponseResult deleteSpecificationOptions(@PathVariable Long id) {
         categoryService.deleteSpecificationOption(id);
         return ResponseResult.success();
     }
 
+    @NeedToken
     @GetMapping("/specifications")
     public ResponseResult getCategorySpecifications(@RequestParam(required = false) Long categoryId, @RequestParam(required = false) Long productId) {
         if (productId != null) {
@@ -172,6 +188,7 @@ public class CategoryController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @PutMapping("/specifications/{id}")
     public ResponseResult updateSpecifications(@PathVariable Long id, @RequestBody NameParam param) {
         if (categoryService.updateSpecification(id, param.getName())) {
@@ -181,6 +198,7 @@ public class CategoryController extends BaseController {
         }
     }
 
+    @NeedToken
     @DeleteMapping("/specifications/{id}")
     public ResponseResult deleteSpecification(@PathVariable Long id) {
         if (categoryService.deleteSpecification(id)) {

@@ -2,6 +2,7 @@ package com.gxw.store.project.background.controller;
 
 
 import com.gxw.store.project.common.controller.BaseController;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.order.dto.OrderSearchParam;
@@ -27,6 +28,7 @@ public class OrderController extends BaseController {
      *
      * @return
      */
+    @NeedToken
     @PostMapping("/send")
     public ResponseResult send(@RequestBody OrderSendParam param) {
         Long businessId = SessionUtils.getBusinessId();
@@ -42,6 +44,7 @@ public class OrderController extends BaseController {
      * @param expressCode
      * @return
      */
+    @NeedToken
     @PutMapping("/express")
     public ResponseResult updateExpressInfo(@RequestParam Long orderId, @RequestParam Long expressId, @RequestParam String expressCode) {
         Long businessId = SessionUtils.getBusinessId();
@@ -49,6 +52,7 @@ public class OrderController extends BaseController {
         return ResponseResult.success();
     }
 
+    @NeedToken
     @GetMapping
     public ResponseResult getOrders(@RequestParam(required = false) Long id,
                                     @RequestParam(required = false) String code,
@@ -69,6 +73,7 @@ public class OrderController extends BaseController {
         return ResponseResult.success(getDataTable(orders, ids));
     }
 
+    @NeedToken
     @GetMapping("/detail/{id}")
     public ResponseResult getOrder(@PathVariable Long id) {
         Order order = orderService.getOrder(id, SessionUtils.getBusinessId());

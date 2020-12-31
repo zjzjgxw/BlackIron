@@ -2,6 +2,7 @@ package com.gxw.store.project.background.controller;
 
 
 import com.gxw.store.project.common.controller.BaseController;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.product.dto.AddProductAttributes;
@@ -22,6 +23,7 @@ public class ProductController extends BaseController {
     @Resource
     private ProductService productService;
 
+    @NeedToken
     @PostMapping("/detail")
     public ResponseResult create(@Valid @RequestBody ProductDetail detail) {
         detail.setBusinessId(SessionUtils.getBusinessId());
@@ -31,6 +33,7 @@ public class ProductController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @PutMapping("/detail")
     public ResponseResult update(@Valid @RequestBody ProductDetail detail) {
         detail.setBusinessId(SessionUtils.getBusinessId());
@@ -48,6 +51,7 @@ public class ProductController extends BaseController {
      * @param id
      * @return
      */
+    @NeedToken
     @DeleteMapping("/detail/attributes/{id}")
     public ResponseResult removeAttribute(@PathVariable Long id, @RequestParam Long detailId) {
         boolean success = productService.removeAttribute(id, detailId);
@@ -65,6 +69,7 @@ public class ProductController extends BaseController {
      * @param addProductAttributes
      * @return
      */
+    @NeedToken
     @PostMapping("/detail/attributes")
     public ResponseResult addAttributes(@Valid @RequestBody AddProductAttributes addProductAttributes) {
         boolean success = productService.addAttributes(addProductAttributes.getDetailId(), addProductAttributes.getAttributes());
@@ -75,6 +80,7 @@ public class ProductController extends BaseController {
         }
     }
 
+    @NeedToken
     @PostMapping("/detail/images/{id}")
     public ResponseResult createImages(@PathVariable(name = "id") Long detailId, @RequestBody ProductImages images) {
         Long id = productService.createProductImages(detailId, images);
@@ -83,13 +89,14 @@ public class ProductController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @PutMapping("/detail/images/{id}")
     public ResponseResult updateImages(@PathVariable(name = "id") Long detailId, @RequestBody ProductImages images) {
         productService.updateProductImages(detailId, images);
         return ResponseResult.success();
     }
 
-
+    @NeedToken
     @GetMapping("/detail/{id}")
     public ResponseResult getDetail(@PathVariable Long id) {
         ProductDetail detail = productService.getDetailById(id);
@@ -98,7 +105,7 @@ public class ProductController extends BaseController {
         return ResponseResult.success(res);
     }
 
-
+    @NeedToken
     @GetMapping()
     public ResponseResult selectProduct(@RequestParam(required = false) Long categoryId,
                                         @RequestParam(required = false) String name,
@@ -115,6 +122,7 @@ public class ProductController extends BaseController {
         return ResponseResult.success(getDataTable(details));
     }
 
+    @NeedToken
     @DeleteMapping("/detail/{id}")
     public ResponseResult deleteDetail(@PathVariable Long id) {
         if (productService.deleteDetail(id, SessionUtils.getBusinessId())) {
@@ -130,6 +138,7 @@ public class ProductController extends BaseController {
      * @param recommends
      * @return
      */
+    @NeedToken
     @PostMapping("/recommend")
     public ResponseResult addRecommend(@RequestBody List<ProductRecommend> recommends) {
         Long businessId = SessionUtils.getBusinessId();
@@ -140,7 +149,7 @@ public class ProductController extends BaseController {
         return ResponseResult.success();
     }
 
-
+    @NeedToken
     @DeleteMapping("/recommend")
     public ResponseResult deleteRecommend(@RequestBody List<Long> productIds) {
         if (productService.deleteRecommend(SessionUtils.getBusinessId(), productIds)) {
@@ -150,6 +159,7 @@ public class ProductController extends BaseController {
         }
     }
 
+    @NeedToken
     @PutMapping("/recommend")
     public ResponseResult updateRecommend(@RequestBody ProductRecommend recommend) {
         recommend.setBusinessId(SessionUtils.getBusinessId());
@@ -160,6 +170,7 @@ public class ProductController extends BaseController {
         }
     }
 
+    @NeedToken
     @GetMapping("/recommend")
     public ResponseResult getRecommend() {
         startPage();

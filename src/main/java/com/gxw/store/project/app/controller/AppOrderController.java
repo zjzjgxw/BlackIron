@@ -2,6 +2,7 @@ package com.gxw.store.project.app.controller;
 
 
 import com.gxw.store.project.common.controller.BaseController;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.order.dto.OrderSearchParam;
@@ -22,6 +23,7 @@ public class AppOrderController extends BaseController {
     @Resource
     private OrderService orderService;
 
+    @NeedToken
     @PostMapping
     public ResponseResult create(@Valid @RequestBody Order order) {
         Long userId = SessionUtils.getUserId();
@@ -33,6 +35,7 @@ public class AppOrderController extends BaseController {
         return ResponseResult.success(res);
     }
 
+    @NeedToken
     @GetMapping
     public ResponseResult getOrders(@RequestParam(required = false) Long id,
                                     @RequestParam(required = false) String code,

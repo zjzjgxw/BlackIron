@@ -1,6 +1,7 @@
 package com.gxw.store.project.app.controller;
 
 import com.gxw.store.project.common.controller.BaseController;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.sale.entity.Coupon;
@@ -25,6 +26,7 @@ public class AppCouponController extends BaseController {
      * @param id
      * @return
      */
+    @NeedToken
     @PostMapping("/{id}")
     public ResponseResult receiveCoupon(@PathVariable Long id) {
         Long userId = SessionUtils.getUserId();
@@ -36,6 +38,7 @@ public class AppCouponController extends BaseController {
      * 获取优惠券列表
      * @return
      */
+    @NeedToken
     @GetMapping
     public ResponseResult getCoupons(@RequestParam(required = false) List<Long> productIds) {
         Long userId = SessionUtils.getUserId();

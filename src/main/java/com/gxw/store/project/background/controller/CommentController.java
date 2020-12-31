@@ -2,6 +2,7 @@ package com.gxw.store.project.background.controller;
 
 
 import com.gxw.store.project.common.controller.BaseController;
+import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.common.utils.exception.NotExistException;
@@ -26,6 +27,7 @@ public class CommentController extends BaseController {
     private CommentService commentService;
 
 
+    @NeedToken
     @GetMapping
     public ResponseResult getComments(@RequestParam Long businessId, @RequestParam(required = false) Long productId,
                                       @RequestParam(required = false) Long orderId) {
@@ -34,6 +36,7 @@ public class CommentController extends BaseController {
         return ResponseResult.success(getDataTable(comments));
     }
 
+    @NeedToken
     @DeleteMapping("/{id}")
     public ResponseResult delete(@PathVariable Long id){
         boolean success = commentService.delete(id);
