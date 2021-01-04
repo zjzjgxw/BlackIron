@@ -22,6 +22,12 @@
 在博客 www.zjzjgxw.cn 中，我会尽量细致的讲解各个知识点包括java,spring boot,微信小程序等等。然后结合项目，使入门的小伙伴更加了解和掌握。
 
 
+## 小程序演示
+
+<img src="https://github.com/zjzjgxw/githubImages/blob/main/1841609136656_.pic.jpg" alt="小程序演示" width="360" height="360" align="bottom" />
+
+
+
 ## 搭建
 
 请参考 http://www.zjzjgxw.cn/archives/xiang-mu-da-jian
@@ -48,7 +54,16 @@
 ## 项目功能结构
 
 见 http://www.zjzjgxw.cn/archives/xiang-mu-gong-neng
+
  
+## 部分截图
 
+<img src="https://github.com/zjzjgxw/githubImages/blob/main/201609747457_.pic_hd.jpg" alt="小程序图片" width="360" height="640" align="bottom" />
 
+<img src="https://github.com/zjzjgxw/githubImages/blob/main/191609747456_.pic_hd.jpg" alt="小程序图片" width="360" height="640" align="bottom" />
+<img src="https://github.com/zjzjgxw/githubImages/blob/main/211609747458_.pic_hd.jpg" alt="小程序图片" width="360" height="640" align="bottom" />
+
+<img src="https://github.com/zjzjgxw/githubImages/blob/main/1911609308352_.pic_hd.jpg" alt="后台图片" width="993" height="567" align="bottom" />
+<img src="https://github.com/zjzjgxw/githubImages/blob/main/1921609308416_.pic_hd.jpg" alt="后台图片" width="993" height="567" align="bottom" />
+<img src="https://github.com/zjzjgxw/githubImages/blob/main/1901609308333_.pic_hd.jpg" alt="后台图片" width="993" height="567" align="bottom" />
 
