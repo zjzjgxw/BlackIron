@@ -22,10 +22,15 @@
 在博客 www.zjzjgxw.cn 中，我会尽量细致的讲解各个知识点包括java,spring boot,微信小程序等等。然后结合项目，使入门的小伙伴更加了解和掌握。
 
 
+## 小程序演示
+
+<img src="https://github.com/zjzjgxw/githubImages/blob/main/1841609136656_.pic.jpg" alt="小程序演示" width="360" height="360" align="bottom" />
+
+
+
 ## 搭建
 
 请参考 http://www.zjzjgxw.cn/archives/xiang-mu-da-jian
-
 
 
 
@@ -46,73 +51,19 @@
 有删除的线的表示已完成。
 
 
-### 商户后台
-> 具体功能点见 <https://github.com/zjzjgxw/BlackIron_Admin>  
+## 项目功能结构
 
-- 登录：
-    1. ~~商户后台商户员工登录 （账号密码）~~
+见 http://www.zjzjgxw.cn/archives/xiang-mu-gong-neng
 
-- 商户信息：
-   1. ~~基本信息编辑~~
-   2. ~~首页banner~~
-   3. ~~首页广告位~~
-   4. ~~首页导航项目~~
-   
+ 
+## 部分截图
 
-- 员工管理：
-    1.~~员工（增删改查）~~
-    2.~~角色管理（增删改查）~~
+<img src="https://github.com/zjzjgxw/githubImages/blob/main/201609747457_.pic_hd.jpg" alt="小程序图片" width="360" height="640" align="bottom" />
 
-- 商品管理：
-    1.~~商品类目（增删改查)~~
-    2.~~商品（增删改查）~~
-    3.~~库存编辑~~
-    4.~~支持上传视频~~
-    
-- 订单管理：
-    1.~~订单列表~~
-    2.~~订单详情~~
-    3.~~发货~~
-   
+<img src="https://github.com/zjzjgxw/githubImages/blob/main/191609747456_.pic_hd.jpg" alt="小程序图片" width="360" height="640" align="bottom" />
+<img src="https://github.com/zjzjgxw/githubImages/blob/main/211609747458_.pic_hd.jpg" alt="小程序图片" width="360" height="640" align="bottom" />
 
-- 评论管理：
-    1. 查看评论
-    2. 删除评论
+<img src="https://github.com/zjzjgxw/githubImages/blob/main/1911609308352_.pic_hd.jpg" alt="后台图片" width="993" height="567" align="bottom" />
+<img src="https://github.com/zjzjgxw/githubImages/blob/main/1921609308416_.pic_hd.jpg" alt="后台图片" width="993" height="567" align="bottom" />
+<img src="https://github.com/zjzjgxw/githubImages/blob/main/1901609308333_.pic_hd.jpg" alt="后台图片" width="993" height="567" align="bottom" />
 
-- 促销活动：
-    1. ~~限时折扣（增删改查）~~
-    2. ~~优惠券（增删改查）~~
-    3. 优惠券发放
-    
-- 用户管理：
-    1.~~用户列表~~
-    2.用户分组
-
-- 统计分析
-    1.商品浏览统计分析
-    2.订单统计分析
-    3.用户图标统计
-
-
-### 微信小程序  
-> 具体功能点见 <https://github.com/zjzjgxw/BlackIronApp.git>
-
-- ~~微信登陆~~
-
-- ~~获取微信信息~~
-
-- ~~获取微信地址信息~~
-
-- 微信支付
-
-- 首页搜索
-
-- 微信分享
-
-- 微信客服
-
-### 管理员后台 （后台界面化还未开始）
-
-- 权限管理：
-    1.管理员后台编辑权限
-    2.商户后台判断用户权限
