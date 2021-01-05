@@ -7,6 +7,7 @@ import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.common.utils.exception.NotExistException;
 import com.gxw.store.project.order.service.OrderService;
+import com.gxw.store.project.product.dto.CommentSearchParams;
 import com.gxw.store.project.product.entity.Comment;
 import com.gxw.store.project.product.service.CommentService;
 import com.gxw.store.project.user.entity.User;
@@ -85,7 +86,10 @@ public class AppCommentController extends BaseController {
     @GetMapping
     public ResponseResult getComments(@RequestParam Long businessId, @RequestParam(required = false) Long productId) {
         startPage();
-        List<Comment> comments = commentService.getComments(businessId,productId);
+        CommentSearchParams params = new CommentSearchParams();
+        params.setBusinessId(businessId);
+        params.setProductId(productId);
+        List<Comment> comments = commentService.getComments(params);
         return ResponseResult.success(getDataTable(comments));
     }
 }

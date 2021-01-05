@@ -1,5 +1,6 @@
 package com.gxw.store.project.product.entity;
 
+import com.gxw.store.project.product.dto.SimpleProductDetail;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotBlank;
@@ -43,6 +44,8 @@ public class Comment {
     private int deleteFlag;
 
     private Date createTime;
+
+    private SimpleProductDetail product;
 
     public Long getId() {
         return id;
@@ -146,5 +149,13 @@ public class Comment {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public SimpleProductDetail getProduct() {
+        return product;
+    }
+
+    public void setProduct(SimpleProductDetail product) {
+        this.product = product;
     }
 }

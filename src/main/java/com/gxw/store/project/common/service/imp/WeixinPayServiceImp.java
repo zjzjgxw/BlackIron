@@ -62,8 +62,7 @@ public class WeixinPayServiceImp implements WeixinPayService {
 
     private static final String PREPAY_URL = "https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi";
 
-    private static final String CALLBACK_URL = "https://b0e99e3ee0db.ngrok.io/app/pay/callback";
-
+    private static final String CALLBACK_URL = "https://store.mynatapp.cc/app/pay/callback";
 
     private static final SecureRandom RANDOM = new SecureRandom();
 

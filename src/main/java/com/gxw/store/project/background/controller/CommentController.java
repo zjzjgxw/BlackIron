@@ -7,6 +7,7 @@ import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.common.utils.exception.NotExistException;
 import com.gxw.store.project.order.service.OrderService;
+import com.gxw.store.project.product.dto.CommentSearchParams;
 import com.gxw.store.project.product.entity.Comment;
 import com.gxw.store.project.product.service.CommentService;
 import com.gxw.store.project.user.entity.User;
@@ -29,10 +30,20 @@ public class CommentController extends BaseController {
 
     @NeedToken
     @GetMapping
-    public ResponseResult getComments(@RequestParam Long businessId, @RequestParam(required = false) Long productId,
-                                      @RequestParam(required = false) Long orderId) {
+    public ResponseResult getComments(@RequestParam(required = false) Long orderId,
+                                      @RequestParam(required = false) String productName,
+                                      @RequestParam(required = false) String userName,
+                                      @RequestParam(required = false) String content,
+                                      @RequestParam(required = false) Long type) {
         startPage();
-        List<Comment> comments = commentService.getComments(businessId,productId,orderId);
+        CommentSearchParams params = new CommentSearchParams();
+        params.setOrderId(orderId);
+        params.setProductName(productName);
+        params.setUserName(userName);
+        params.setContent(content);
+        params.setType(type);
+        params.setBusinessId(SessionUtils.getBusinessId());
+        List<Comment> comments = commentService.getComments(params);
         return ResponseResult.success(getDataTable(comments));
     }
 

@@ -1,6 +1,7 @@
 package com.gxw.store.project.product.mapper;
 
 
+import com.gxw.store.project.product.dto.CommentSearchParams;
 import com.gxw.store.project.product.entity.Comment;
 
 import java.util.List;
@@ -8,8 +9,7 @@ import java.util.List;
 public interface CommentMapper {
     void create(Comment comment);
 
-    List<Comment> getComments(Long businessId, Long productId, Long orderId);
-
+    List<Comment> getComments(CommentSearchParams params);
 
     /**
      * 删除评论

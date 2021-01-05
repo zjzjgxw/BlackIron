@@ -1,6 +1,7 @@
 package com.gxw.store.project.product.service;
 
 
+import com.gxw.store.project.product.dto.CommentSearchParams;
 import com.gxw.store.project.product.entity.Comment;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface CommentService {
 
     boolean create(List<Comment> comments);
 
-    List<Comment> getComments(Long businessId, Long productId, Long orderId);
+    List<Comment> getComments(CommentSearchParams params);
 
     /**
      * 删除评论
@@ -20,11 +21,4 @@ public interface CommentService {
      */
     Boolean delete(Long id);
 
-    /**
-     * 获取评论
-     * @param businessId
-     * @param productId
-     * @return
-     */
-    List<Comment> getComments(Long businessId, Long productId);
 }

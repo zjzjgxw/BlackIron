@@ -18,6 +18,13 @@
         <result property="imgUrl" column="img_url"/>
         <result property="deleteFlag" column="delete_flag"/>
         <result property="createTime" column="created_at"/>
+        <association property="product" resultMap="SimpleProductResult"/>
+    </resultMap>
+
+    <resultMap id="SimpleProductResult" type="SimpleProductDetail">
+        <id property="id" column="detail_id"/>
+        <result property="name" column="detail_name"/>
+        <result property="coverUrl" column="detail_cover_url"/>
     </resultMap>
 
     <insert id="create" parameterType="Comment" useGeneratedKeys="true" keyProperty="id">
@@ -26,10 +33,17 @@
     </insert>
 
     <select id="getComments" resultMap="CommentResult">
-        select a.id, a.business_id,a.product_id,a.order_id,a.user_id,a.user_name,a.cover_url,a.content,a.score,a.type,a.img_url,a.delete_flag,a.created_at
-        from gxw_product_comment a where a.business_id = #{businessId}
-        <if test="productId != null and productId !=0  "> and a.product_id = #{productId} </if>
-        <if test="orderId != null and orderId !=0  "> and a.order_id = #{orderId} </if>
+        select a.id, a.business_id,a.product_id,a.order_id,a.user_id,a.user_name,a.cover_url,a.content,a.score,a.type,a.img_url,a.delete_flag,a.created_at,
+        b.id as detail_id,b.name as detail_name,b.cover_url as detail_cover_url
+        from gxw_product_comment a
+        left join gxw_product_detail b on a.product_id = b.id
+        where a.business_id = #{businessId} and a.delete_flag = 0
+        <if test="productId != null and productId !=0  "> and a.product_id =#{productId} </if>
+        <if test="productName != null and productName !=''  ">  and b.name like CONCAT('%',#{productName},'%') </if>
+        <if test="userName != null and userName !=''  "> and a.user_name like CONCAT('%',#{userName},'%') </if>
+        <if test="content != null and content !=''  "> and a.content like CONCAT('%',#{content},'%') </if>
+        <if test="type != null and type !=0  "> and a.type =#{type} </if>
+        <if test="orderId != null and orderId !=0  "> and a.order_id =#{orderId} </if>
         order by a.id desc
     </select>
 

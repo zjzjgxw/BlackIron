@@ -1,8 +1,8 @@
 package com.gxw.store.project.product.service.imp;
 
-import ch.qos.logback.core.util.FileUtil;
 import com.gxw.store.project.common.utils.FileUtils;
 import com.gxw.store.project.order.service.OrderService;
+import com.gxw.store.project.product.dto.CommentSearchParams;
 import com.gxw.store.project.product.entity.Comment;
 import com.gxw.store.project.product.mapper.CommentMapper;
 import com.gxw.store.project.product.service.CommentService;
@@ -45,8 +45,8 @@ public class CommentServiceImp implements CommentService {
     }
 
     @Override
-    public List<Comment> getComments(Long businessId, Long productId, Long orderId) {
-        List<Comment> comments = commentMapper.getComments(businessId, productId, orderId);
+    public List<Comment> getComments(CommentSearchParams params) {
+        List<Comment> comments = commentMapper.getComments(params);
         return handleComments(comments);
     }
 
@@ -56,11 +56,6 @@ public class CommentServiceImp implements CommentService {
         return row != 0;
     }
 
-    @Override
-    public List<Comment> getComments(Long businessId, Long productId) {
-        List<Comment> comments = commentMapper.getComments(businessId, productId, null);
-        return handleComments(comments);
-    }
 
     private List<Comment> handleComments(List<Comment> comments){
         for (Comment comment : comments){
@@ -69,6 +64,9 @@ public class CommentServiceImp implements CommentService {
             }
             if(!comment.getImgUrl().isEmpty()){
                 comment.setImgUrl(FileUtils.getPath(comment.getImgUrl()));
+            }
+            if(!comment.getProduct().getCoverUrl().isEmpty()){
+                comment.getProduct().setCoverUrl(FileUtils.getPath(comment.getProduct().getCoverUrl()));
             }
         }
         return  comments;

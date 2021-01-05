@@ -8,6 +8,7 @@ import com.gxw.store.project.sso.dto.PhoneAccount;
 import com.gxw.store.project.sso.service.SsoService;
 import com.gxw.store.project.sso.service.TokenService;
 import com.gxw.store.project.user.entity.business.Staff;
+import com.gxw.store.project.user.entity.business.StaffStatus;
 import com.gxw.store.project.user.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,9 @@ public class StaffLoginServiceImp implements SsoService {
         Staff staff = staffService.getStaffByAccount(loginUser.getAccount());
         if (staff == null) {  //请求成功，但是没有找到对应的用户信息
             throw new NotExistException("用户未找到");
+        }
+        if(staff.getStatus() == StaffStatus.UNUSABLE){
+            return ResponseResult.error("该账户已被禁");
         }
         //检查尝试次数
         Integer times = loginTriedService.getTriedTimes(loginUser.getAccount());
