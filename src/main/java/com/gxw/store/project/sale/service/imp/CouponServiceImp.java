@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CouponServiceImp implements CouponService {
@@ -60,6 +57,9 @@ public class CouponServiceImp implements CouponService {
 
     @Override
     public List<Coupon> getCoupons(List<Long> ids) {
+        if(ids.isEmpty()){
+            return Collections.emptyList();
+        }
         return couponMapper.selectCoupons(ids);
     }
 

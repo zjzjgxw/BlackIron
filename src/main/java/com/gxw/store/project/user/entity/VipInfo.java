@@ -13,7 +13,6 @@ public class VipInfo {
     @NotNull
     private Integer freeExpress;
     private Long discount;
-    private Long couponId;
 
     @NotNull
     private Long consumePrice;
@@ -64,14 +63,6 @@ public class VipInfo {
 
     public void setDiscount(Long discount) {
         this.discount = discount;
-    }
-
-    public Long getCouponId() {
-        return couponId;
-    }
-
-    public void setCouponId(Long couponId) {
-        this.couponId = couponId;
     }
 
     public Long getConsumePrice() {

@@ -47,4 +47,25 @@ public class VipController extends BaseController {
         res.put("vip", vipInfo);
         return ResponseResult.success(res);
     }
+
+    @NeedToken
+    @PutMapping
+    public ResponseResult update(@Valid @RequestBody VipInfo info){
+        info.setBusinessId(SessionUtils.getBusinessId());
+        if(vipService.update(info)){
+            return ResponseResult.success();
+        }else{
+            return ResponseResult.error();
+        }
+    }
+
+    @NeedToken
+    @DeleteMapping("/{id}")
+    public ResponseResult delete(@PathVariable Long id){
+        if(vipService.delete(id,SessionUtils.getBusinessId())){
+            return ResponseResult.success();
+        }else{
+            return ResponseResult.error();
+        }
+    }
 }

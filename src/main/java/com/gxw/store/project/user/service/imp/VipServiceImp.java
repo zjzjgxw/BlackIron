@@ -33,13 +33,25 @@ public class VipServiceImp implements VipService {
     @Override
     public VipInfo getCurrentVipInfo(Long consumePrice, List<VipInfo> vipInfos) {
         VipInfo current = vipInfos.get(0);
-        for (VipInfo vipInfo: vipInfos){
-            if(consumePrice >= vipInfo.getConsumePrice()){
+        for (VipInfo vipInfo : vipInfos) {
+            if (consumePrice >= vipInfo.getConsumePrice()) {
                 current = vipInfo;
-            }else{
+            } else {
                 break;
             }
         }
         return current;
+    }
+
+    @Override
+    public boolean update(VipInfo vipInfo) {
+        int row = vipMapper.update(vipInfo);
+        return row != 0;
+    }
+
+    @Override
+    public boolean delete(Long id, Long businessId) {
+        int row = vipMapper.delete(id,businessId);
+        return row !=0;
     }
 }

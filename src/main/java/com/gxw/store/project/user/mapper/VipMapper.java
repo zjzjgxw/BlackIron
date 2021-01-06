@@ -13,4 +13,7 @@ public interface VipMapper {
 
      VipInfo getVipInfo(Long id,Long businessId);
 
+     int update(VipInfo vipInfo);
+
+     int delete(Long id, Long businessId);
 }
