@@ -34,10 +34,9 @@ public class VipController extends BaseController {
     @NeedToken
     @GetMapping
     public ResponseResult getVips(){
+        startPage();
         List<VipInfo> vipInfos = vipService.getVips(SessionUtils.getBusinessId());
-        HashMap<String, List<VipInfo>> res = new HashMap<>();
-        res.put("vips", vipInfos);
-        return ResponseResult.success(res);
+        return ResponseResult.success(getDataTable(vipInfos));
     }
 
     @NeedToken

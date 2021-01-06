@@ -35,10 +35,11 @@ public class CouponController extends BaseController {
 
     @NeedToken
     @GetMapping()
-    public ResponseResult getCoupons() {
+    public ResponseResult getCoupons(@RequestParam(required = false) String name) {
         startPage();
-        List<Coupon> coupons = couponService.getCoupons(SessionUtils.getBusinessId());
-        return ResponseResult.success(getDataTable(coupons));
+        List<Long> ids = couponService.getCouponIds(SessionUtils.getBusinessId(),name);
+        List<Coupon> coupons = couponService.getCoupons(ids);
+        return ResponseResult.success(getDataTable(coupons,ids));
     }
 
     @NeedToken

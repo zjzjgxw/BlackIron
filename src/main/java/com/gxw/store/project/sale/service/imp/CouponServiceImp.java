@@ -59,8 +59,13 @@ public class CouponServiceImp implements CouponService {
     }
 
     @Override
-    public List<Coupon> getCoupons(Long businessId) {
-        return couponMapper.selectCoupons(businessId);
+    public List<Coupon> getCoupons(List<Long> ids) {
+        return couponMapper.selectCoupons(ids);
+    }
+
+    @Override
+    public List<Long> getCouponIds(Long businessId, String name) {
+        return couponMapper.getCouponIds(businessId, name);
     }
 
     @Override
@@ -84,34 +89,34 @@ public class CouponServiceImp implements CouponService {
         List<Coupon> coupons;
         coupons = couponMapper.selectCouponsOfUser(userId, null, null);
         for (Coupon coupon : coupons) {
-            coupon.setStatus(getCouponUseStatus(coupon,productIds));
+            coupon.setStatus(getCouponUseStatus(coupon, productIds));
         }
         return coupons;
     }
 
-    private CouponUseStatus getCouponUseStatus(Coupon coupon,List<Long> productIds){
-        if(coupon.getUsers().size() == 0){
+    private CouponUseStatus getCouponUseStatus(Coupon coupon, List<Long> productIds) {
+        if (coupon.getUsers().size() == 0) {
             return CouponUseStatus.UN_FIT;
         }
-        if(coupon.getUsers().get(0).getStatus() == CouponUseStatus.USED){
+        if (coupon.getUsers().get(0).getStatus() == CouponUseStatus.USED) {
             return CouponUseStatus.USED;
-        }else{
+        } else {
             Date now = new Date();
-            if(now.getTime() < coupon.getStartTime().getTime()){
+            if (now.getTime() < coupon.getStartTime().getTime()) {
                 return CouponUseStatus.UN_START;
             }
-            if(now.getTime() > coupon.getEndTime().getTime()){
+            if (now.getTime() > coupon.getEndTime().getTime()) {
                 return CouponUseStatus.EXPIRED;
             }
-            if(coupon.getMode() == Mode.ALL){
+            if (coupon.getMode() == Mode.ALL) {
                 return CouponUseStatus.UN_USED;
-            }else if(coupon.getMode() == Mode.PRODUCT){ //指定商品模式，则判断是否包含商品
+            } else if (coupon.getMode() == Mode.PRODUCT) { //指定商品模式，则判断是否包含商品
                 List<Long> destList = new ArrayList<>();
                 destList.addAll(coupon.getProducts());
                 destList.retainAll(productIds);
-                if(destList.size() > 0){
+                if (destList.size() > 0) {
                     return CouponUseStatus.UN_USED;
-                }else{
+                } else {
                     return CouponUseStatus.UN_FIT;
                 }
             }

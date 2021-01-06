@@ -197,10 +197,14 @@ public class OrderServiceImp implements OrderService {
      * @return
      */
     private Long getDiscountPrice(ProductDetail detail, Long originalPrice) {
+
+        //获取商品折扣
         Map<Long, Long> discountMap = discountService.getDiscountOfProducts(detail.getBusinessId(), new Long[]{detail.getId()});
         if (discountMap.get(detail.getId()) != null) {
             return originalPrice * discountMap.get(detail.getId()) / 100;
         }
+
+        //获取Vip折扣
         return originalPrice;
     }
 

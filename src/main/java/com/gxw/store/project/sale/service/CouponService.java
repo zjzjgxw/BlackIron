@@ -11,8 +11,9 @@ public interface CouponService {
 
     Boolean delete(Long id, Long businessId);
 
-    List<Coupon> getCoupons(Long businessId);
+    List<Coupon> getCoupons(List<Long> ids);
 
+    List<Long> getCouponIds(Long businessId, String name);
     /**
      * 发放优惠券
      *

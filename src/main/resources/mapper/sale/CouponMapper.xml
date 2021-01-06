@@ -125,10 +125,21 @@
             left join gxw_coupon_user c on a.id = c.coupon_id
     </sql>
 
+    <select id="getCouponIds" resultType="Long">
+        select a.id from gxw_coupon a
+        where a.business_id = #{businessId}
+        <if test="name != null and name != '' ">  and a.name like CONCAT('%',#{name},'%') </if>
+        and a.delete_flag = 0
+    </select>
 
     <select id="selectCoupons" resultMap="CouponResult">
         <include refid="sqlCoupon"/>
-        where a.business_id = #{businessId} and a.delete_flag = 0 order by a.created_at desc
+        where a.delete_flag = 0
+        and a.id in
+        <foreach collection="ids" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by a.created_at desc
     </select>
 
     <select id="getCoupon" resultMap="CouponResult">

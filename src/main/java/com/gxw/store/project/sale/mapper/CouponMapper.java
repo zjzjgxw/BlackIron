@@ -32,19 +32,12 @@ public interface CouponMapper {
      */
     void clearProducts(Long couponId);
 
-    /**
-     * 获取商户下所有的活动
-     *
-     * @param businessId
-     */
-    List<Coupon> selectCoupons(Long businessId);
 
-    /**
-     * 获取优惠券详情
-     *
-     * @param id
-     * @return
-     */
+    List<Coupon> selectCoupons(List<Long> ids);
+
+    List<Long> getCouponIds(Long businessId,String name);
+
+
     Coupon getCoupon(Long id);
 
 
