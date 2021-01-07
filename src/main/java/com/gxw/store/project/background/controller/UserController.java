@@ -11,11 +11,13 @@ import com.gxw.store.project.user.dto.UserSearchParams;
 import com.gxw.store.project.user.entity.User;
 import com.gxw.store.project.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,10 +47,10 @@ public class UserController extends BaseController {
 
     @NeedToken
     @PatchMapping("/{id}")
-    public ResponseResult changeStatus(@PathVariable Long id){
-        if(userService.changeUserStatus(id)){
+    public ResponseResult changeStatus(@PathVariable Long id) {
+        if (userService.changeUserStatus(id)) {
             return ResponseResult.success();
-        }else{
+        } else {
             return ResponseResult.error();
         }
     }
@@ -60,10 +62,12 @@ public class UserController extends BaseController {
                                    @RequestParam(required = false) String tel,
                                    @RequestParam(required = false) String name,
                                    @RequestParam(required = false) String email,
+                                   @RequestParam(required = false) @DateTimeFormat(pattern="yyyy-MM-dd") Date birthday,
+                                   @RequestParam(required = false) Long vipId,
                                    @RequestParam(required = false) List<Integer> status) {
         startPage();
         List<User> users = null;
-        UserSearchParams searchParams = new UserSearchParams(id, SessionUtils.getBusinessId(), account, tel, name, email, status);
+        UserSearchParams searchParams = new UserSearchParams(id, SessionUtils.getBusinessId(), account, tel, name, email, birthday, vipId, status);
         users = userService.getUsers(searchParams);
         return ResponseResult.success(getDataTable(users));
     }
@@ -97,7 +101,7 @@ public class UserController extends BaseController {
     @GetMapping("/openId")
     public ResponseResult selectUserByOpenId(@RequestParam("openId") String openId, @RequestParam("canCreate") Boolean canCreate) {
         HashMap<String, User> res = new HashMap<>();
-        res.put("user", userService.selectUserByOpenId(openId, canCreate,SessionUtils.getBusinessId()));
+        res.put("user", userService.selectUserByOpenId(openId, canCreate, SessionUtils.getBusinessId()));
         return ResponseResult.success(res);
     }
 

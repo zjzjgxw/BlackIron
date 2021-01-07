@@ -21,7 +21,7 @@ public interface CouponService {
      * @param userIds
      * @return
      */
-    Boolean send(Long id, Long[] userIds);
+    Boolean send(Long id,Long businessId, Long[] userIds);
 
     /**
      * 获取

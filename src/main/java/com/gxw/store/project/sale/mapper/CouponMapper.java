@@ -38,7 +38,7 @@ public interface CouponMapper {
     List<Long> getCouponIds(Long businessId,String name);
 
 
-    Coupon getCoupon(Long id);
+    Coupon getCoupon(Long id,Long businessId);
 
 
     /**

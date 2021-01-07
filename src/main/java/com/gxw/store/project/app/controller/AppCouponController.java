@@ -30,7 +30,7 @@ public class AppCouponController extends BaseController {
     @PostMapping("/{id}")
     public ResponseResult receiveCoupon(@PathVariable Long id) {
         Long userId = SessionUtils.getUserId();
-        couponService.send(id, new Long[]{userId});
+        couponService.send(id,SessionUtils.getBusinessId(), new Long[]{userId});
         return ResponseResult.success();
     }
 

@@ -89,6 +89,8 @@
         <if test="name != null and name != ''">and a.name= #{name}</if>
         <if test="tel != null and tel != ''">and a.tel= #{tel}</if>
         <if test="email != null and email != ''">and a.email= #{email}</if>
+        <if test="birthday != null ">and a.birthday= #{birthday,jdbcType=DATE} </if>
+        <if test="vipId != null and vipId !=0 ">and a.vip_id= #{vipId} </if>
         <if test="status != null">
             and a.status in
             <foreach collection="status" item="item" open="(" separator="," close=")">

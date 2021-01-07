@@ -1,5 +1,6 @@
 package com.gxw.store.project.user.dto;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -10,12 +11,14 @@ public class UserSearchParams {
     private String email;
     private String tel;
     private String name;
+    private Date birthday;
+    private Long vipId;
     private List<Integer> status;
 
     public UserSearchParams() {
     }
 
-    public UserSearchParams(Long id, Long businessId, String account, String tel, String name, String email, List<Integer> status) {
+    public UserSearchParams(Long id, Long businessId, String account, String tel, String name, String email, Date birthday, Long vipId, List<Integer> status) {
         this.id = id;
         this.businessId = businessId;
         this.account = account;
@@ -23,6 +26,8 @@ public class UserSearchParams {
         this.name = name;
         this.email = email;
         this.status = status;
+        this.birthday = birthday;
+        this.vipId = vipId;
     }
 
     public Long getId() {
@@ -79,5 +84,21 @@ public class UserSearchParams {
 
     public void setBusinessId(Long businessId) {
         this.businessId = businessId;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public Long getVipId() {
+        return vipId;
+    }
+
+    public void setVipId(Long vipId) {
+        this.vipId = vipId;
     }
 }

@@ -91,7 +91,6 @@ public class UserServiceImp implements UserService {
                 user.setVip(vipInfo);
             }
         }
-
         return users;
     }
 

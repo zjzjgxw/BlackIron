@@ -57,7 +57,7 @@ public class CouponServiceImp implements CouponService {
 
     @Override
     public List<Coupon> getCoupons(List<Long> ids) {
-        if(ids.isEmpty()){
+        if (ids.isEmpty()) {
             return Collections.emptyList();
         }
         return couponMapper.selectCoupons(ids);
@@ -70,8 +70,11 @@ public class CouponServiceImp implements CouponService {
 
     @Override
     @Transactional
-    public Boolean send(Long id, Long[] userIds) {
-        Coupon coupon = couponMapper.getCoupon(id);
+    public Boolean send(Long id, Long businessId, Long[] userIds) {
+        if(userIds.length == 0){
+            return false;
+        }
+        Coupon coupon = couponMapper.getCoupon(id, businessId);
         if (coupon == null) {
             throw new NotExistException("查询不到可用优惠券");
         }

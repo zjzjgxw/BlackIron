@@ -144,7 +144,7 @@
 
     <select id="getCoupon" resultMap="CouponResult">
         <include refid="sqlCoupon"/>
-        where a.id = #{id} and a.delete_flag = 0
+        where a.id = #{id}  and a.business_id = #{businessId} and a.delete_flag = 0
     </select>
 
 
