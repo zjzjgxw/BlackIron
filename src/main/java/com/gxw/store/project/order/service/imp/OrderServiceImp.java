@@ -279,6 +279,7 @@ public class OrderServiceImp implements OrderService {
         //增加用户消费金额,和积分。
         userService.addConsumePrice(order.getUserId(),order.getPrice());
         userService.addPoint(order.getUserId(),order.getPrice());
+        userService.updateVip(order.getUserId());
         return true;
     }
 

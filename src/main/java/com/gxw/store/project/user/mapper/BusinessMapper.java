@@ -139,4 +139,7 @@ public interface BusinessMapper {
      * @return
      */
     int deleteNavigation(Long id, Long businessId);
+
+
+    List<Long> getAllBusinessId();
 }

@@ -17,6 +17,7 @@
         <result property="idolNum" column="idol_num"/>
         <result property="birthday" column="birthday"/>
         <result property="vipFlag" column="vip_flag"/>
+        <result property="vipId" column="vip_id"/>
         <result property="point" column="point"/>
         <result property="fansNum" column="fans_num"/>
         <result property="consumePrice" column="consume_price"/>
@@ -50,6 +51,7 @@
         a.consume_price,
         a.point,
         a.vip_flag,
+        a.vip_id,
         a.delete_flag from `gxw_user` a
     </sql>
 
@@ -106,8 +108,8 @@
             <if test="unionId != null and unionId != ''">union_id = #{unionId},</if>
             <if test="birthday != null ">birthday = #{birthday},</if>
             <if test="profileUrl != null and profileUrl != ''">profile_url = #{profileUrl},</if>
+            <if test="vipId != null">vip_id = #{vipId},</if>
             <if test="deleteFlag != null and deleteFlag != ''">delete_flag = #{deleteFlag},</if>
-            update_time = sysdate()
         </set>
         where id = #{id}
     </update>

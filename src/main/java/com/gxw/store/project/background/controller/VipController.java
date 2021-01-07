@@ -40,6 +40,15 @@ public class VipController extends BaseController {
     }
 
     @NeedToken
+    @GetMapping("/all")
+    public ResponseResult getAllVips(){
+        List<VipInfo> vipInfos = vipService.getVips(SessionUtils.getBusinessId());
+        HashMap<String,  List<VipInfo>> res = new HashMap<>();
+        res.put("vips", vipInfos);
+        return ResponseResult.success(res);
+    }
+
+    @NeedToken
     @GetMapping("/{id}")
     public ResponseResult getVipDetail(@PathVariable Long id){
         VipInfo vipInfo = vipService.getVipInfo(id,SessionUtils.getBusinessId());

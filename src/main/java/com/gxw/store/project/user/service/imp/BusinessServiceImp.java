@@ -187,4 +187,10 @@ public class BusinessServiceImp implements BusinessService {
         return row != 0;
     }
 
+    @Override
+    public List<Long> getAllBusinessId() {
+        return businessMapper.getAllBusinessId();
+    }
+
+
 }

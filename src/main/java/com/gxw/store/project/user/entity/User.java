@@ -61,6 +61,8 @@ public class User {
 
     private Long consumePrice; //总消费金额
 
+    private Long vipId;
+
     private VipInfo vip; //vip信息
 
     @JsonIgnore
@@ -217,5 +219,13 @@ public class User {
 
     public void setPoint(Long point) {
         this.point = point;
+    }
+
+    public Long getVipId() {
+        return vipId;
+    }
+
+    public void setVipId(Long vipId) {
+        this.vipId = vipId;
     }
 }

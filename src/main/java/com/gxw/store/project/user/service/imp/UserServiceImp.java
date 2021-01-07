@@ -1,6 +1,7 @@
 package com.gxw.store.project.user.service.imp;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
 import com.gxw.store.project.common.utils.Md5Utils;
 import com.gxw.store.project.common.utils.WeiXinUtils;
 import com.gxw.store.project.common.utils.exception.HasExistException;
@@ -84,10 +85,13 @@ public class UserServiceImp implements UserService {
     public List<User> getUsers(UserSearchParams searchParams) {
         List<User> users = userMapper.getUsers(searchParams);
         List<VipInfo> vipInfos = vipService.getVips(searchParams.getBusinessId());
-        for (User user : users) {
-            VipInfo vipInfo = vipService.getCurrentVipInfo(user.getConsumePrice(), vipInfos);
-            user.setVip(vipInfo);
+        if (vipInfos != null && !vipInfos.isEmpty()) {
+            for (User user : users) {
+                VipInfo vipInfo = vipService.getCurrentVipInfo(user.getConsumePrice(), vipInfos);
+                user.setVip(vipInfo);
+            }
         }
+
         return users;
     }
 
@@ -108,8 +112,10 @@ public class UserServiceImp implements UserService {
     public User selectUserById(Long id) {
         User user = userMapper.selectUserById(id);
         List<VipInfo> vipInfos = vipService.getVips(user.getBusinessId());
-        VipInfo vipInfo = vipService.getCurrentVipInfo(user.getConsumePrice(), vipInfos);
-        user.setVip(vipInfo);
+        if (vipInfos != null && !vipInfos.isEmpty()) {
+            VipInfo vipInfo = vipService.getCurrentVipInfo(user.getConsumePrice(), vipInfos);
+            user.setVip(vipInfo);
+        }
         return user;
     }
 
@@ -128,6 +134,7 @@ public class UserServiceImp implements UserService {
                 user.setEmail("");
                 user.setProfileUrl("");
                 user.setVipFlag(0L);
+                user.setVipId(0L);
                 userMapper.create(user);
             }
             return user;
@@ -189,5 +196,47 @@ public class UserServiceImp implements UserService {
         int row = userMapper.addPoint(id, point);
         return row != 0;
     }
+
+    @Override
+    public Boolean updateVip(Long id) {
+        User user = userMapper.selectUserById(id);
+        List<VipInfo> vipInfos = vipService.getVips(user.getBusinessId());
+        if (vipInfos == null || vipInfos.isEmpty()) {
+            return false;
+        }
+        VipInfo vipInfo = vipService.getCurrentVipInfo(user.getConsumePrice(), vipInfos);
+        if (vipInfo != null) {
+            user.setVipId(vipInfo.getId());
+            userMapper.updateUser(user);
+        }
+        return true;
+    }
+
+    @Override
+    public void freshAllUserVip(Long businessId) {
+        List<VipInfo> vipInfos = vipService.getVips(businessId);
+        if (vipInfos == null || vipInfos.isEmpty()) {
+            return;
+        }
+        int pageNum = 1;
+        int pageSize = 20;
+        while (true) {
+            PageHelper.startPage(pageNum, pageSize);
+            List<User> users = userMapper.getUsers(null);
+            if (users == null || users.size() < pageSize) {
+                break;
+            }
+            //TODO 可以考虑批量更新
+            for (User user : users) {
+                VipInfo vipInfo = vipService.getCurrentVipInfo(user.getConsumePrice(), vipInfos);
+                if (vipInfo != null) {
+                    user.setVipId(vipInfo.getId());
+                    userMapper.updateUser(user);
+                }
+            }
+            pageNum += 1;
+        }
+    }
+
 
 }

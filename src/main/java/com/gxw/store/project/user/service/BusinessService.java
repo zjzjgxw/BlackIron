@@ -201,4 +201,7 @@ public interface BusinessService {
      * @return
      */
     Boolean deleteBanner(Long id, Long businessId);
+
+
+    List<Long> getAllBusinessId();
 }

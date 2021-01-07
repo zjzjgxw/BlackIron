@@ -95,4 +95,14 @@ public interface UserService {
      * @return
      */
     Boolean addPoint(Long id, Long point);
+
+
+    Boolean updateVip(Long id);
+
+
+    /**
+     * 刷新所有用户的vip等级信息
+     */
+    void freshAllUserVip(Long businessId);
+
 }

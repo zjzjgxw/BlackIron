@@ -253,4 +253,8 @@
         delete from gxw_business_navigation where id = #{id} and business_id = #{businessId}
     </delete>
 
+    <select id="getAllBusinessId" resultType="Long">
+        select id from gxw_business where delete_flag = 0 and status = 0
+    </select>
+
 </mapper> 
