@@ -1,8 +1,11 @@
 package com.gxw.store.project.sale.service.imp;
 
+import com.github.pagehelper.PageInfo;
 import com.gxw.store.project.common.utils.exception.ErrorParamException;
 import com.gxw.store.project.common.utils.exception.NotExistException;
 import com.gxw.store.project.common.utils.exception.UnEnoughStockException;
+import com.gxw.store.project.common.utils.page.PageDataInfo;
+import com.gxw.store.project.sale.dto.CouponStoreView;
 import com.gxw.store.project.sale.entity.Coupon;
 import com.gxw.store.project.sale.entity.CouponUseStatus;
 import com.gxw.store.project.sale.entity.Mode;
@@ -71,7 +74,7 @@ public class CouponServiceImp implements CouponService {
     @Override
     @Transactional
     public Boolean send(Long id, Long businessId, Long[] userIds) {
-        if(userIds.length == 0){
+        if (userIds.length == 0) {
             return false;
         }
         Coupon coupon = couponMapper.getCoupon(id, businessId);
@@ -95,6 +98,27 @@ public class CouponServiceImp implements CouponService {
             coupon.setStatus(getCouponUseStatus(coupon, productIds));
         }
         return coupons;
+    }
+
+    @Override
+    public PageDataInfo getCouponsOfStore(Long businessId, Long userId) {
+        List<Long> ids = this.getCouponIds(businessId, null);
+        List<Coupon> couponsOfStore = this.getCoupons(ids);
+        List<Coupon> couponsOfUser = couponMapper.selectCouponsOfUser(userId, null, null); //用户以及领取的优惠券
+        List<CouponStoreView> couponStoreViews = new LinkedList<>();
+        for (Coupon coupon : couponsOfStore) {
+            for (Coupon userCoupon : couponsOfUser) {
+                if (coupon.getId().equals(userCoupon.getId())) {
+                    couponStoreViews.add(new CouponStoreView(coupon, true));
+                } else {
+                    couponStoreViews.add(new CouponStoreView(coupon, false));
+                }
+            }
+        }
+        PageDataInfo rspData = new PageDataInfo();
+        rspData.setRows(couponStoreViews);
+        rspData.setTotal(new PageInfo(ids).getTotal());
+        return rspData;
     }
 
     private CouponUseStatus getCouponUseStatus(Coupon coupon, List<Long> productIds) {
