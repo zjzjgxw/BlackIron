@@ -132,4 +132,8 @@
             (business_staff_id = #{item.staffId} and business_role_id = #{item.roleId})
         </foreach>
     </delete>
+
+    <insert id="recordLogin">
+        insert gxw_business_staff_login_log (staff_id,ip) values (#{staffId},#{ip})
+    </insert>
 </mapper>

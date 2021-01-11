@@ -2,6 +2,7 @@ package com.gxw.store.project.sso.service.imp;
 
 import com.gxw.store.project.common.utils.Md5Utils;
 import com.gxw.store.project.common.utils.ResponseResult;
+import com.gxw.store.project.common.utils.ServletUtils;
 import com.gxw.store.project.common.utils.exception.NotExistException;
 import com.gxw.store.project.sso.dto.LoginUser;
 import com.gxw.store.project.sso.dto.PhoneAccount;
@@ -47,6 +48,7 @@ public class StaffLoginServiceImp implements SsoService {
         //验证账号密码
         if (checkPassword(loginUser, staff.getPassword())) {
             //生成token
+            staffService.recordLogin(staff.getId(), ServletUtils.getIpAddr());
             HashMap<String, String> token = tokenService.createToken(staff.getId(), staff.getName(), staff.getBusinessId(), KEY_PREFIX);
             return ResponseResult.success(token);
         } else { //记录失败次数

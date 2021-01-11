@@ -15,6 +15,7 @@ public interface UserMapper {
      User selectUserByEmail(String email);
      User selectUserById(Long id);
 
+     int recordLogin(Long userId,String ip);
      List<User> getUsers(UserSearchParams searchParams);
 
      int updateUser(User user);

@@ -10,30 +10,33 @@ import java.util.List;
 import java.util.Set;
 
 public interface StaffMapper {
-     void create(Staff staff);
+    void create(Staff staff);
 
-     Staff getStaff(Long id);
+    Staff getStaff(Long id);
 
-     List<Staff> getStaffs(Long businessId);
+    int recordLogin(Long staffId, String ip);
 
-     int update(StaffUpdate staffUpdate);
+    List<Staff> getStaffs(Long businessId);
 
-     int delete(Long id, Long businessId);
+    int update(StaffUpdate staffUpdate);
 
-     Staff getStaffByAccount(String account);
+    int delete(Long id, Long businessId);
 
-     int addDepartments(@Param("set") Set<StaffDepartmentRel> staffDepartmentRelSet);
+    Staff getStaffByAccount(String account);
 
-     int deleteDepartments(@Param("set") Set<StaffDepartmentRel> staffDepartmentRelSet);
+    int addDepartments(@Param("set") Set<StaffDepartmentRel> staffDepartmentRelSet);
 
-     int addRoles(@Param("set") Set<StaffRoleRel> staffRoleRelSet);
+    int deleteDepartments(@Param("set") Set<StaffDepartmentRel> staffDepartmentRelSet);
 
-     /**
-      * 清除角色下的员工
-      * @param roleId
-      * @return
-      */
-     int clearRoleRelations(Long roleId);
+    int addRoles(@Param("set") Set<StaffRoleRel> staffRoleRelSet);
 
-     int deleteRoles(@Param("set") Set<StaffRoleRel> staffRoleRelSet);
+    /**
+     * 清除角色下的员工
+     *
+     * @param roleId
+     * @return
+     */
+    int clearRoleRelations(Long roleId);
+
+    int deleteRoles(@Param("set") Set<StaffRoleRel> staffRoleRelSet);
 }

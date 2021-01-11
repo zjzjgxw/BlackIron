@@ -189,4 +189,8 @@
     <update id="addPoint">
          update gxw_user set point = point + #{point} where id=#{id}
     </update>
+
+    <insert id="recordLogin">
+        insert gxw_user_login_log (user_id,ip) values (#{userId},#{ip})
+    </insert>
 </mapper> 

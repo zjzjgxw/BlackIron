@@ -65,6 +65,12 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public boolean recordLogin(Long userId, String ip) {
+        userMapper.recordLogin(userId,ip);
+        return true;
+    }
+
+    @Override
     public boolean changeUserStatus(Long id) {
         User user = userMapper.selectUserById(id);
         if (user == null) {

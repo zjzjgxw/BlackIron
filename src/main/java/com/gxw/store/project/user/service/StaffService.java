@@ -15,6 +15,15 @@ public interface StaffService {
 
     Staff getStaff(Long id);
 
+    /**
+     * 记录登录信息
+     *
+     * @param staffId
+     * @param ip
+     * @return
+     */
+    boolean recordLogin(Long staffId, String ip);
+
     List<Staff> getStaffs(Long businessId);
 
     boolean update(StaffUpdate staffUpdate);
@@ -25,6 +34,7 @@ public interface StaffService {
 
     /**
      * 新增用户所属部门
+     *
      * @param staffDepartmentRelSet
      * @return
      */
@@ -32,6 +42,7 @@ public interface StaffService {
 
     /**
      * 删除用户所属部门
+     *
      * @param staffDepartmentRelSet
      * @return
      */
@@ -40,6 +51,7 @@ public interface StaffService {
 
     /**
      * 新增用户所属角色
+     *
      * @param staffRoleRelSet
      * @return
      */
@@ -47,6 +59,7 @@ public interface StaffService {
 
     /**
      * 删除用户所属角色
+     *
      * @param staffRoleRelSet
      * @return
      */

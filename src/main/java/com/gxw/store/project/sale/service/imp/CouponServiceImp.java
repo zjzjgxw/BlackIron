@@ -107,12 +107,17 @@ public class CouponServiceImp implements CouponService {
         List<Coupon> couponsOfUser = couponMapper.selectCouponsOfUser(userId, null, null); //用户以及领取的优惠券
         List<CouponStoreView> couponStoreViews = new LinkedList<>();
         for (Coupon coupon : couponsOfStore) {
+            boolean fended = false;
             for (Coupon userCoupon : couponsOfUser) {
                 if (coupon.getId().equals(userCoupon.getId())) {
-                    couponStoreViews.add(new CouponStoreView(coupon, true));
-                } else {
-                    couponStoreViews.add(new CouponStoreView(coupon, false));
+                    fended = true;
+                    break;
                 }
+            }
+            if (fended) {
+                couponStoreViews.add(new CouponStoreView(coupon, true));
+            } else {
+                couponStoreViews.add(new CouponStoreView(coupon, false));
             }
         }
         PageDataInfo rspData = new PageDataInfo();

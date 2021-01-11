@@ -37,6 +37,12 @@ public class StaffServiceImp implements StaffService {
     }
 
     @Override
+    public boolean recordLogin(Long staffId, String ip) {
+        staffMapper.recordLogin(staffId,ip);
+        return true;
+    }
+
+    @Override
     public List<Staff> getStaffs(Long businessId) {
         return staffMapper.getStaffs(businessId);
     }

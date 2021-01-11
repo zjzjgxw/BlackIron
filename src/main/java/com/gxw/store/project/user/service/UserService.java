@@ -18,6 +18,14 @@ public interface UserService {
     boolean updateUser(User user);
 
     /**
+     * 记录登录信息
+     * @param userId
+     * @param ip
+     * @return
+     */
+    boolean recordLogin(Long userId,String ip);
+
+    /**
      * 修改用户状态
      * @param id
      * @return

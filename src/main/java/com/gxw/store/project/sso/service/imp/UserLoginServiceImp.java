@@ -1,8 +1,6 @@
 package com.gxw.store.project.sso.service.imp;
 
-import com.gxw.store.project.common.utils.Md5Utils;
-import com.gxw.store.project.common.utils.ResponseResult;
-import com.gxw.store.project.common.utils.WeiXinUtils;
+import com.gxw.store.project.common.utils.*;
 import com.gxw.store.project.common.utils.cache.RedisCache;
 import com.gxw.store.project.common.utils.exception.NotExistException;
 import com.gxw.store.project.sso.dto.LoginUser;
@@ -14,6 +12,7 @@ import com.gxw.store.project.user.service.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.mail.Session;
 import java.util.HashMap;
 
 @Service
@@ -56,6 +55,7 @@ public class UserLoginServiceImp implements SsoService {
         //验证账号密码
         if (checkPassword(loginUser, user.getPassword())) {
             //生成token
+            userService.recordLogin(user.getId(),ServletUtils.getIpAddr());
             HashMap<String, String> token = tokenService.createToken(user.getId(), user.getName(), user.getBusinessId());
             return ResponseResult.success(token);
         } else { //记录失败次数
@@ -78,6 +78,7 @@ public class UserLoginServiceImp implements SsoService {
         }
         if (phoneAccount.getCode().equals(cachedCode)) { //验证用户输入的code 和缓存中的code
             //生成token
+            userService.recordLogin(user.getId(),ServletUtils.getIpAddr());
             HashMap<String, String> token = tokenService.createToken(user.getId(), user.getName(), user.getBusinessId());
             return ResponseResult.success(token);
         } else {
@@ -97,13 +98,15 @@ public class UserLoginServiceImp implements SsoService {
         if (user == null) {  //请求成功，但是没有找到对应的用户信息
             throw new NotExistException("用户未找到");
         }
+        //记录登录信息
+        userService.recordLogin(user.getId(),ServletUtils.getIpAddr());
+
         //保存sessionKey 到缓存中，用于后续获取微信用户详情时进行数据校验。
         redisCache.setCacheObject(OPEN_ID_PREFIX + user.getId(), wxSession, EXPIRE_TIME);
         //生成token
         HashMap<String, String> token = tokenService.createToken(user.getId(), user.getName(), user.getBusinessId());
         return ResponseResult.success(token);
     }
-
 
     @Override
     public String getWxSessionKey(Long userId) {
