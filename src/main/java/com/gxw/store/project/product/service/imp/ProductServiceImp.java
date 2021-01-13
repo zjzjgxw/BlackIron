@@ -1,7 +1,11 @@
 package com.gxw.store.project.product.service.imp;
 
+import com.gxw.store.project.common.utils.DateUtils;
 import com.gxw.store.project.common.utils.FileUtils;
+import com.gxw.store.project.common.utils.ServletUtils;
 import com.gxw.store.project.common.utils.StringUtils;
+import com.gxw.store.project.order.entity.OrderStatus;
+import com.gxw.store.project.product.dto.AccessStat;
 import com.gxw.store.project.product.dto.ProductImages;
 import com.gxw.store.project.product.dto.ProductSearchParams;
 import com.gxw.store.project.product.entity.*;
@@ -14,10 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ProductServiceImp implements ProductService {
@@ -227,5 +228,45 @@ public class ProductServiceImp implements ProductService {
         List<ProductDetail> details = productMapper.getRecommendProducts(businessId);
         return handelProductDetails(businessId, details);
     }
+
+    @Override
+    public boolean accessLog(Long businessId, Long productId, Long userId) {
+        int row = productMapper.accessLog(businessId, productId, userId, ServletUtils.getIpAddr());
+        return row != 0;
+    }
+
+    @Override
+    public List<AccessStat> accessStatDateRange(Long businessId, Date startTime, Date endTime) {
+        List<PVInfo>  pvList = productMapper.getPV(businessId, startTime, endTime);
+        HashMap<String,Long> pvMap = new HashMap<>();
+        for(PVInfo pv : pvList){
+            pvMap.put(DateUtils.dateTime(pv.getTime()),pv.getPv());
+        }
+
+        List<UVInfo> uvList = productMapper.getUV(businessId, startTime, endTime);
+        HashMap<String,Long> uvMap = new HashMap<>();
+        for(UVInfo uv: uvList){
+            uvMap.put(DateUtils.dateTime(uv.getTime()),uv.getUv());
+        }
+        List<Date> dates = DateUtils.getDates(startTime,endTime);
+        List<AccessStat> stats = new LinkedList<>();
+        for (Date date : dates){
+            AccessStat stat = new AccessStat();
+            stat.setTime(date);
+            if(pvMap.get(DateUtils.dateTime(date)) != null){
+                stat.setPv(pvMap.get(DateUtils.dateTime(date)));
+            }else{
+                stat.setPv(0L);
+            }
+            if(uvMap.get(DateUtils.dateTime(date)) !=null){
+                stat.setUv(uvMap.get(DateUtils.dateTime(date)));
+            }else{
+                stat.setUv(0L);
+            }
+            stats.add(stat);
+        }
+        return stats;
+    }
+
 
 }

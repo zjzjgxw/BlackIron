@@ -4,12 +4,9 @@ package com.gxw.store.project.app.controller;
 import com.gxw.store.project.common.controller.BaseController;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
-import com.gxw.store.project.product.dto.AddProductAttributes;
-import com.gxw.store.project.product.dto.ProductImages;
 import com.gxw.store.project.product.dto.ProductSearchParams;
 import com.gxw.store.project.product.entity.Category;
 import com.gxw.store.project.product.entity.ProductDetail;
-import com.gxw.store.project.product.entity.ProductRecommend;
 import com.gxw.store.project.product.entity.StockInfo;
 import com.gxw.store.project.product.service.CategoryService;
 import com.gxw.store.project.product.service.ProductService;
@@ -18,7 +15,6 @@ import com.gxw.store.project.sale.service.DiscountService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 
@@ -66,6 +62,13 @@ public class AppProductController extends BaseController {
     @GetMapping("/detail/{id}")
     public ResponseResult getDetail(@PathVariable Long id) {
         ProductDetail detail = productService.getDetailById(id);
+        Long userId = 0L;
+        try {
+            userId = SessionUtils.getUserId();
+        } catch (Exception e) {
+
+        }
+        productService.accessLog(detail.getBusinessId(), id, userId);
         HashMap<String, ProductDetail> res = new HashMap<>();
         res.put("detail", detail);
         return ResponseResult.success(res);

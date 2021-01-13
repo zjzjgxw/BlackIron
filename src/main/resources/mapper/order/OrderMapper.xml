@@ -187,4 +187,48 @@
         where a.id = #{orderId} and a.user_id = #{userId} and b.product_id = #{productId} and a.delete_flag = 0
     </select>
 
+
+    <select id="countOrder" resultType="Integer">
+        select count(1) from gxw_order a where a.delete_flag = 0 and a.business_id=#{businessId} <if test="status != null"> and a.status = #{status}</if>
+    </select>
+
+    <select id="countOrderDate" resultType="Integer">
+        select count(1) from  gxw_order a where a.delete_flag = 0 and a.business_id=#{businessId}
+        <if test="statuses != null ">
+            and a.status in
+            <foreach collection="statuses" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        and to_days(a.created_at) = to_days(#{time})
+    </select>
+
+    <select id="priceOfOrderDate" resultType="Integer">
+        select IFNULL(sum(a.price),0)  from  gxw_order a where a.delete_flag = 0 and a.business_id=#{businessId}
+        <if test="statuses != null ">
+            and a.status in
+            <foreach collection="statuses" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        and to_days(a.created_at) = to_days(#{time})
+    </select>
+
+    <select id="ordersOfDateRange" resultMap="OrderResult">
+        <include refid="sqlOrder"/>
+        where a.delete_flag = 0 and a.business_id=#{businessId}
+        <if test="statuses != null ">
+            and a.status in
+            <foreach collection="statuses" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        and
+        (date_format(a.created_at,'%Y-%m-%d')
+        BETWEEN
+        date_format(#{startTime},'%Y-%m-%d')
+        AND date_format(#{endTime},'%Y-%m-%d'))
+    </select>
+
+
 </mapper>

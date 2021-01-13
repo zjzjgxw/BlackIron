@@ -1,11 +1,13 @@
 package com.gxw.store.project.product.service;
 
+import com.gxw.store.project.product.dto.AccessStat;
 import com.gxw.store.project.product.dto.ProductImages;
 import com.gxw.store.project.product.dto.ProductSearchParams;
 import com.gxw.store.project.product.entity.ProductDetail;
 import com.gxw.store.project.product.entity.ProductDetailAttribute;
 import com.gxw.store.project.product.entity.ProductRecommend;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ProductService {
@@ -121,4 +123,8 @@ public interface ProductService {
      * @return
      */
     List<ProductDetail> getRecommendProducts(Long businessId);
+
+    boolean accessLog(Long businessId, Long productId, Long userId);
+
+    List<AccessStat>  accessStatDateRange(Long businessId, Date startTime, Date endTime);
 }

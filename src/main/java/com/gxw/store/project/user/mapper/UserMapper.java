@@ -3,8 +3,10 @@ package com.gxw.store.project.user.mapper;
 
 import com.gxw.store.project.user.dto.UserSearchParams;
 import com.gxw.store.project.user.entity.User;
+import com.gxw.store.project.user.entity.UserStat;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -119,4 +121,13 @@ public interface UserMapper {
       * @return
       */
      int addPoint(Long id, Long point);
+
+     /**
+      * 获取新增用户数
+      * @param businessId
+      * @param startTime
+      * @param endTime
+      * @return
+      */
+     List<UserStat>  newUserStatDateRange(Long businessId, Date startTime, Date endTime);
 }

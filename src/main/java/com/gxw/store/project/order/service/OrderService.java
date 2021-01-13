@@ -2,7 +2,10 @@ package com.gxw.store.project.order.service;
 
 import com.gxw.store.project.order.dto.OrderSearchParam;
 import com.gxw.store.project.order.entity.Order;
+import com.gxw.store.project.order.entity.OrderStat;
+import com.gxw.store.project.order.entity.OrderStatTime;
 
+import java.util.Date;
 import java.util.List;
 
 public interface OrderService {
@@ -61,4 +64,12 @@ public interface OrderService {
      * @return
      */
     Boolean finished(Long orderId, Long businessId);
+
+    OrderStat stat(Long businessId);
+
+    List<OrderStatTime> statOfTime(Long businessId, Date startTime, Date endTime);
+
+    OrderStatTime statOfToday(Long businessId);
+
+    OrderStatTime statOfYesterday(Long businessId);
 }

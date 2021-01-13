@@ -1,15 +1,13 @@
 package com.gxw.store.project.order.service.imp;
 
 import com.alibaba.fastjson.JSON;
+import com.gxw.store.project.common.utils.DateUtils;
 import com.gxw.store.project.common.utils.exception.MissSpecificationException;
 import com.gxw.store.project.common.utils.exception.NotExistException;
 import com.gxw.store.project.common.utils.exception.UnEnoughStockException;
 import com.gxw.store.project.common.utils.exception.UnableServiceException;
 import com.gxw.store.project.order.dto.OrderSearchParam;
-import com.gxw.store.project.order.entity.Express;
-import com.gxw.store.project.order.entity.Order;
-import com.gxw.store.project.order.entity.OrderItem;
-import com.gxw.store.project.order.entity.OrderStatus;
+import com.gxw.store.project.order.entity.*;
 import com.gxw.store.project.order.mapper.OrderMapper;
 import com.gxw.store.project.order.service.ExpressService;
 import com.gxw.store.project.order.service.OrderService;
@@ -63,6 +61,9 @@ public class OrderServiceImp implements OrderService {
     @Resource
     private ExpressService expressService;
 
+
+    private final OrderStatus[] HadPaidStatues = new OrderStatus[]{OrderStatus.WAIT_SEND, OrderStatus.HAS_SEND, OrderStatus.WAIT_COMMENT, OrderStatus.FINISHED, OrderStatus.APPLY_REFUND, OrderStatus.AGREE_REFUND, OrderStatus.REFUSE_REFUND};
+
     @Override
     public Long create(Order order) {
         //查找商户信息
@@ -79,7 +80,7 @@ public class OrderServiceImp implements OrderService {
         for (OrderItem item : items) {
             //获取产品信息
             ProductDetail detail = productService.getDetailById(item.getProductId());
-            if(detail == null){
+            if (detail == null) {
                 throw new MissSpecificationException(); //缺少规格信息
             }
             productIds.add(item.getProductId());
@@ -89,7 +90,7 @@ public class OrderServiceImp implements OrderService {
             item.setStockType(detail.getStockType());
             //获取库存信息
             StockInfo stockInfo = stockService.getStockInfoByProductId(item.getProductId());
-            if(stockInfo == null){
+            if (stockInfo == null) {
                 throw new MissSpecificationException(); //缺少规格信息
             }
             if (expressPrice > stockInfo.getExpressPrice()) {
@@ -236,14 +237,14 @@ public class OrderServiceImp implements OrderService {
 
     @Override
     public List<Order> getDetailOfOrders(List<Long> ids) {
-        if(ids.isEmpty()){
+        if (ids.isEmpty()) {
             return Collections.emptyList();
         }
         List<Order> orders = orderMapper.selectOrders(ids);
         List<Express> expresses = expressService.select();
-        for(Order order : orders){
-            for(Express express : expresses){
-                if(order.getExpressId().equals(express.getId())){
+        for (Order order : orders) {
+            for (Express express : expresses) {
+                if (order.getExpressId().equals(express.getId())) {
                     order.setExpressName(express.getName());
                 }
             }
@@ -277,8 +278,8 @@ public class OrderServiceImp implements OrderService {
         orderMapper.update(order);
 
         //增加用户消费金额,和积分。
-        userService.addConsumePrice(order.getUserId(),order.getPrice());
-        userService.addPoint(order.getUserId(),order.getPrice());
+        userService.addConsumePrice(order.getUserId(), order.getPrice());
+        userService.addPoint(order.getUserId(), order.getPrice());
         userService.updateVip(order.getUserId());
         return true;
     }
@@ -320,15 +321,83 @@ public class OrderServiceImp implements OrderService {
     @Override
     public Boolean finished(Long orderId, Long businessId) {
         Order order = orderMapper.getOrder(orderId, businessId);
-        if (order == null ) {
+        if (order == null) {
             throw new NotExistException("查找不到对应的订单");
         }
-        if(order.getStatus() == OrderStatus.HAS_SEND || order.getStatus() == OrderStatus.WAIT_COMMENT){
+        if (order.getStatus() == OrderStatus.HAS_SEND || order.getStatus() == OrderStatus.WAIT_COMMENT) {
             order.setStatus(OrderStatus.FINISHED);
-        }else{
+        } else {
             throw new NotExistException("查找不到对应的发货订单");
         }
         orderMapper.update(order);
         return true;
     }
+
+    @Override
+    public OrderStat stat(Long businessId) {
+        int totalNum = orderMapper.countOrder(businessId, null);
+        int unPaidNum = orderMapper.countOrder(businessId, OrderStatus.UNPAID);
+        int waitSendNum = orderMapper.countOrder(businessId, OrderStatus.WAIT_SEND);
+        int refundNum = orderMapper.countOrder(businessId, OrderStatus.APPLY_REFUND);
+
+        OrderStat stat = new OrderStat();
+        stat.setTotalNum(totalNum);
+        stat.setUnPaidNum(unPaidNum);
+        stat.setWaitSendNum(waitSendNum);
+        stat.setRefundNum(refundNum);
+        return stat;
+    }
+
+    @Override
+    public List<OrderStatTime> statOfTime(Long businessId, Date startTime, Date endTime) {
+
+        List<OrderStatTime> statTimes = new LinkedList<>();
+        List<Order> orders = orderMapper.ordersOfDateRange(businessId,this.HadPaidStatues, startTime,endTime);
+        List<Date> dates = DateUtils.getDates(startTime,endTime);
+        for(Date date : dates){
+            OrderStatTime orderStatTime = new OrderStatTime();
+            orderStatTime.setTime(date);
+            int count = 0;
+            int price = 0;
+            for(Order order: orders){
+                if(DateUtils.dateTime(order.getCreateTime()).equals(DateUtils.dateTime(date))){
+                    count +=1;
+                    price += order.getPrice();
+                }
+            }
+            orderStatTime.setPaidNum(count);
+            orderStatTime.setPaidPrice(price/100);
+            statTimes.add(orderStatTime);
+        }
+
+        return statTimes;
+    }
+
+    public OrderStatTime statOfToday(Long businessId) {
+        return this.statOfTime(businessId, new Date());
+    }
+
+    public OrderStatTime statOfYesterday(Long businessId) {
+        Date yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+        return this.statOfTime(businessId, yesterday);
+    }
+
+    public OrderStatTime statOfTime(Long businessId, Date time) {
+        int paidOrderNum = this.paidOrderNum(businessId, time);
+        int paidPrice = this.paidPrice(businessId, time);
+        OrderStatTime statTime = new OrderStatTime();
+        statTime.setTime(time);
+        statTime.setPaidNum(paidOrderNum);
+        statTime.setPaidPrice(paidPrice);
+        return statTime;
+    }
+
+    private int paidOrderNum(Long businessId, Date date) {
+        return orderMapper.countOrderDate(businessId, this.HadPaidStatues, date);
+    }
+
+    private int paidPrice(Long businessId, Date date) {
+        return orderMapper.priceOfOrderDate(businessId, this.HadPaidStatues, date);
+    }
+
 }

@@ -3,8 +3,13 @@ package com.gxw.store.project.product.mapper;
 
 import com.gxw.store.project.product.dto.ProductSearchParams;
 import com.gxw.store.project.product.entity.*;
+import org.apache.ibatis.annotations.MapKey;
+import org.apache.ibatis.type.MappedTypes;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface ProductMapper {
     void createDetail(ProductDetail detail);
@@ -98,5 +103,19 @@ public interface ProductMapper {
      * @return
      */
     List<ProductDetail> getRecommendProducts(Long businessId);
+
+    /**
+     * 记录访问日志
+     *
+     * @param productId
+     * @param userId
+     * @param ip
+     * @return
+     */
+    int accessLog(Long businessId, Long productId, Long userId, String ip);
+
+    List<PVInfo> getPV(Long businessId, Date startTime, Date endTime);
+
+    List<UVInfo> getUV(Long businessId, Date startTime, Date endTime);
 
 }

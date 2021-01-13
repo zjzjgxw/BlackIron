@@ -1,10 +1,13 @@
 package com.gxw.store.project.user.service;
 
 
+import com.gxw.store.project.product.dto.AccessStat;
 import com.gxw.store.project.user.dto.UserSearchParams;
 import com.gxw.store.project.user.dto.WxEncryptedData;
 import com.gxw.store.project.user.entity.User;
+import com.gxw.store.project.user.entity.UserStat;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -112,5 +115,14 @@ public interface UserService {
      * 刷新所有用户的vip等级信息
      */
     void freshAllUserVip(Long businessId);
+
+    /**
+     * 获取新增用户数
+     * @param businessId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    List<UserStat>  newUserStatDateRange(Long businessId, Date startTime, Date endTime);
 
 }

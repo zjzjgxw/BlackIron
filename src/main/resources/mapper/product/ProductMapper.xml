@@ -59,7 +59,7 @@
 
 
     <insert id="createDetail" parameterType="ProductDetail" useGeneratedKeys="true" keyProperty="id">
-        insert `gxw_product_detail`  (business_id,category_id,name,mode,description,cover_url,
+        insert `gxw_product_detail` (business_id,category_id,name,mode,description,cover_url,
         <if test="videoUrl != null ">video_url,</if>
         <if test="saleTime != null ">sale_time,</if>
         stock_type,status_type)
@@ -183,10 +183,10 @@
     <select id="selectProducts" resultMap="ProductListResult">
         <include refid="sqlSelectProducts"/>
         where a.business_id = #{businessId}
-         <if test="categoryId != null and categoryId != 0">and a.category_id= #{categoryId} </if>
-        <if test="name != null and name != ''">and a.name like CONCAT('%',#{name},'%') </if>
-        <if test="mode != null and mode != 0">and a.`mode`= #{mode} </if>
-        <if test="statusType != null and statusType != 0">and a.status_type= #{statusType} </if>
+        <if test="categoryId != null and categoryId != 0">and a.category_id= #{categoryId}</if>
+        <if test="name != null and name != ''">and a.name like CONCAT('%',#{name},'%')</if>
+        <if test="mode != null and mode != 0">and a.`mode`= #{mode}</if>
+        <if test="statusType != null and statusType != 0">and a.status_type= #{statusType}</if>
         and a.delete_flag = 0 order by a.created_at desc
     </select>
 
@@ -218,4 +218,38 @@
         where b.business_id = #{businessId} order by b.index_no desc
     </select>
 
+    <insert id="accessLog">
+         insert `gxw_product_log` (business_id,product_id,user_id,ip) values (#{businessId}, #{productId},#{userId},#{ip})
+    </insert>
+
+
+    <resultMap id="pvResultMap" type="PVInfo">
+        <result property="time" column="created_at"/>
+        <result property="pv" column="pv"/>
+    </resultMap>
+
+    <resultMap id="uvResultMap" type="UVInfo">
+        <result property="time" column="created_at"/>
+        <result property="uv" column="uv"/>
+    </resultMap>
+
+    <select id="getPV" resultMap="pvResultMap">
+        SELECT count(1) as pv,a.created_at from gxw_product_log a where a.business_id =#{businessId}
+         and
+        (date_format(a.created_at,'%Y-%m-%d')
+        BETWEEN
+        date_format(#{startTime},'%Y-%m-%d')
+        AND date_format(#{endTime},'%Y-%m-%d'))
+        GROUP BY TO_DAYS(a.created_at)
+    </select>
+
+    <select id="getUV" resultMap="uvResultMap">
+        SELECT  count(DISTINCT(user_id)) as uv,a.created_at from gxw_product_log a where a.business_id =#{businessId}
+        and
+        (date_format(a.created_at,'%Y-%m-%d')
+        BETWEEN
+        date_format(#{startTime},'%Y-%m-%d')
+        AND date_format(#{endTime},'%Y-%m-%d'))
+        GROUP BY TO_DAYS(a.created_at)
+    </select>
 </mapper> 

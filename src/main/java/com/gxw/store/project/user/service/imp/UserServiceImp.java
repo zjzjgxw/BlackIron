@@ -2,13 +2,17 @@ package com.gxw.store.project.user.service.imp;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.gxw.store.project.common.utils.DateUtils;
 import com.gxw.store.project.common.utils.Md5Utils;
 import com.gxw.store.project.common.utils.WeiXinUtils;
 import com.gxw.store.project.common.utils.exception.HasExistException;
 import com.gxw.store.project.common.utils.exception.InvalidUserException;
+import com.gxw.store.project.product.dto.AccessStat;
+import com.gxw.store.project.product.entity.PVInfo;
 import com.gxw.store.project.user.dto.UserSearchParams;
 import com.gxw.store.project.user.dto.WxEncryptedData;
 import com.gxw.store.project.user.entity.User;
+import com.gxw.store.project.user.entity.UserStat;
 import com.gxw.store.project.user.entity.VipInfo;
 import com.gxw.store.project.user.mapper.UserMapper;
 import com.gxw.store.project.user.service.UserService;
@@ -19,7 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -66,7 +72,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public boolean recordLogin(Long userId, String ip) {
-        userMapper.recordLogin(userId,ip);
+        userMapper.recordLogin(userId, ip);
         return true;
     }
 
@@ -241,6 +247,29 @@ public class UserServiceImp implements UserService {
             }
             pageNum += 1;
         }
+    }
+
+    @Override
+    public List<UserStat> newUserStatDateRange(Long businessId, Date startTime, Date endTime) {
+        List<UserStat> stats = userMapper.newUserStatDateRange(businessId, startTime, endTime);
+        HashMap<String,Long> statMap = new HashMap<>();
+        for(UserStat stat : stats){
+            statMap.put(DateUtils.dateTime(stat.getTime()),stat.getNewNum());
+        }
+
+        List<Date> dates = DateUtils.getDates(startTime,endTime);
+        List<UserStat> res = new LinkedList<>();
+        for (Date date : dates){
+            UserStat stat = new UserStat();
+            stat.setTime(date);
+            if(statMap.get(DateUtils.dateTime(date)) != null){
+                stat.setNewNum(statMap.get(DateUtils.dateTime(date)));
+            }else{
+                stat.setNewNum(0L);
+            }
+            res.add(stat);
+        }
+        return res;
     }
 
 

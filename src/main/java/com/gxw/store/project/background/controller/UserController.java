@@ -3,14 +3,13 @@ package com.gxw.store.project.background.controller;
 
 import com.gxw.store.project.common.controller.BaseController;
 import com.gxw.store.project.common.interceptor.NeedToken;
-import com.gxw.store.project.common.utils.Md5Utils;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.user.dto.FollowRel;
 import com.gxw.store.project.user.dto.UserSearchParams;
 import com.gxw.store.project.user.entity.User;
+import com.gxw.store.project.user.entity.UserStat;
 import com.gxw.store.project.user.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -62,7 +61,7 @@ public class UserController extends BaseController {
                                    @RequestParam(required = false) String tel,
                                    @RequestParam(required = false) String name,
                                    @RequestParam(required = false) String email,
-                                   @RequestParam(required = false) @DateTimeFormat(pattern="yyyy-MM-dd") Date birthday,
+                                   @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date birthday,
                                    @RequestParam(required = false) Long vipId,
                                    @RequestParam(required = false) List<Integer> status) {
         startPage();
@@ -156,6 +155,15 @@ public class UserController extends BaseController {
         startPage();
         List<User> users = userService.getFans(userId);
         return ResponseResult.success(getDataTable(users));
+    }
+
+    @NeedToken
+    @GetMapping("/stat")
+    public ResponseResult userStat(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime) {
+        List<UserStat> stats = userService.newUserStatDateRange(SessionUtils.getBusinessId(), startTime, endTime);
+        HashMap<String, List<UserStat>> res = new HashMap<>();
+        res.put("stats", stats);
+        return ResponseResult.success(res);
     }
 
 }

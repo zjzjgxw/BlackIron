@@ -5,15 +5,18 @@ import com.gxw.store.project.common.controller.BaseController;
 import com.gxw.store.project.common.interceptor.NeedToken;
 import com.gxw.store.project.common.utils.ResponseResult;
 import com.gxw.store.project.common.utils.SessionUtils;
+import com.gxw.store.project.product.dto.AccessStat;
 import com.gxw.store.project.product.dto.AddProductAttributes;
 import com.gxw.store.project.product.dto.ProductImages;
 import com.gxw.store.project.product.dto.ProductSearchParams;
 import com.gxw.store.project.product.entity.*;
 import com.gxw.store.project.product.service.ProductService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -176,5 +179,15 @@ public class ProductController extends BaseController {
         startPage();
         List<ProductDetail> details = productService.getRecommendProducts(SessionUtils.getBusinessId());
         return ResponseResult.success(getDataTable(details));
+    }
+
+
+    @NeedToken
+    @GetMapping("/stat")
+    public ResponseResult statDateRange(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime) {
+        List<AccessStat> stats = productService.accessStatDateRange(SessionUtils.getBusinessId(), startTime, endTime);
+        HashMap<String,  List<AccessStat>> res = new HashMap<>();
+        res.put("stats", stats);
+        return ResponseResult.success(res);
     }
 }

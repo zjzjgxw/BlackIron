@@ -9,7 +9,6 @@ import com.gxw.store.project.sso.service.SsoService;
 import com.gxw.store.project.user.dto.WxEncryptedData;
 import com.gxw.store.project.user.entity.User;
 import com.gxw.store.project.user.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 

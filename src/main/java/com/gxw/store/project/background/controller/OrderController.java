@@ -8,10 +8,14 @@ import com.gxw.store.project.common.utils.SessionUtils;
 import com.gxw.store.project.order.dto.OrderSearchParam;
 import com.gxw.store.project.order.dto.OrderSendParam;
 import com.gxw.store.project.order.entity.Order;
+import com.gxw.store.project.order.entity.OrderStat;
+import com.gxw.store.project.order.entity.OrderStatTime;
 import com.gxw.store.project.order.service.OrderService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -80,6 +84,35 @@ public class OrderController extends BaseController {
         HashMap<String, Order> res = new HashMap<>();
         res.put("info", order);
         return ResponseResult.success(res);
+    }
 
+
+    @NeedToken
+    @GetMapping("/stat")
+    public ResponseResult OrderStat() {
+        OrderStat stat = orderService.stat(SessionUtils.getBusinessId());
+        HashMap<String, OrderStat> res = new HashMap<>();
+        res.put("stat", stat);
+        return ResponseResult.success(res);
+    }
+
+    @NeedToken
+    @GetMapping("/stat/today")
+    public ResponseResult OrderStatToday() {
+        OrderStatTime today = orderService.statOfToday(SessionUtils.getBusinessId());
+        OrderStatTime yesterday = orderService.statOfYesterday(SessionUtils.getBusinessId());
+        HashMap<String, OrderStatTime> res = new HashMap<>();
+        res.put("today", today);
+        res.put("yesterday", yesterday);
+        return ResponseResult.success(res);
+    }
+
+    @NeedToken
+    @GetMapping("/stat/time")
+    public ResponseResult OrderStatTime(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startTime, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime) {
+        List<OrderStatTime> statTimes = orderService.statOfTime(SessionUtils.getBusinessId(), startTime, endTime);
+        HashMap<String,List<OrderStatTime>> res = new HashMap<>();
+        res.put("stats", statTimes);
+        return ResponseResult.success(res);
     }
 }

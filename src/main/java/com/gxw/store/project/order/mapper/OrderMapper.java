@@ -5,6 +5,7 @@ import com.gxw.store.project.order.entity.Order;
 import com.gxw.store.project.order.entity.OrderItem;
 import com.gxw.store.project.order.entity.OrderStatus;
 
+import java.util.Date;
 import java.util.List;
 
 public interface OrderMapper {
@@ -25,10 +26,21 @@ public interface OrderMapper {
 
     /**
      * 判断是否有用户记录
+     *
      * @param orderId
      * @param productId
      * @param userId
      * @return
      */
     int hasOrderOfUser(Long orderId, Long productId, Long userId);
+
+
+    int countOrder(Long businessId, OrderStatus status);
+
+    int countOrderDate(Long businessId, OrderStatus[] statuses, Date time);
+
+    int priceOfOrderDate(Long businessId, OrderStatus[] statuses, Date time);
+
+    List<Order> ordersOfDateRange(Long businessId, OrderStatus[] statuses, Date startTime, Date endTime);
+
 }

@@ -5,7 +5,10 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import java.lang.management.ManagementFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 时间工具类
@@ -151,5 +154,22 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
         // 计算差多少秒//输出结果
         // long sec = diff % nd % nh % nm / ns;
         return day + "天" + hour + "小时" + min + "分钟";
+    }
+
+    //JAVA获取某段时间内的所有日期
+    public static List<Date> getDates(Date dStart, Date dEnd) {
+        Calendar cStart = Calendar.getInstance();
+        cStart.setTime(dStart);
+
+        List dateList = new ArrayList();
+        //别忘了，把起始日期加上
+        dateList.add(dStart);
+        // 此日期是否在指定日期之后
+        while (dEnd.after(cStart.getTime())) {
+            // 根据日历的规则，为给定的日历字段添加或减去指定的时间量
+            cStart.add(Calendar.DAY_OF_MONTH, 1);
+            dateList.add(cStart.getTime());
+        }
+        return dateList;
     }
 }
