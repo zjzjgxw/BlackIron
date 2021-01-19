@@ -203,10 +203,10 @@
     <select id="newUserStatDateRange" resultMap="newUserResultMap">
          select count(id) as new_num,a.create_time from gxw_user a where a.business_id = #{businessId}
           and
-        (date_format(a.create_time,'%Y-%m-%d')
+        a.create_time
         BETWEEN
         date_format(#{startTime},'%Y-%m-%d')
-        AND date_format(#{endTime},'%Y-%m-%d'))
-          GROUP BY TO_DAYS(a.create_time)
+        AND date_format(#{endTime},'%Y-%m-%d')
+        GROUP BY TO_DAYS(a.create_time)
     </select>
 </mapper> 

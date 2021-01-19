@@ -236,20 +236,20 @@
     <select id="getPV" resultMap="pvResultMap">
         SELECT count(1) as pv,a.created_at from gxw_product_log a where a.business_id =#{businessId}
          and
-        (date_format(a.created_at,'%Y-%m-%d')
+        a.created_at
         BETWEEN
         date_format(#{startTime},'%Y-%m-%d')
-        AND date_format(#{endTime},'%Y-%m-%d'))
+        AND date_format(#{endTime},'%Y-%m-%d')
         GROUP BY TO_DAYS(a.created_at)
     </select>
 
     <select id="getUV" resultMap="uvResultMap">
         SELECT  count(DISTINCT(user_id)) as uv,a.created_at from gxw_product_log a where a.business_id =#{businessId}
         and
-        (date_format(a.created_at,'%Y-%m-%d')
+        a.created_at,'%Y-%m-%d'
         BETWEEN
         date_format(#{startTime},'%Y-%m-%d')
-        AND date_format(#{endTime},'%Y-%m-%d'))
+        AND date_format(#{endTime},'%Y-%m-%d')
         GROUP BY TO_DAYS(a.created_at)
     </select>
 </mapper> 
